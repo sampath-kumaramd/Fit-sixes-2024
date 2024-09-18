@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button';
+import { InitialLoadingComponent } from '@/components/InitialLoadingComponent';
 
 export default function Home() {
   return (
     <div>
-      <Button>Click me</Button>
+      <InitialLoadingComponent />
     </div>
   );
 }
