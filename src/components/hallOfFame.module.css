@@ -1,6 +1,6 @@
 .carousel-container {
     position: relative;
-    width: 90vw;
+    width: 100%;
     height: 95vh;
     max-width: 90vw;
     overflow: hidden;
@@ -27,12 +27,12 @@
     position: relative;
     height: 90%;
     width: 100%;
-    margin: 0 20px;
+    margin: 0 27px;
 }
 
 .carousel-slide .carousel-item {
     width: 280px;
-    height: 60%;
+    height: 500px;
     position: absolute;
     top: 50%;
     transform: translate(0, -50%);
@@ -67,17 +67,17 @@
 }
 
 .carousel-slide .carousel-item:nth-child(4) {
-    left: calc(45% + 310px);
+    left: calc(45% + 320px);
     z-index: 1;
 }
 
 .carousel-slide .carousel-item:nth-child(5) {
-    left: calc(45% + 620px);
+    left: calc(45% + 640px);
     z-index: 0;
 }
 
 .carousel-slide .carousel-item:nth-child(n + 6) {
-    left: calc(45% + 930px);
+    left: calc(45% +960px);
     opacity: 0;
 }
 
@@ -190,7 +190,7 @@
 
     .carousel-slide .carousel-item {
         width: 240px;
-        height: 400px;
+        height: 430px;
     }
     
     .carousel-slide .carousel-item:nth-child(1),
@@ -236,7 +236,7 @@
     
     .carousel-slide .carousel-item {
         width: 220px;
-        height: 350px;
+        height: 400px;
     }
     
     .carousel-slide .carousel-item:nth-child(1),
