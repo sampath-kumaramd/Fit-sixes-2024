@@ -67,3 +67,60 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .ball {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    position: absolute;
+    background: white;
+    top: 0;
+    left: 0;
+    offset-path: path(
+      'm0,0s79.65,102.99,182.21,67.76c0,0,38.68-11.69,57.38,1.82,0,0,105.54,70.81,181.55,31.04'
+    );
+  }
+  .cls-1,
+  .cls-2 {
+    fill: none;
+  }
+
+  .cls-3 {
+    fill: #fff;
+  }
+
+  .cls-4 {
+    fill: #feb53b;
+  }
+
+  .cls-2 {
+    stroke: #fff;
+    stroke-miterlimit: 10;
+  }
+
+  .cls-5 {
+    opacity: 0.5;
+  }
+  .ball-cls-1 {
+    fill: rgb(255, 255, 255);
+  }
+
+  .ball-cls-2 {
+    fill: #bd4141;
+  }
+
+  .dot-path-cls-1 {
+    fill: none;
+    stroke: #000;
+    stroke-dasharray: 0 0 0.98 6;
+    stroke-width: 1.5px;
+    stroke-miterlimit: 10;
+    stroke-linecap: round;
+  }
+  @keyframes draw {
+    to {
+      stroke-dashoffset: -69.8;
+    }
+  }
+}
