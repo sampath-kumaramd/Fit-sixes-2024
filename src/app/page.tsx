@@ -1,11 +1,10 @@
-import HallOfFame from '@/components/HallOfFame';
-import { Button } from '@/components/ui/button';
+"use client";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="w-full flex flex-col justify-center items-center">
-      <Button>Click me</Button>
-      <HallOfFame />
-    </div>
-  );
+  const router = useRouter();
+  return <div>
+    Home
+    <button onClick={() => router.push('/auth/sign-up')}>Register</button>
+  </div>;
 }
