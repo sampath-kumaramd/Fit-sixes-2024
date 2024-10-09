@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
-import styles from './hallOfFame.module.css';
-
-const images = [
+const teams = [
   {
     id: 1,
     src: '/assets/images/2023_men.jpg',
@@ -38,45 +36,56 @@ const images = [
       "2022 - Champions (Women) - FIT BATCH 18. The women's team from FIT BATCH 18 dominated the 2022 tournament with their exceptional skills and teamwork, securing the championship title for the year.",
   },
 ];
+
 const HallOfFame = () => {
-  const [items, setItems] = useState(images);
+  useEffect(() => {
+    const next = document.querySelector('.next');
+    const prev = document.querySelector('.prev');
+    const slide = document.querySelector('.carousel-slide');
 
-  const handleNext = () => {
-    setItems((prev) => {
-      const newItems = [...prev];
-      const firstItem = newItems.shift();
-      if (firstItem) newItems.push(firstItem);
-      return newItems;
-    });
-  };
+    const handleNext = () => {
+      const items = document.querySelectorAll('.carousel-item');
 
-  const handlePrev = () => {
-    setItems((prev) => {
-      const newItems = [...prev];
-      const lastItem = newItems.pop();
-      if (lastItem) newItems.unshift(lastItem);
-      return newItems;
-    });
-  };
+      if (items.length > 0 && slide) {
+        slide.appendChild(items[0]);
+      }
+    };
+
+    const handlePrev = () => {
+      const items = document.querySelectorAll('.carousel-item');
+
+      if (items.length > 0 && slide) {
+        slide.prepend(items[items.length - 1]);
+      }
+    };
+
+    next?.addEventListener('click', handleNext);
+    prev?.addEventListener('click', handlePrev);
+
+    // Cleanup event listeners
+    return () => {
+      next?.removeEventListener('click', handleNext);
+      prev?.removeEventListener('click', handlePrev);
+    };
+  }, []);
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Hall of Fame</h1>
+    <div className="carousel-container">
+      <h1 className="carousel-title">Hall of Fame</h1>
 
-      <div className={styles.slide}>
-        {items.map((item, index) => (
+      <div className="carousel-slide">
+        {teams.map((item, index) => (
           <div
             key={item.id}
-            className={styles.item}
+            className="carousel-item"
             style={{ backgroundImage: `url(${item.src})` }}
           >
-            <div className={styles.content}>
-              <div className={styles.des}>{item.description}</div>
+            <div className="carousel-content">
+              <div className="carousel-des">{item.description}</div>
             </div>
           </div>
         ))}
       </div>
-
       <div className={styles.buttons}>
         <button onClick={handlePrev}>
           <ArrowBack className={styles.icon} />

@@ -23,6 +23,9 @@ const config = {
       '2xl': '1400px',
     },
     extend: {
+      fontFamily: {
+        schluber: ["var(--font-schluber)"]
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -57,6 +60,8 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        yellow: 'hsl(var(--yellow))',
+        darkBlue: 'hsl(var(--dark-blue))',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -72,10 +77,17 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'letter-right-fill': {
+          '0%': { width: '0' },
+          '35%': { width: '40%' },
+          '65%': { width: '40%' },
+          '100%': { width: '100%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'letter-right-fill': 'letter-right-fill 3s linear infinite'
       },
     },
   },
