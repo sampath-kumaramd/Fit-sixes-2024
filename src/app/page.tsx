@@ -1,11 +1,11 @@
-import Sponsorship from '@/components/Sponsorship';
-import { Button } from '@/components/ui/button';
+"use client";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div>
-      <Button>Click me</Button>
-      <Sponsorship />
-    </div>
-  );
+  const router = useRouter();
+  return <div>
+    Home
+    <button onClick={() => router.push('/auth/sign-up')}>Register</button>
+  </div>;
 }
+
