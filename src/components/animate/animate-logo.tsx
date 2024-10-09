@@ -15,7 +15,7 @@ export function AnimateLogo1({ logo, className, ...props }: AnimateLogoProps) {
   return (
     <div
       className={cn(
-        "relative inline-flex items-center justify-center w-30 h-30",
+        "relative inline-flex items-center justify-center w-32 h-32",
         className
       )}
       {...props}
@@ -35,7 +35,7 @@ export function AnimateLogo1({ logo, className, ...props }: AnimateLogoProps) {
 
       <motion.div
         animate={{
-          scale: [1.6, 1, 1, 1.6, 1.6],
+          scale: [1.4, 1, 1, 1.4, 1.4],
           rotate: [270, 0, 0, 270, 270],
           opacity: [0.25, 1, 1, 1, 0.25],
           borderRadius: ['25%', '25%', '50%', '50%', '25%'],
@@ -46,7 +46,7 @@ export function AnimateLogo1({ logo, className, ...props }: AnimateLogoProps) {
 
       <motion.div
         animate={{
-          scale: [1, 1.2, 1.2, 1, 1],
+          scale: [1, 1.1, 1.1, 1, 1],
           rotate: [0, 270, 270, 0, 0],
           opacity: [1, 0.25, 0.25, 0.25, 1],
           borderRadius: ['25%', '25%', '50%', '50%', '25%'],

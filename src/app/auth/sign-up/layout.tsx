@@ -12,5 +12,5 @@ export default function SignUpLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <AuthLayout>{children}</AuthLayout>;
+  return <AuthLayout title="Welcome!" subTitle='Welcome to Fit Sixes 2K24' isInSignIn={false}>{children}</AuthLayout>;
 }

@@ -1,10 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 import { useToast } from '@/hooks/use-toast';
+import { SignUpSchema, signUpSchema } from '@/schemas';
+import { IsSponsor, SponsorshipLevel } from '@/types/enums/sign-up';
 
 import {
   Form,
@@ -27,6 +30,8 @@ import {
   SelectItem,
 } from '../ui';
 
+
+
 export default function SignUpForm() {
   const { toast } = useToast();
   const router = useRouter();
@@ -35,8 +40,8 @@ export default function SignUpForm() {
     defaultValues: {
       companyName: '',
       password: '',
-      isSponsor: 'no',
-      sponsorshipLevel: 'bronze',
+      isSponsor: IsSponsor.NO,
+      sponsorshipLevel: SponsorshipLevel.BRONZE,
       primaryContact: {
         name: '',
         phone: '',
@@ -50,7 +55,7 @@ export default function SignUpForm() {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data :SignUpSchema) => {
     console.log(data);
     toast({
       title: 'Success',
@@ -258,7 +263,7 @@ export default function SignUpForm() {
           </Card>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <Button
             type="submit"
             className="w-fit"
@@ -266,6 +271,11 @@ export default function SignUpForm() {
           >
             {form.formState.isSubmitting ? 'Submitting...' : 'Sign Up'}
           </Button>
+        </div>
+        <div className="flex justify-center">
+          <p className="text-sm text-gray-500">
+            Already have an account? <Link href="/auth/sign-in">Sign In</Link>
+          </p>
         </div>
       </form>
     </Form>

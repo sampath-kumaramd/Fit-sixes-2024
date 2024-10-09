@@ -3,11 +3,12 @@
 import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray } from 'react-hook-form';
 
 import { useToast } from '@/hooks/use-toast';
-import { signInSchema } from '@/schemas';
+import { SignInSchema, signInSchema } from '@/schemas';
 
 import {
   Button,
@@ -31,7 +32,7 @@ export default function SignInForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
 
-  const form = useForm({
+  const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       companyName: '',
@@ -51,7 +52,7 @@ export default function SignInForm() {
     name: 'teams',
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: SignInSchema) => {
     console.log(data);
     // Here you would typically send the data to your backend
     toast({
@@ -63,7 +64,7 @@ export default function SignInForm() {
     router.push('/auth/sign-in');
   };
 
-  const handleTeamCountChange = (gender, count) => {
+  const handleTeamCountChange = (gender: string, count: number) => {
     const currentCount =
       gender === 'male'
         ? form.getValues('maleTeamCount')
@@ -75,7 +76,7 @@ export default function SignInForm() {
       for (let i = 0; i < difference; i++) {
         appendTeam({
           name: '',
-          gender,
+          gender: gender as 'male' | 'female',
           players: Array(6).fill({ name: '', nic: '', contactNumber: '' }),
         });
       }
@@ -132,6 +133,13 @@ export default function SignInForm() {
             <Button type="button" onClick={() => setStep(2)} className="mt-4">
               Next
             </Button>
+            <div className="flex justify-start items-center gap-2 mt-4">
+              <p>Don&apos;t have an account?</p>
+              <Link href="/auth/sign-up">Sign Up</Link>
+            </div>
+            <div className="flex justify-start items-center gap-2 mt-4">
+              <Link href="/auth/forgot-password">Forgot Password?</Link>
+            </div>
           </div>
         )}
 
@@ -297,11 +305,11 @@ export default function SignInForm() {
                 <FormItem>
                   <FormLabel>Upload Payment Slip</FormLabel>
                   <FormControl>
-                    <Input
+                    {/* <Input
                       type="file"
-                      onChange={(e) => onChange(e.target.files[0])}
+                      onChange={(e) => onChange(e.target.files?.[0])}
                       {...rest}
-                    />
+                    /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>

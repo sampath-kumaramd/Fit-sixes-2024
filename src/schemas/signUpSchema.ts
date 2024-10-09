@@ -8,7 +8,7 @@ export const signUpSchema = z.object({
     .string()
     .min(8, { message: 'Password must be at least 8 characters.' }),
   isSponsor: z.enum(['yes', 'no']),
-  sponsorshipLevel: z.enum(['gold', 'silver', 'bronze']),
+  sponsorshipLevel: z.enum(['bronze', 'silver', 'gold']),
   primaryContact: z.object({
     name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
     phone: z
@@ -25,4 +25,4 @@ export const signUpSchema = z.object({
   }),
 });
 
-export type signUpSchema = z.infer<typeof signUpSchema>;
+export type SignUpSchema = z.infer<typeof signUpSchema>;

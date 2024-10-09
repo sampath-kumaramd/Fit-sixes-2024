@@ -13,19 +13,20 @@ export interface LogoProps extends React.HTMLAttributes<HTMLDivElement> {
   href?: string;
   isSingle?: boolean;
   disableLink?: boolean;
+  logoSize?: 'small' | 'large';
 }
 
 export const Logo = forwardRef<HTMLDivElement, LogoProps>(
   (
-    { href = '/', isSingle = true, disableLink = false, className, ...props },
+    { href = '/', isSingle = true, disableLink = false, className, logoSize = 'large', ...props },
     ref
   ) => {
     const singleLogo = (
-      <Image src="/logo/logo-light.svg" alt="logo" width={30} height={30} />
+      <Image src="/logo/logo-light.svg" alt="logo" width={logoSize === 'large' ? 150 : 25} height={logoSize === 'large' ? 150 : 25} />
     );
 
     const fullLogo = (
-      <Image src="/logo/logo-light.svg" alt="logo" width={30} height={30} />
+      <Image src="/logo/logo-light.svg" alt="logo" width={53} height={53} />
     );
 
     const logo = isSingle ? singleLogo : fullLogo;

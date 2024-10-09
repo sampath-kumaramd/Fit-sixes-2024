@@ -1,6 +1,6 @@
 import SignInForm from '@/components/form/sign-in';
 
-export default function SignUp() {
+export default function SignIn() {
   return (
     <div className="col-span-8 p-8 items-center">
       <h2 className="text-3xl font-bold mb-2 text-center mt-12">

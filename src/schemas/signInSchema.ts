@@ -25,4 +25,4 @@ export const signInSchema = z.object({
   paymentSlip: z.instanceof(File, { message: 'Payment slip is required' }),
 });
 
-export type signInSchema = z.infer<typeof signInSchema>;
+export type SignInSchema = z.infer<typeof signInSchema>;
