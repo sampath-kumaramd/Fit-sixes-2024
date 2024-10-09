@@ -8,3 +8,4 @@ export default function Home() {
     <button onClick={() => router.push('/auth/sign-up')}>Register</button>
   </div>;
 }
+
