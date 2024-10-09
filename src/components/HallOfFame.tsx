@@ -86,13 +86,12 @@ const HallOfFame = () => {
           </div>
         ))}
       </div>
-
-      <div className="buttons">
-        <button className="prev">
-          <ArrowBack className="icon" />
+      <div className={styles.buttons}>
+        <button onClick={handlePrev}>
+          <ArrowBack className={styles.icon} />
         </button>
-        <button className="next">
-          <ArrowForward className="icon" />
+        <button onClick={handleNext}>
+          <ArrowForward className={styles.icon} />
         </button>
       </div>
     </div>
