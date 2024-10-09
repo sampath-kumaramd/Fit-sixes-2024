@@ -49,7 +49,7 @@ export default function contactUs() {
 
     return (
         <div className="relative bg-[#03081b] text-white">
-        <div className="absolute inset-0 bg-[url('/images/background.svg')] bg-[length:80%] marker:bg-contain bg-center sm:bg-left-top bg-no-repeat opacity-5" />
+        <div className="absolute inset-0 bg-[url('/images/background.svg')] bg-[length:80%] marker:bg-contain hidden sm:block sm:bg-left-top bg-no-repeat opacity-5" />
         
         <div className="text-center pt-3 sm:pt-1 sm:text-2xl font-bold">CONTACT US</div>
         <div className="container mx-auto flex flex-col sm:flex-row sm:flex-wrap justify-between items-center py-8 px-20">
