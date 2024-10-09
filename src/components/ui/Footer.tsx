@@ -5,15 +5,12 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link';
 
-
 import MobileViewFooter from './mobileViewFooter';
-
-
 
 const Footer = () => {
   return (
-    <div className='bg-[#030825] w-full '>
-         <footer className='max-w-screen-2xl mx-auto bg-gradient-to-r from-[#03081a] to-[#03082c] border-t border-gray-400 hidden sm:block '>
+    <div className='bg-[#03082a] w-full '>
+         <footer className='max-w-screen-2xl mx-auto bg-gradient-to-t from-[#03081a] to-[#03082c] border-t border-gray-400 hidden sm:block '>
         <div className=' w-full  text-white h-48 pt-8 '>
             <div className='grid  grid-cols-4 sm:grid-cols-3 sm:mx-6 md:mx-8 lg:mx-16 xl:mx-32 '>
             <div className=''>
@@ -40,11 +37,11 @@ const Footer = () => {
             </div>
             <div className='sm:pt-0 pt-6'>
                 <ul className='text-[5px] sm:text-[10px] flex flex-col text-center sm:text-left space-y-2'>
-                    <li>HOME</li>
-                    <li>ABOUT</li>
-                    <li>WATCH LIVE</li>
-                    <li>LIVE SCORE</li>
-                    <li>CONTACT US</li>
+                    <li><a href='/home' className=''>HOME</a> </li>
+                    <li><a href='/about' className=''>ABOUT</a></li>
+                    <li><a href='/about' className=''>WATCH LIVE</a></li>
+                    <li><a href='/about' className=''>LIVE SCORE</a></li>
+                    <li><a href='/contactUs' className=''>CONTACT US</a></li>
 
                 </ul>
             </div>

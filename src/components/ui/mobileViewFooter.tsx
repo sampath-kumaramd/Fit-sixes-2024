@@ -21,7 +21,7 @@ const MobileViewFooter = () => {
         </div>
             
            
-        <div className='flex flex-col text-white text-center text-[6px]'>
+        <div className='flex flex-col text-white text-center text-[8px]'>
             <ul className='   text-center space-y-2'>
                     <li>HOME</li>
                     <li>ABOUT</li>

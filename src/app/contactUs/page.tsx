@@ -36,12 +36,20 @@ export default function contactUs() {
             email:'dushan.18@itfac.mrt.ac.lk',
             image:'/images/profile.jpg'
 
-        }
+        },
+        {
+          name:'Dushan Dissanayake',
+          position:'Event coordinator',
+          contactNo:'+94 71 864 7945',
+          email:'dushan.18@itfac.mrt.ac.lk',
+          image:'/images/profile.jpg'
+
+      }
     ];
 
     return (
-        <div className="relative bg-[#03082a] text-white">
-        <div className="absolute inset-0 bg-[url('/images/background.svg')] bg-[length:70%]  marker:bg-contain bg-left-top bg-no-repeat opacity-5" />
+        <div className="relative bg-[#03081b] text-white">
+        <div className="absolute inset-0 bg-[url('/images/background.svg')] bg-[length:80%] marker:bg-contain bg-center sm:bg-left-top bg-no-repeat opacity-5" />
         
         <div className="text-center pt-3 sm:pt-1 sm:text-2xl font-bold">CONTACT US</div>
         <div className="container mx-auto flex flex-col sm:flex-row sm:flex-wrap justify-between items-center py-8 px-20">

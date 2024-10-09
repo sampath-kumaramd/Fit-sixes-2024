@@ -17,13 +17,13 @@ const Header = () => {
 
   return (
     <div>
-      <div className='bg-[#03082a] w-full py-6'>
+      <div className='bg-[#03081b] w-full py-6'>
         <div className='max-w-screen-2xl mx-auto flex justify-between items-center'>
           <div className='mx-6 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-32 text-white'>
             <Image src="/images/logo.png" alt="logo" width={45} height={45} />
           </div>
-          <div className='bg-[#03082a] mx-6 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-32 hidden sm:block'>
-            <Navbar />
+          <div className=' mx-6 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-32 hidden sm:block'>
+            <Navbar  />
           </div>
           <div className='sm:hidden flex items-center'>
             <button className='text-white inline-flex items-center justify-center p-2 hover:text-white focus:outline-none' onClick={toggleNavbar}>
