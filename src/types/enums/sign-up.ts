@@ -5,6 +5,7 @@ export enum SignUpStep {
 }
 
 export enum SponsorshipLevel {
+  NONE = 'none',
   BRONZE = 'bronze',
   SILVER = 'silver',
   GOLD = 'gold',

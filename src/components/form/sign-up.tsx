@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
+import { axiosUnauthorized } from '@/hooks/axiox-instance';
 import { useToast } from '@/hooks/use-toast';
 import { SignUpSchema, signUpSchema } from '@/schemas';
 import { IsSponsor, SponsorshipLevel } from '@/types/enums/sign-up';
@@ -30,8 +31,6 @@ import {
   SelectItem,
 } from '../ui';
 
-
-
 export default function SignUpForm() {
   const { toast } = useToast();
   const router = useRouter();
@@ -41,7 +40,7 @@ export default function SignUpForm() {
       companyName: '',
       password: '',
       isSponsor: IsSponsor.NO,
-      sponsorshipLevel: SponsorshipLevel.BRONZE,
+      sponsorshipLevel: SponsorshipLevel.NONE,
       primaryContact: {
         name: '',
         phone: '',
@@ -55,14 +54,36 @@ export default function SignUpForm() {
     },
   });
 
-  const onSubmit = (data :SignUpSchema) => {
-    console.log(data);
-    toast({
-      title: 'Success',
-      description: JSON.stringify(form.getValues()),
-    });
-    form.reset();
-    router.push('/auth/sign-in');
+  const onSubmit = async (data: SignUpSchema) => {
+    let payload = {
+      username: data.companyName,
+      password: data.password,
+      company_name: data.companyName,
+      package: data.sponsorshipLevel,
+      primary_contact_name: data.primaryContact.name,
+      primary_contact_email: data.primaryContact.email,
+      primary_contact_phone: data.primaryContact.phone,
+      secondary_contact_name: data.secondaryContact.name,
+      secondary_contact_email: data.secondaryContact.email,
+      secondary_contact_phone: data.secondaryContact.phone,
+    };
+    const response = await axiosUnauthorized.post(
+      '/api/v1/registration/company/',
+      payload
+    );
+    if (response.status === 201) {
+      toast({
+        title: 'Success',
+        description: JSON.stringify(form.getValues()),
+      });
+      form.reset();
+      // router.push('/auth/sign-in');
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Something went wrong',
+      });
+    }
   };
 
   return (
