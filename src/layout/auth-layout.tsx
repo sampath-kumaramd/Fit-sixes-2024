@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
-import { Button, Separator } from '@/components';
+import { Separator } from '@/components';
 
-import BackToHomeButton from './back-to-home-button';
+import BackToHomeButton from './components/back-to-home-button';
 
-export default function AuthLayout({
+ function AuthLayout({
   children,
   title,
   subTitle,
@@ -71,3 +71,5 @@ export default function AuthLayout({
     </section>
   );
 }
+
+export default AuthLayout;

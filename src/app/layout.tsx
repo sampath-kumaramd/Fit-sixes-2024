@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import HomePageLayout from '@/layout/home-page-layout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +23,9 @@ export default function RootLayout({
         <link rel="icon" href="/logo/logo-light.svg" />
       </head>
       <body className={inter.className}>
-        {children}
+        <HomePageLayout>
+          {children}
+        </HomePageLayout>
         <Toaster />
       </body>
     </html>

@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
-
 const teams = [
   {
     id: 1,
@@ -86,12 +85,13 @@ const HallOfFame = () => {
           </div>
         ))}
       </div>
-      <div className={styles.buttons}>
-        <button onClick={handlePrev}>
-          <ArrowBack className={styles.icon} />
+
+      <div className="buttons">
+        <button className="prev">
+          <ArrowBack className="icon" />
         </button>
-        <button onClick={handleNext}>
-          <ArrowForward className={styles.icon} />
+        <button className="next">
+          <ArrowForward className="icon" />
         </button>
       </div>
     </div>
