@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
 
-const config = {
+const config: Config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -39,6 +40,9 @@ const config = {
       druktrial: ['var(--font-druktrial-medium)', 'sans-serif'], // Add this line
     },
     extend: {
+      backgroundImage: {
+        'custom-text-gradient':
+          'linear-gradient(89.1deg, #ffae01 6%, #a1700d 16%, #36291a 26%, #020720 70%)',
       fontFamily: {
         schluber: ['var(--font-schluber)'],
       },
@@ -143,7 +147,17 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.text-gradient': {
+          'background-clip': 'text',
+          '-webkit-background-clip': 'text',
+          color: 'transparent',
+        },
+      });
+    }),
+  ],
 } satisfies Config;
 
 export default config;
