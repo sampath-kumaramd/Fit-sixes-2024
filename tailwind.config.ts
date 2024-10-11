@@ -43,6 +43,7 @@ const config: Config = {
       backgroundImage: {
         'custom-text-gradient':
           'linear-gradient(89.1deg, #ffae01 6%, #a1700d 16%, #36291a 26%, #020720 70%)',
+      },
       fontFamily: {
         schluber: ['var(--font-schluber)'],
       },
@@ -153,7 +154,7 @@ const config: Config = {
         '.text-gradient': {
           'background-clip': 'text',
           '-webkit-background-clip': 'text',
-          color: 'transparent',
+          color: 'transparen  t',
         },
       });
     }),
