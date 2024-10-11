@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import HallOfFame from "@/components/HallOfFame";
+import HeroSection from "@/components/Hero-section";
 import Sponsorship from "@/components/Sponsorship";
 import PhotoBouquet from "@/components/ui/photo_bouquet";
 import RollingBallAbstract from "@/components/ui/rolling_ball_abstract";
@@ -17,10 +18,9 @@ export default function Home() {
     const [boquetVisible, setBoquetVisible] = useState(false);
   return (
     <div>
-      <div className="h-screen bg-darkBlue text-white items-center flex flex-col justify-center">
-        Hero section
+      <div className="h-screen  bg-gradient-to-br from-blue-950 via-darkBlue to-darkBlue text-white items-center flex flex-col justify-center">
+        <HeroSection />
       </div>
-      <HallOfFame />
       <div className="relative m-auto grid bg-gradient-to-br from-amber-300 to-zinc-50">
         <div className="absolute bottom-0 z-20 h-[80%] w-[50vw]">
           <Image
@@ -90,6 +90,7 @@ export default function Home() {
           </motion.div>
         </div>
       </div>
+      <HallOfFame />
 
       <Sponsorship />
     </div>

@@ -17,15 +17,15 @@ export default function Error500({
   }, [error])
  
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-darkBlue space-y-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-darkBlue">
       <Logo logoSize="large" />
-          <h2>Something went wrong!</h2>
-          <p>Oops! An error occurred while processing your request.</p>
+          <h2 className='text-2xl font-bold text-white mt-8'>Something went wrong!</h2>
+          <p className='text-white mt-4'>Oops! An error occurred while processing your request.</p>
       <button
         onClick={
-          // Attempt to recover by trying to re-render the segment
           () => reset()
         }
+        className='bg-white text-darkBlue px-4 py-2 rounded-md mt-4'
       >
         Try again
       </button>
