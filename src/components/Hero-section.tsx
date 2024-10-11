@@ -37,21 +37,21 @@ const HeroSection: React.FC = () => {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  const [model, setModel] = useState('animations/ani-1.glb');
+  const [model, setModel] = useState('animations/1st.glb');
 
   const handleClick = () => {
     setClicked(true);
-    setModel('animations/ani-3.glb');
+    setModel('animations/3rd.glb');
   };
 
   const handleHover = () => {
     setHovered(true);
-    setModel('animations/ani-2.glb');
+    setModel('animations/2nd.glb');
   };
 
   const handleLeave = () => {
     setHovered(false);
-    setModel('animations/ani-1.glb');
+    setModel('animations/1st.glb');
   };
     
   const targetDate = new Date('2024-10-14T08:00:00');
