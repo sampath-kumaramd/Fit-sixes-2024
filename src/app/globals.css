@@ -73,6 +73,13 @@
   }
 }
 
+@font-face {
+  font-family: 'Exon';
+  src: url('/fonts/Excon-Medium.otf') format('otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer components {
   .ball {
     width: 50px;

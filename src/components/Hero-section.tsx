@@ -37,21 +37,21 @@ const HeroSection: React.FC = () => {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  const [model, setModel] = useState('animations/7.glb');
+  const [model, setModel] = useState('animations/ani-1.glb');
 
   const handleClick = () => {
     setClicked(true);
-    setModel('animations/animation-3.glb');
+    setModel('animations/ani-3.glb');
   };
 
   const handleHover = () => {
     setHovered(true);
-    setModel('animations/animation-2.glb');
+    setModel('animations/ani-2.glb');
   };
 
   const handleLeave = () => {
     setHovered(false);
-    setModel('animations/7.glb');
+    setModel('animations/ani-1.glb');
   };
     
   const targetDate = new Date('2024-10-14T08:00:00');
@@ -62,7 +62,7 @@ const HeroSection: React.FC = () => {
     <section className="container mx-auto h-screen">
       <div className="mt-0 text-center text-white opacity-90 relative">
        <div className='absolute top-0 left-1/2 -translate-x-1/2  w-full'>
-      <StylizedText mainText="FIT SIXES" highlightText="2K24" />
+      <StylizedText mainText="FIT SIXES" highlightText="2K24" onClick={handleClick} onMouseEnter={handleHover} onMouseLeave={handleLeave} />
     </div>
       </div>
       <div className=" -mt-12 ">
@@ -86,21 +86,7 @@ const HeroSection: React.FC = () => {
           </div>
         </div>
       </div>
-       <div className="absolute bottom-[18.5rem] right-20 w-full z-50">
-        <div className='absolute bottom-1/2 -right-10 translate-y-1/2' >
-        <Button 
-          className={`w-40 px-10 h-40 bg-yellow text-white text-xl group relative mt-20 overflow-hidden rounded-full ${!isHovering ? 'animate-bounce' : ''}`}
-          onMouseEnter={handleHover}
-            onMouseLeave={handleLeave}
-            onClick={handleClick}
-        >
-         REGISTER <br/> NOW
-          <div className="absolute inset-0 h-full w-full -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent group-hover:animate-shimmer"></div>
-        </Button>
-          {/* <ShinyButton className='text-xl bg-yellow text-white w-40 h-40 rounded-full border-2 border-black '
-          >REGISTER NOW</ShinyButton> */}
-        </div>
-      </div>
+    
     </section>
   );
 };

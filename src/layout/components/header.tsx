@@ -33,7 +33,7 @@ export default function Header() {
   return (
     <header>
       <div className="bg-darkBlue">
-        <div className="container mx-auto flex items-center justify-between p-4">
+        <div className="container mx-auto flex items-center justify-between p-4 pt-8">
           <div className="flex items-center gap-4 justify-between w-full">
              <button
               onClick={handleLogoClick}

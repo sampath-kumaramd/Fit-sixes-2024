@@ -13,7 +13,10 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: '1rem',
+      screens: {
+        '2xl': '1600px',
+      },
     },
     screens: {
       sd: '520px',
@@ -23,29 +26,20 @@ const config: Config = {
       xl: '1280px',
       '2xl': '1400px',
     },
-    fontSize: {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      base: '1rem',
-      lg: '1.125rem',
-      xl: '1.25rem',
-      '2xl': '1.5rem',
-      '4xl': '2rem',
-      '8xl': '8rem',
-      '9xl': '9.5rem',
-      '10xl': '11rem',
-    },
-    fontFamily: {
-      schluber: ['var(--font-schluber)'],
-      druktrial: ['var(--font-druktrial-medium)', 'sans-serif'], // Add this line
-    },
     extend: {
       backgroundImage: {
         'custom-text-gradient':
           'linear-gradient(89.1deg, #ffae01 6%, #a1700d 16%, #36291a 26%, #020720 70%)',
       },
+      fontSize: {
+        '8xl': '8rem',
+        '9xl': '9.5rem',
+        '10xl': '11rem',
+      },
       fontFamily: {
         schluber: ['var(--font-schluber)'],
+        druktrial: ['var(--font-druktrial-medium)', 'sans-serif'], // Add this line
+        exon: ['Exon', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',
