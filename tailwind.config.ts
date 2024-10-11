@@ -22,6 +22,22 @@ const config = {
       xl: '1280px',
       '2xl': '1400px',
     },
+    fontSize: {
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+      '2xl': '1.5rem',
+      '4xl': '2rem',
+      '8xl': '8rem',
+      '9xl': '9.5rem',
+      '10xl': '11rem',
+    },
+    fontFamily: {
+      schluber: ['var(--font-schluber)'],
+      druktrial: ['var(--font-druktrial-medium)', 'sans-serif'], // Add this line
+    },
     extend: {
       fontFamily: {
         schluber: ['var(--font-schluber)'],
@@ -89,6 +105,10 @@ const config = {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' },
         },
+        bounce: {
+          '0%, 100%': { transform: 'translateY(-25%)' },
+          '50%': { transform: 'translateY(0)' },
+        },
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
@@ -119,6 +139,7 @@ const config = {
         'flip-up': 'flip-up 0.6s cubic-bezier(0.455, 0.030, 0.515, 0.955) both',
         fliptop: 'fliptop 0.45s both',
         flipbottom: 'flipbottom 0.45s 0.45s both',
+        bounce: 'bounce 1s infinite',
       },
     },
   },

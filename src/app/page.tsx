@@ -5,6 +5,7 @@ import { motion , AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import { Button } from "@/components";
 import HallOfFame from "@/components/HallOfFame";
 import HeroSection from "@/components/Hero-section";
 import Sponsorship from "@/components/Sponsorship";
@@ -17,8 +18,8 @@ export default function Home() {
   const router = useRouter();
     const [boquetVisible, setBoquetVisible] = useState(false);
   return (
-    <div>
-      <div className="h-screen  bg-gradient-to-br from-blue-950 via-darkBlue to-darkBlue text-white items-center flex flex-col justify-center">
+    <div className=" relative">
+      <div className="h-screen  bg-darkBlue text-white items-center flex flex-col justify-center relative">
         <HeroSection />
       </div>
       <div className="relative m-auto grid bg-gradient-to-br from-amber-300 to-zinc-50">
@@ -93,6 +94,8 @@ export default function Home() {
       <HallOfFame />
 
       <Sponsorship />
+
+     
     </div>
   );
 }
