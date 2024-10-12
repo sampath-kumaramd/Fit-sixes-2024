@@ -65,7 +65,7 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
           return (
             <div
               key={index}
-              className={`absolute w-[300px] h-[200px] transition-all duration-500 ${
+              className={`absolute w-[30rem] h-[15rem] transition-all duration-500 ${
                 isVisible ? '' : 'pointer-events-none'
               }`}
               style={{

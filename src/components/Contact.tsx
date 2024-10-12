@@ -19,13 +19,13 @@ const Contact = ({name , position,contactNo,email,image}:contactProfile) => {
           <Image 
               src={image} 
               alt={name} 
-              width={96} 
-              height={96} 
+              width={400} 
+              height={400} 
               className='w-24 h-24 sm:w-44 sm:h-44 rounded-full' 
   />
          </div>
         <div className='py-6 text-center'>
-        <div className='pt-2 font-bold'>{name}</div>
+        <div className='pt-2 font-semibold text-lg'>{name}</div>
         <div className='text-[12px]'>{position}</div>
         </div>
         <hr className='border-t  w-1/2 border-yellow-600'/>

@@ -31,7 +31,7 @@ const sponsors = [
   {
     id: 1,
     name: 'creative',
-    logo: '/company-logo/creative-bgremove.png',
+    logo: '/company-logo/question-mark.png',
     type: 'platinum',
     borderColor: '#e80a4c',
     description: (
@@ -56,7 +56,7 @@ const sponsors = [
   {
     id: 2,
     name: 'Digital Ocean',
-    logo: '/company-logo/gtn.png',
+    logo: '/company-logo/question-mark.png',
     type: 'gold',
     borderColor: '#40a0b8',
     description: (
@@ -81,7 +81,7 @@ const sponsors = [
   {
     id: 3,
     name: 'United Nations',
-    logo: '/company-logo/creative-bgremove.png',
+    logo: '/company-logo/question-mark.png',
     type: 'silver',
     borderColor: '#e80a4c',
     description: (
@@ -102,57 +102,7 @@ const sponsors = [
         </p>
       </div>
     ),
-  },
-  {
-    id: 4,
-    name: 'HP',
-    logo: '/company-logo/creative-bgremove.png',
-    type: 'gold',
-    borderColor: '#e80a4c',
-    description: (
-      <div className="space-y-4">
-        <p className="text-gray-300">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type
-          and scrambled it to make a type specimen book.
-        </p>
-        <p className="text-gray-300">
-          It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.
-        </p>
-      </div>
-    ),
-  },
-  {
-    id: 5,
-    name: 'Apple',
-    logo: '/company-logo/creative-bgremove.png',
-    type: 'platinum',
-    borderColor: '#e80a4c',
-    description: (
-      <div className="space-y-4">
-        <p className="text-gray-300">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type
-          and scrambled it to make a type specimen book.
-        </p>
-        <p className="text-gray-300">
-          It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.
-        </p>
-      </div>
-    ),
-  },
+  }
 ];
 
 const Sponsorship = () => {

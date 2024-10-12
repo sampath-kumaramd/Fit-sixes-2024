@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import Carouselsection from '@/components/Carouselsection';
 import PastMatches from '@/components/PastMatches';
+import SubTitle from '@/components/sub-title';
 
 const carouselItems = [
   {
@@ -66,40 +67,17 @@ const carouselItems = [
 
 function page() {
   return (
-    <div className="">
+    <div className="relative">
       {/* hero section */}
-      <div className="bg-gradient-to-r from-[#03082b] to-[#03081a] min-h-screen flex justify-center items-center ">
-        <div className="container mx-auto grid md:grid-cols-3 grid-cols-1 text-white py-6 md:gap-10 gap-0 space-y-10">
-          <div className="w-full max-h-96 grid col-span-2 space-y-1 md:space-y-10">
-            <h1 className="text-[#171c32] md:text-7xl text-2xl font-bold text-right">
-              FIT SIXES 2K24
-            </h1>
-            <h1 className="text-[#fba919] md:text-9xl text-5xl font-bold text-left md:ms-24 ms-10">
-              FIT SIXES
-            </h1>
-            <h1 className="text-white md:text-6xl text-xl font-bold text-right md:me-24 me-10">
-              CRICKET FIESTA
-            </h1>
-            <h1 className="text-[#171c32] md:text-7xl text-2xl font-bold text-left">
-              FIT SIXES 2K24
-            </h1>
-          </div>
-          <div className="flex w-full justify-center px-12 md:px-0 items-center">
-            <Image
-              src="/logo-light.png"
-              alt="hero"
-              width={400}
-              height={400}
-              className="w-full h-auto md:p-0"
-            />
-          </div>
-        </div>
+      <div className="   flex justify-center items-center pb-10 pt-20 bg-[#050a2e]">
+        <SubTitle mainText='About' highlightText=' Us'/>
       </div>
-
+      <div className=' bg-gradient-to-r from-[#fba818]/10 to-[#fba818]/5'>
+        
       {/* about section */}
       <div className="container mx-auto md:py-24 py-6 h-auto ">
         <div className="md:flex space-y-10 md:space-y-0 w-full justify-center items-center">
-          <div className="md:w-2/5 w-full flex justify-center items-center">
+          <div className="md:w-2/5 w-full flex justify-center items-center ">
             <Carouselsection items={carouselItems} />
           </div>
           <div className="space-y-8 md:text-xl text-md font-medium leading-normal md:w-3/5 w-full">
@@ -167,6 +145,7 @@ function page() {
           <PastMatches />
         </div>
       </div>
+</div>
     </div>
   );
 }

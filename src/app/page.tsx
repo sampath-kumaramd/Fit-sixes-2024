@@ -31,12 +31,12 @@ export default function Home() {
             alt="Wickets Background"
           />
         </div>
-        <div className="z-10">
-          <h1 className="mt-20 text-center text-2xl font-bold">
+        {/* <div className="z-10"> */}
+          {/* <h1 className="mt-20 text-center text-2xl font-bold">
             The Annual Cricket Fiesta by FIT
-          </h1>
+          </h1> */}
           <RollingBallAbstract />
-        </div>
+        {/* </div> */}
         <div className="z-30 mt-[-5rem] grid grid-cols-5 gap-5 p-2 lg:mt-[-20rem] lg:p-10 lg:px-20">
           <AnimatePresence>
             <motion.div
@@ -57,29 +57,9 @@ export default function Home() {
               viewport={{ once: true }}
               layout
             >
-              <motion.p>
-                Welcome to the official website of FIT SIXES, the annual
-                six-a-side cricket Tournament of the Faculty of Information
-                Technology of University of Moratuwa. FIT SIXES is a friendly
-                rivalry of cricket among the squads of undergraduates of the
-                faculty and the industry giants, and underpinning a numerous
-                mini-games, fun activities, and after party celebration.
-                Upholding the traditions of the faculty from generation to
-                generation, it is organized to strengthen the alliance between
-                the undergraduates and the invited industrial partners.
+              <motion.p className="mt-60 text-lg text-justify">
+                Welcome to the official website of FIT SIXES, the annual six-a-side cricket tournament of the Faculty of Information Technology of University of Moratuwa. FIT SIXES is a friendly rivalry of cricket among the squads of undergraduates of the faculty and the industry giants, underpinning a numerous mini-games, fun activities and an afterparty celebration. Upholding the traditions of the faculty from generation to generation, it is organized to strengthen the alliance between the undergraduates and the invited industry partners.
               </motion.p>
-              <motion.ul className="ml-10 mt-10 list-disc">
-                <motion.li className="mb-1">
-                  Annual six-a-side cricket tournament
-                </motion.li>
-                <motion.li className="mb-1">
-                  FIT SIXES is a friendly rivalry of cricket
-                </motion.li>
-                <motion.li className="mb-1">
-                  Alliance between the undergraduates and the invited industry
-                  partners
-                </motion.li>
-              </motion.ul>
               {/* <motion.div className="h-60 lg:block hidden" /> */}
             </motion.div>
           </AnimatePresence>
@@ -93,7 +73,7 @@ export default function Home() {
       </div>
       <HallOfFame />
 
-      <Sponsorship />
+      {/* <Sponsorship /> */}
 
      
     </div>

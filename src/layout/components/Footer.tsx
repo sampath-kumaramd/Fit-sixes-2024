@@ -18,8 +18,6 @@ const Footer = () => {
     const links = [
         { href: '/home', label: 'HOME' },
         { href: '/about', label: 'ABOUT' },
-        { href: '/about', label: 'WATCH LIVE' },
-        { href: '/about', label: 'LIVE SCORE' },
         { href: '/contactUs', label: 'CONTACT US' },
     ]
 
@@ -64,7 +62,7 @@ const Footer = () => {
             </div>
 
             </div>
-            <div className='text-[5px] sm:text-[8px] text-center pt-5 sm:pt-8'>2024@FIT SIXES - ALL RIGHT RESERVED</div>
+            <div className='text-sm sm:text-base text-center pt-5 sm:pt-8 pb-4 sm:pb-6'>2024@FIT SIXES - ALL RIGHT RESERVED</div>
             
         </div>
 

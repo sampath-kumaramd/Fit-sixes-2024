@@ -79,11 +79,11 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
           whileInView="visible"
         >
           <Path
-            className="absolute right-[7rem] top-[3rem] hidden h-20 w-32 rotate-[-40deg] sm:block xl:right-[17rem] xl:top-[0rem] xl:rotate-0"
+            className="absolute right-[7rem] top-[12rem] hidden h-20 w-32 rotate-[-40deg] sm:block xl:right-[27rem] xl:top-[0rem] xl:rotate-0"
             reverse
           />
           <motion.div
-            className="absolute right-[3rem] top-[0.5rem] hidden w-32 text-center font-bold sm:block xl:right-[3rem] xl:top-[32rem]"
+            className="absolute right-[3rem] top-[0.5rem] hidden w-32 text-center font-bold sm:block xl:right-[3rem] xl:top-[38rem]"
             variants={generalVariants}
             initial="initial"
             animate="visible"
@@ -91,7 +91,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             Memories
           </motion.div>
           <motion.div
-            className="absolute left-[1rem] top-[2rem] h-24 w-40 shadow-xl sd:left-[3rem] sd:h-32 sd:w-56 sm:left-[2rem] sm:top-[5rem] sm:h-48 sm:w-80 md:left-[5rem] xl:left-20 xl:top-[4rem]"
+            className="absolute left-[1rem] top-[2rem] h-24 w-40 shadow-xl sd:left-[3rem] sd:h-32 sd:w-56 sm:left-[2rem] sm:top-[5rem] sm:h-64 sm:w-[26rem] md:left-[5rem] xl:left-20 xl:top-[4rem]"
             variants={img1Variants}
             initial="initial"
             animate="animate"
@@ -105,11 +105,11 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             />
           </motion.div>
           <Path
-            className="absolute right-[3rem] top-[22rem] hidden h-20 w-32 rotate-90 sm:left-[28rem] sm:right-auto sm:top-[24rem] sm:block sm:rotate-45 md:left-[10rem] md:right-auto md:top-[25rem] md:rotate-180 xl:left-auto xl:right-[5rem] xl:top-[25rem] xl:rotate-90"
+            className="absolute right-[3rem] top-[22rem] hidden h-20 w-32 rotate-90 sm:left-[28rem] sm:right-auto sm:top-[24rem] sm:block sm:rotate-45 md:left-[10rem] md:right-auto md:top-[25rem] md:rotate-180 xl:left-auto xl:right-[5rem] xl:top-[30rem] xl:rotate-90"
             reverse
           />
           <motion.div
-            className="absolute hidden w-32 text-center font-bold sm:left-[34rem] sm:top-[28rem] sm:block md:left-[4rem] md:right-auto md:top-[27rem] xl:left-auto xl:right-[11rem] xl:top-[0rem]"
+            className="absolute hidden w-32 text-center font-bold sm:left-[34rem] sm:top-[28rem] sm:block md:left-[4rem] md:right-auto md:top-[27rem] xl:left-auto xl:right-[19rem] xl:top-[0rem]"
             variants={generalVariants}
             initial="initial"
             animate="visible"
@@ -118,7 +118,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             Games
           </motion.div>
           <motion.div
-            className="absolute right-[2rem] top-[4rem] h-24 w-40 shadow-xl sd:right-[4rem] sd:h-32 sd:w-56 sm:right-[2rem] sm:top-[8rem] sm:h-48 sm:w-80 md:right-[6rem] xl:right-[5rem] xl:top-[12rem]"
+            className="absolute right-[2rem] top-[4rem] h-24 w-40 shadow-xl sd:right-[4rem] sd:h-32 sd:w-56 sm:right-[2rem] sm:top-[8rem] sm:h-64 sm:w-[26rem] md:right-[6rem] xl:right-[5rem] xl:top-[12rem]"
             variants={img2Variants}
             initial="initial"
             animate="animate"
@@ -143,7 +143,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             Participants
           </motion.div>
           <motion.div
-            className="absolute left-[5rem] top-[10rem] h-24 w-40 shadow-xl sd:left-[10rem] sd:top-[12rem] sd:h-32 sd:w-56 sm:left-[8rem] sm:top-[20rem] sm:h-48 sm:w-80 md:left-[15rem] xl:left-[12rem] xl:top-[20rem]"
+            className="absolute left-[5rem] top-[10rem] h-24 w-40 shadow-xl sd:left-[10rem] sd:top-[12rem] sd:h-32 sd:w-56 sm:left-[8rem] sm:top-[20rem] sm:h-64 sm:w-[26rem] md:left-[15rem] xl:left-[12rem] xl:top-[20rem]"
             variants={img3Variants}
             initial="initial"
             animate="animate"
