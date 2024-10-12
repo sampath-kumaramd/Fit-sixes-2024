@@ -6,33 +6,57 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 const teams = [
   {
     id: 1,
-    src: '/assets/Champions/2023(m).jpg',
+    src: '/assets/images/2023(m).jpg',
     description:
-      '2023 Mens Champions - Team DFN Tapro A (DirectFN). This team showcased exceptional skill and teamwork throughout the tournament, emerging as the top contenders and securing the championship title for the year 2023.',
+      'Team DFN Tapro A (DirectFN) demonstrated exceptional skill and teamwork, securing the men’s championship title in 2023.',
   },
   {
     id: 2,
-    src: '/assets/Champions/2023(w).jpg',
+    src: '/assets/images/2022(m)-1.jpg',
     description:
-      "2023 Champions (Women) - Creative (Creative Software Pvt Ltd). The women's team from Creative Software Pvt Ltd demonstrated outstanding performance and resilience, earning them the championship title in the 2023 tournament.",
+      'Creative Software Pvt Ltd displayed remarkable talent and strategy, earning them a joint championship title in the 2022 men’s tournament.',
   },
   {
     id: 3,
-    src: '/assets/Champions/2022(m).jpg',
+    src: '/assets/images/2022(w)-2.jpg',
     description:
-      '2022 - Joint Champions (Men) - Virtusa Pvt Ltd. In a thrilling finale, Virtusa Pvt Ltd shared the championship title with another top-performing team, showcasing their prowess and sportsmanship in the 2022 tournament.',
+      "In a thrilling finale, Virtusa Pvt Ltd shared the championship title with another top-performing team, showcasing their prowess and sportsmanship in the 2022 tournament.",
   },
   {
     id: 4,
-    src: '/assets/Champions/2022(w).jpg',
+    src: '/assets/images/2022(w).jpg',
     description:
-      "2022 - Joint Champions (Men) - Creative Software Pvt Ltd. Creative Software Pvt Ltd displayed remarkable talent and strategy, earning them a joint championship title in the 2022 men's tournament.",
+      "The women's team from FIT BATCH 18 dominated the 2022 tournament with their exceptional skills and teamwork, securing the championship title for the year.",
   },
   {
     id: 5,
-    src: '/assets/Champions/2022(w).jpg',
+    src: '/assets/images/2017(m).png',
     description:
-      "2022 - Champions (Women) - FIT BATCH 18. The women's team from FIT BATCH 18 dominated the 2022 tournament with their exceptional skills and teamwork, securing the championship title for the year.",
+      "Virtusa once again claimed the men’s championship title in 2017, showcasing their consistency and expertise. ",
+  },
+  {
+    id: 6,
+    src: '/assets/images/2017(w).jpg',
+    description:
+      "The Batch 13 women’s team excelled with exceptional talent, taking the women’s championship in 2017.",
+  },
+  {
+    id: 7,
+    src: '/assets/images/2016(m).png',
+    description:
+      "Batch 13 secured the men’s championship title, marking their dominance in 2016.  ",
+  },
+  {
+    id: 8,
+    src: '/assets/images/2015(w).png',
+    description:
+      "Virtusa displayed superior strategy and talent, emerging as the 2015 men’s champions.",
+  },
+  {
+    id: 9,
+    src: '/assets/images/2014(m).png',
+    description:
+      "Millennium IT’s men’s team showcased remarkable skill, securing the championship title in 2014.",
   },
 ];
 

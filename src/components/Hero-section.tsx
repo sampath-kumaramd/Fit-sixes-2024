@@ -37,21 +37,24 @@ const HeroSection: React.FC = () => {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  const [model, setModel] = useState('animations/1st.glb');
+  const [model, setModel] = useState('animations/model-1.glb');
 
   const handleClick = () => {
     setClicked(true);
-    setModel('animations/3rd.glb');
+    console.log('clicked');
+    setModel('animations/model-3.glb');
   };
 
   const handleHover = () => {
+    console.log('hovered');
     setHovered(true);
-    setModel('animations/2nd.glb');
+    setModel('animations/model-2.glb');
   };
 
   const handleLeave = () => {
+    console.log('left');
     setHovered(false);
-    setModel('animations/1st.glb');
+    setModel('animations/model-1.glb');
   };
     
   const targetDate = new Date('2024-10-14T08:00:00');
@@ -81,7 +84,7 @@ const HeroSection: React.FC = () => {
 
             <Model url={model} play={true} />
           </Canvas>
-          <div className='absolute bottom-[26.5rem]'>
+          <div className='absolute bottom-[26rem]'>
         <CountDown targetDate={targetDate}/>  
           </div>
         </div>
