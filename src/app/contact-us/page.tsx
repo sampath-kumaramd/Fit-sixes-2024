@@ -60,7 +60,7 @@ export default function contactUs() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="container mx-auto mt-20 flex flex-col items-center justify-between px-20 py-8 sm:flex-row sm:flex-wrap"
+        className="container mx-auto sm:mt-20 mt-10 flex flex-col items-center justify-between px-20 py-8 sm:flex-row sm:flex-wrap gap-6"
       >
         {contacts.map((contact, index) => (
           <motion.div

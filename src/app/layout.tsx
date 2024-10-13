@@ -12,8 +12,8 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: 'FIT SIXES 2024',
-  description: 'FIT SIXES 2024',
+  title: 'FIT SIXES 2k24',
+  description: 'FIT SIXES 2k24',
 };
 
 export default function RootLayout({

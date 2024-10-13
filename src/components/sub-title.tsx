@@ -55,19 +55,20 @@ const SubTitle: React.FC<SubTitleProps> = ({ mainText, highlightText }) => {
         variants={divVariants}
         className="relative font-extrabold font-druktrial"
       >
-        <div className="absolute font-bold inset-0 flex justify-center items-center text-white/20 -z-10 text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-exon tracking-tighter">
+        <div className="absolute font-bold inset-0 flex justify-center items-center text-white/20 -z-10 text-5xl sm:text-4xl md:text-5xl lg:text-7xl font-exon tracking-tighter">
           {mainText} {highlightText}
         </div>
-        <div className="flex flex-row justify-center items-center font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-exon text">
+        <div className="flex flex-row justify-center items-center font-semibold text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-exon text">
           <motion.span
             variants={spanVariants}
             className="text-yellow"
           >
             {mainText}
           </motion.span>
+          <span> &nbsp;</span>
           <motion.span
             variants={spanHighlightVariants}
-            className="text-white mt-2 sm:mt-0 sm:ml-2"
+            className="text-white mt-0 sm:ml-2"
           >
             {highlightText}
           </motion.span>

@@ -6,10 +6,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
 
 interface CarouselItem {
-  name: string;
   image: string;
-  description: string;
-  logo?: string;
 }
 
 interface CustomCarouselProps {
@@ -94,13 +91,9 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
             >
               <div className="relative w-full h-full rounded-md shadow-lg  border-2 border-gray-300 overflow-hidden group">
                 <div className="relative z-10 flex flex-col items-center justify-center bg-blue-900 h-full px-6 pt-12 pb-6 text-center">
-                  <Image src={item.image} alt={item.name} fill className='object-cover' />
+                  <Image src={item.image} alt={item.image} fill className='object-cover' />
                 </div>
-                {isActive && (
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black bg-opacity-70 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                    {item.description}
-                  </div>
-                )}
+                
               </div>
             </div>
           );

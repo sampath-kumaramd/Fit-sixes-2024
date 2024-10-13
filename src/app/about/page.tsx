@@ -9,63 +9,62 @@ import { TypeAnimation } from 'react-type-animation';
 import Carouselsection from '@/components/Carouselsection';
 import PastMatches from '@/components/PastMatches';
 import SubTitle from '@/components/sub-title';
+interface CarouselItem {
+  image: string;
+}
 
-const carouselItems = [
+interface CustomCarouselProps {
+  items: CarouselItem[];
+}
+
+const carouselItems : CarouselItem[] = [
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/1.jpg',
   },
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/2.jpg',
   },
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum mass sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/3.jpg',
   },
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/4.jpg',
   },
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/5.jpg',
   },
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum mass sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/6.jpg',
   },
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/7.jpg',
   },
   {
-    name: 'JORDYN CURTIS',
-    image: '/Champions/2014(m).png',
-    description:
-      'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
-    logo: '',
+    image: '/about-us/8.jpg',
+  },
+  {
+    image: '/about-us/9.jpg',
+  },
+  {
+    image: '/about-us/10.jpg',
+  },
+  {
+    image: '/about-us/11.jpg',
+  },
+  {
+    image: '/about-us/12.jpg',
+  },
+  {
+    image: '/about-us/13.jpg',
+  },
+  {
+    image: '/about-us/14.jpg',
+  },
+  {
+    image: '/about-us/15.jpg',
+  },
+  {
+    image: '/about-us/16.jpg',
   },
 ];
 
@@ -144,7 +143,6 @@ function page() {
               ]}
               wrapper="div"
               speed={99}
-              style={{ whiteSpace: 'pre-line' }}
               repeat={0}
               cursor={false}
             />
@@ -154,7 +152,6 @@ function page() {
               ]}
               wrapper="div"
               speed={99}
-              style={{ whiteSpace: 'pre-line' }}
               repeat={0}
               cursor={false}
             />
