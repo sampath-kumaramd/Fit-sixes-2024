@@ -64,20 +64,28 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+@font-face {
+  font-family: 'Gotham-Black';
+  src: url('../../public/fonts/Gotham-Black.otf') format('otf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Exon';
-  src: url('/fonts/Excon-Medium.otf') format('otf');
+  font-family: 'Anton';
+  src: url('../../public/fonts/Anton-Regular.ttf') format('ttf');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Druk Trial';
+  src: url('../../public/fonts/oswald.regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @layer components {

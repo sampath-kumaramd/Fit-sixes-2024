@@ -32,6 +32,7 @@ const config: Config = {
           'linear-gradient(89.1deg, #ffae01 6%, #a1700d 16%, #36291a 26%, #020720 70%)',
       },
       fontSize: {
+        '7xl': '7rem',
         '8xl': '8rem',
         '9xl': '9.5rem',
         '10xl': '11rem',

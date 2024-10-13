@@ -71,7 +71,7 @@ const HeroSection: React.FC = () => {
     } else if (isTablet) {
       setFov(50);
     } else if(isDesktop){
-      setFov(40);
+      setFov(45);
     } else if(isSmallMobile){
       setFov(60);
     } else{

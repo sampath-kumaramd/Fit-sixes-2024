@@ -60,10 +60,12 @@ const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText, on
         variants={divVariants}
         className="relative font-extrabold font-druktrial"
       >
-        <div className="absolute font-bold inset-0 flex justify-center items-center text-white/10 -z-10 text-4xl sm:text-6xl md:text-8xl lg:text-11xl font-exon tracking-tighter">
-          {mainText} {highlightText}
+        <div >
+             <div className="absolute font-bold inset-0 flex justify-center items-center text-white/10 -z-10 text-5xl sm:text-7xl md:text-8xl lg:text-10xl ">
+            {mainText} {highlightText}
+          </div>
         </div>
-        <div className="flex flex-col sm:flex-row justify-center items-center font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-exon text">
+        <div className="flex flex-row justify-center items-center font-semibold text-6xl  lg:text-8xl w-fit mx-auto relative">
           <motion.span
             variants={spanVariants}
             className="text-yellow"
@@ -76,20 +78,20 @@ const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText, on
           >
             {highlightText}
           </motion.span>
+          <motion.div
+            variants={buttonVariants}
+            className='absolute -bottom-10 sm:-bottom-12 right-0'
+          >
+            <ShinyButton
+              className='text-sm sm:text-xl bg-yellow text-white w-fit px-3 sm:px-4 py-1 sm:py-2'
+              onMouseEnter={onMouseEnter}
+              onMouseLeave={onMouseLeave}
+              onClick={onClick}
+            >
+              Coming Soon
+            </ShinyButton>
+          </motion.div>
         </div>
-      </motion.div>
-      <motion.div
-        variants={buttonVariants}
-        className='absolute -bottom-8 sm:-bottom-12 left-1/2 -translate-x-1/2 lg:right-48'
-      >
-        <ShinyButton
-          className='text-sm sm:text-xl bg-yellow text-white w-fit px-3 sm:px-4 py-1 sm:py-2'
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-          onClick={onClick}
-        >
-          Coming Soon
-        </ShinyButton>
       </motion.div>
     </motion.div>
   );

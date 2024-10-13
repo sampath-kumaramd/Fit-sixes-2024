@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Oswald } from 'next/font/google';
 import Script from 'next/script';
 
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import HomePageLayout from '@/layout/home-page-layout';
 
-const inter = Inter({ subsets: ['latin'] });
+const oswald = Oswald({ 
+  subsets: ['latin'],
+  weight: ['400'], // 400 is the weight for Regular
+});
 
 export const metadata: Metadata = {
   title: 'FIT SIXES 2024',
@@ -25,7 +28,7 @@ export default function RootLayout({
       <link href="https://unpkg.com/@pqina/flip/dist/flip.min.css" rel="stylesheet"></link>
         <Script src="https://unpkg.com/@pqina/flip/dist/flip.min.js"></Script>
       </head>
-      <body className={inter.className}>
+      <body className={oswald.className}>
         <HomePageLayout>
           {children}
         </HomePageLayout>
