@@ -72,9 +72,10 @@ const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText, on
           >
             {mainText}
           </motion.span>
+          <span className='whitespace-nowrap'> &nbsp;</span>
           <motion.span
             variants={spanHighlightVariants}
-            className="text-white mt-2 sm:mt-0 sm:ml-2"
+            className="text-white sm:ml-2"
           >
             {highlightText}
           </motion.span>

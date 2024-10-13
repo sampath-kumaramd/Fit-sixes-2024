@@ -130,35 +130,41 @@ function page() {
         viewport={{ once: true }}
         className="container mx-auto md:py-12 py-6 h-auto"
       >
-        <div className="md:flex space-y-10 md:space-y-0 w-full justify-center items-center">
+        <div className="flex flex-col md:flex-row space-y-10 md:space-y-0 w-full justify-center items-center">
           <motion.div 
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 1 }}
             viewport={{ once: true }}
-            className="w-full md:w-1/2 space-y-8 md:text-xl text-md font-medium leading-normal"
-          >
-            <p>
-              In the year 2019, the &quot;FIT SIXES Cricket Fiesta&quot; was
-              held for the last time. With the support of students from batches
-              15, 16, 17, and 18, as well as more than 100 industry visitors, it
-              was successfully concluded.
-            </p>
-            <p>
-              When compared to previously held cricket fiestas, this event had a
-              unique fan base every year, both in the University of Moratuwa and
-              in the businesses associated with the industry. In addition to the
-              faculty of IT cricket teams, more than 40 teams from 30 different
-              companies took part in the previous match, which benefited the
-              relationship between the faculty of IT and its industry partners.
-            </p>
+            className="w-full md:w-1/2 space-y-8 md:text-xl text-md font-medium leading-normal order-2 md:order-1"
+            >
+               <TypeAnimation
+              sequence={[
+                'In the year 2019, the &quot;FIT SIXES Cricket Fiesta&quot; was\n\nheld for the last time. With the support of students from batches\n\n15, 16, 17, and 18, as well as more than 100 industry visitors, it\n\nwas successfully concluded.',
+              ]}
+              wrapper="div"
+              speed={99}
+              style={{ whiteSpace: 'pre-line' }}
+              repeat={0}
+              cursor={false}
+            />
+         <TypeAnimation
+              sequence={[
+                'When compared to previously held cricket fiestas, this event had a\n\nunique fan base every year, both in the University of Moratuwa and\n\nin the businesses associated with the industry. In addition to the\n\nfaculty of IT cricket teams, more than 40 teams from 30 different\n\ncompanies took part in the previous match, which benefited the\n\nrelationship between the faculty of IT and its industry partners.',
+              ]}
+              wrapper="div"
+              speed={99}
+              style={{ whiteSpace: 'pre-line' }}
+              repeat={0}
+              cursor={false}
+            />
           </motion.div>
           <motion.div 
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.2 }}
             viewport={{ once: true }}
-            className="w-full md:w-1/2"
+            className="w-full md:w-1/2 order-1 md:order-2"
           >
             <Image
               src="/t-shirt.svg"

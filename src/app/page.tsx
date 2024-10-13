@@ -55,7 +55,7 @@ export default function Home() {
               viewport={{ once: true }}
               layout
             >
-              <motion.p className="mt-60 text-lg text-justify">
+              <motion.p className="md:mt-60 mt-20 text-lg text-justify">
                 Welcome to the official website of FIT SIXES, the annual six-a-side cricket tournament of the Faculty of Information Technology of University of Moratuwa. FIT SIXES is a friendly rivalry of cricket among the squads of undergraduates of the faculty and the industry giants, underpinning a numerous mini-games, fun activities and an afterparty celebration. Upholding the traditions of the faculty from generation to generation, it is organized to strengthen the alliance between the undergraduates and the invited industry partners.
               </motion.p>
             </motion.div>

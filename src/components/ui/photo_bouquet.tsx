@@ -83,7 +83,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             reverse
           />
           <motion.div
-            className="absolute right-[3rem] top-[0.5rem] hidden w-32 text-center font-bold sm:flex xl:right-[3rem] xl:top-[38rem] bg-blue-900 h-32 rounded-full items-center justify-center text-white"
+            className="absolute right-[3rem] top-[0.5rem] hidden w-28 text-center font-bold sm:flex xl:right-[3rem] xl:top-[38rem] bg-gray-200  outline-dashed outline-offset-4 outline-2 outline-yellow-600  h-28 rounded-full items-center justify-center text-black"
             variants={generalVariants}
             initial="initial"
             animate="visible"
@@ -109,7 +109,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             reverse
           />
           <motion.div
-            className="absolute hidden w-32 text-center font-bold sm:left-[34rem] sm:top-[28rem] sm:block md:left-[4rem] md:right-auto md:top-[27rem] xl:left-auto xl:right-[19rem] xl:top-[0rem]"
+            className="absolute hidden w-28 text-center font-bold sm:left-[34rem] sm:top-[28rem] sm:flex md:left-[4rem] md:right-auto md:top-[27rem] xl:left-auto xl:right-[19rem] xl:top-[0rem] bg-gray-200  outline-dashed outline-offset-4 outline-2 outline-yellow-600  h-28 rounded-full items-center justify-center text-black"
             variants={generalVariants}
             initial="initial"
             animate="visible"
@@ -133,7 +133,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
           </motion.div>
           <Path className="absolute left-[2rem] top-[5rem] -z-10 hidden h-20 w-32 rotate-[90deg] sm:block xl:left-[5rem] xl:top-[25rem] xl:rotate-0" />
           <motion.div
-            className="absolute hidden w-32 text-center font-bold sm:block xl:left-[-1rem] xl:top-[29rem]"
+            className="absolute hidden w-28 text-center font-bold sm:flex xl:left-[-1rem] xl:top-[29rem] bg-gray-200  outline-dashed outline-offset-4 outline-2 outline-yellow-600  h-28 rounded-full items-center justify-center text-black"
             variants={generalVariants}
             initial="initial"
             animate="visible"

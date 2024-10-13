@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
+import { useMediaQuery } from 'react-responsive';
 
 import { Logo } from '@/components';
 
@@ -16,6 +17,10 @@ export default function Header() {
   const router = useRouter();
   const params = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isTablet = useMediaQuery({ maxWidth: 1024 });
+  const isDesktop = useMediaQuery({ minWidth: 1280 });
 
   const handleLogoClick = () => {
     router.push(`/`);
@@ -39,7 +44,7 @@ export default function Header() {
               onClick={handleLogoClick}
               className="flex items-center gap-3"
             >
-              <Logo logoSize="medium"/>
+              <Logo logoSize={isMobile ? 'small':'medium'}/>
           
             </button>
             

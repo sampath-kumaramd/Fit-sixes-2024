@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
@@ -19,6 +19,7 @@ interface CustomCarouselProps {
 const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
   const [activeIndex, setActiveIndex] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -30,10 +31,26 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const handleNext = useCallback(() =>
+    setActiveIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1)),
+  [items.length]);
+
   const handlePrev = () =>
     setActiveIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
-  const handleNext = () =>
-    setActiveIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    if (isAutoPlaying) {
+      intervalId = setInterval(() => {
+        handleNext();
+      }, 3000); // Change slide every 3 seconds
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isAutoPlaying, handleNext]);
 
   const getTransformValue = (adjustedPosition: number) => {
     const translateY = isMobile ? 30 : 70;
@@ -43,6 +60,8 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
   return (
     <div
       className={`relative w-full ${isMobile ? 'h-[290px]' : 'h-[450px]'} mx-auto overflow-hidden`}
+      onMouseEnter={() => setIsAutoPlaying(false)}
+      onMouseLeave={() => setIsAutoPlaying(true)}
     >
       <div
         className="absolute inset-0 -z-10"
@@ -73,7 +92,7 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
                 zIndex: items.length - Math.abs(adjustedPosition),
               }}
             >
-              <div className="relative w-full h-full rounded-md shadow-lg border-4 border-blue-300 overflow-hidden group">
+              <div className="relative w-full h-full rounded-md shadow-lg  border-2 border-gray-300 overflow-hidden group">
                 <div className="relative z-10 flex flex-col items-center justify-center bg-blue-900 h-full px-6 pt-12 pb-6 text-center">
                   <Image src={item.image} alt={item.name} fill className='object-cover' />
                 </div>

@@ -108,7 +108,6 @@ const HeroSection: React.FC = () => {
             <ambientLight intensity={0.5} />
             <pointLight position={[1, 5, 10]} intensity={600} />
             <pointLight position={[-2, 7, -10]} intensity={100} />
-
             <Model url={model} play={true} />
           </Canvas>
           <div className='absolute lg:bottom-[25rem] md:bottom-[27.5rem] sm:bottom-[27rem] sd:bottom-[27rem] bottom-[29rem] '>
