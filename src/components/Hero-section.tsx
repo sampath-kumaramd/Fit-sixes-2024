@@ -38,6 +38,7 @@ const Model = ({ url, play }: { url: string; play: boolean }) => {
 const HeroSection: React.FC = () => {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [canvasHeight, setCanvasHeight] = useState('1268px');
 
   const [model, setModel] = useState('animations/model-1.glb');
 
@@ -68,14 +69,18 @@ const HeroSection: React.FC = () => {
   useEffect(() => {
     if (isMobile) {
       setFov(70);
+      setCanvasHeight('1580px');
     } else if (isTablet) {
       setFov(50);
+      setCanvasHeight('1268px');
     } else if(isDesktop){
       setFov(45);
     } else if(isSmallMobile){
       setFov(60);
+      setCanvasHeight('1268px');
     } else{
       setFov(45);
+      setCanvasHeight('1268px');
     }
   }, [isMobile, isTablet, isDesktop, isSmallMobile]);
 
@@ -91,7 +96,7 @@ const HeroSection: React.FC = () => {
     </div>
       </div>
       <div className=" -mt-12 ">
-        <div className=" flex items-center justify-center relative">
+        <div className=" flex items-center justify-center relative ">
           <Canvas
             camera={{ position: [0, 1, 5.5], fov: fov }}
             style={{
@@ -106,7 +111,7 @@ const HeroSection: React.FC = () => {
 
             <Model url={model} play={true} />
           </Canvas>
-          <div className='absolute lg:bottom-[25rem] md:bottom-[27.5rem] sm:bottom-[27rem] bottom-[31rem] '>
+          <div className='absolute lg:bottom-[25rem] md:bottom-[27.5rem] sm:bottom-[27rem] sd:bottom-[27rem] bottom-[29rem] '>
         <CountDown targetDate={targetDate}/>  
           </div>
         </div>

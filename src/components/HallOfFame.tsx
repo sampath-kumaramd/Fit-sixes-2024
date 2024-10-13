@@ -101,7 +101,7 @@ const HallOfFame = () => {
           <div
             key={item.id}
             className="carousel-item"
-            style={{ backgroundImage: `url(/assets/images/2022_men_creative.jpg)` }}
+            style={{ backgroundImage: `url(/assets/images/2017(w).png)` }}
           >
             <div className="carousel-content">
               <div className="carousel-des">{item.description}</div>

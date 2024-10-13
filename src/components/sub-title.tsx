@@ -58,7 +58,7 @@ const SubTitle: React.FC<SubTitleProps> = ({ mainText, highlightText }) => {
         <div className="absolute font-bold inset-0 flex justify-center items-center text-white/20 -z-10 text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-exon tracking-tighter">
           {mainText} {highlightText}
         </div>
-        <div className="flex flex-col sm:flex-row justify-center items-center font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-exon text">
+        <div className="flex flex-row justify-center items-center font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-exon text">
           <motion.span
             variants={spanVariants}
             className="text-yellow"

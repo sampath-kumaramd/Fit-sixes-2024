@@ -61,7 +61,7 @@ const Footer = () => {
             </div>
 
             </div>
-            <div className='text-sm sm:text-base text-center pt-5 sm:pt-8 pb-4 sm:pb-6'>2024@FIT SIXES - ALL RIGHT RESERVED</div>
+            <div className='text-sm text-center pt-5 sm:pt-8 pb-4 sm:pb-6'>2024@FIT SIXES - ALL RIGHT RESERVED</div>
             
         </div>
 
