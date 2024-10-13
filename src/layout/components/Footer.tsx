@@ -25,7 +25,7 @@ const Footer = () => {
     <div className='bg-gradient-to-t from-[#03081a] to-[#03082c] '>
          <footer className=' container mx-auto  border-t border-gray-400 hidden sm:block '>
         <div className='text-white  pt-8 '>
-            <div className='grid  grid-cols-4 sm:grid-cols-3'>
+            <div className='flex justify-between'>
             <div className=''>
                           <Image src={"/images/footerLogo.png"} alt='itfsu' width={180} height={180} />
                           <div className=' flex justify-start gap-8 items-center pt-6'>
@@ -41,7 +41,7 @@ const Footer = () => {
                               </div>
                           </div>
             </div>
-            <div className='sm:pt-0 pt-6'>
+            {/* <div className='sm:pt-0 pt-6'>
                 <ul className='text-sm  flex flex-col text-center sm:text-left space-y-2 '>
                     {links.map((link, index) => (
                         <li key={index}>
@@ -50,13 +50,12 @@ const Footer = () => {
                     ))}
 
                 </ul>
-            </div>
+            </div> */}
             <div className=' col-span-2 sm:col-span-1 flex'>
                 <div className=' flex flex-col items-center    text-center text-sm'>
-                <div>Proudly Presented by</div>
+               <Image src={"/images/itfsuLogo.png"} alt='itfsu' width={100} height={100}/>
+                <div className='pt-6'>Proudly Presented by</div>
                 <div>IT FACULTY STUDENTS&apos; UNION OF UNIVERSITY OF MORATUWA</div>
-                <div className='pt-6'><Image src={"/images/itfsuLogo.png"} alt='itfsu' width={100} height={100}/>
-                </div>
                 </div>
               
             </div>

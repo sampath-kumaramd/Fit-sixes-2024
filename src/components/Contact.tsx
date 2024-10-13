@@ -31,7 +31,7 @@ const Contact = ({name , position,contactNo,email,image}:contactProfile) => {
         <hr className='border-t  w-1/2 border-yellow-600'/>
         <div className='py-6 sm:py-4 text-center font-bold'>
           <div>{contactNo}</div>
-          <div>{email}</div>
+          <div><a href={`mailto:${email}`} className="">{email}</a></div>
         </div>
     </div>
   )

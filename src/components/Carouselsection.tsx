@@ -42,15 +42,15 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
 
   return (
     <div
-      className={`relative w-full ${isMobile ? 'h-[290px]' : 'h-[450px]'} mx-auto  overflow-hidden`}
+      className={`relative w-full ${isMobile ? 'h-[290px]' : 'h-[450px]'} mx-auto overflow-hidden`}
     >
       <div
-        className="absolute inset-0 bg-white rounded-3xl -z-10"
+        className="absolute inset-0 -z-10"
         style={{ transform: 'skew(0, -5deg)' }}
       ></div>
       <button
         onClick={handleNext}
-        className="absolute left-1/2 md:translate-y-8 translate-y-2 flex items-center justify-center text-white z-40"
+        className="absolute left-1/2 md:translate-y-8 translate-y-2 flex items-center justify-center text-white z-40 bg-blue-900"
       >
         <ChevronUp size={28} />
       </button>
@@ -73,10 +73,15 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
                 zIndex: items.length - Math.abs(adjustedPosition),
               }}
             >
-              <div className="relative w-full h-full rounded-md shadow-lg border-4 border-blue-300 overflow-hidden">
-                <div className="relative z-10 flex flex-col items-center justify-center bg-blue-900  h-full px-6 pt-12 pb-6 text-center">
-                  hello
+              <div className="relative w-full h-full rounded-md shadow-lg border-4 border-blue-300 overflow-hidden group">
+                <div className="relative z-10 flex flex-col items-center justify-center bg-blue-900 h-full px-6 pt-12 pb-6 text-center">
+                  <Image src={item.image} alt={item.name} fill className='object-cover' />
                 </div>
+                {isActive && (
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black bg-opacity-70 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    {item.description}
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -85,7 +90,7 @@ const Carouselsection: React.FC<CustomCarouselProps> = ({ items }) => {
 
       <button
         onClick={handlePrev}
-        className="absolute left-1/2 md:-translate-y-12 -translate-y-8 flex items-center justify-center text-white z-40"
+        className="absolute left-1/2 md:-translate-y-12 -translate-y-8 flex items-center justify-center text-white z-40 bg-blue-900"
       >
         <ChevronDown size={28} />
       </button>

@@ -1,6 +1,10 @@
+'use client';
+
 import React from 'react';
 
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { TypeAnimation } from 'react-type-animation';
 
 import Carouselsection from '@/components/Carouselsection';
 import PastMatches from '@/components/PastMatches';
@@ -9,56 +13,56 @@ import SubTitle from '@/components/sub-title';
 const carouselItems = [
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
     logo: '',
   },
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa sagittis tincidunt. Fermentum massa.',
     logo: '',
   },
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum mass sagittis tincidunt. Fermentum massa.',
     logo: '',
   },
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
     logo: '',
   },
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
     logo: '',
   },
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum mass sagittis tincidunt. Fermentum massa.',
     logo: '',
   },
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
     logo: '',
   },
   {
     name: 'JORDYN CURTIS',
-    image: '/avatars/placeholder.png',
+    image: '/Champions/2014(m).png',
     description:
       'Nulla nibh amet ac augue enim mauris. Nulla massa suspendisse risus nibh hendrerit. A viverra tincidunt sagittis tincidunt. Fermentum massa.',
     logo: '',
@@ -69,46 +73,71 @@ function page() {
   return (
     <div className="relative">
       {/* hero section */}
-      <div className="   flex justify-center items-center pb-10 pt-20 bg-[#050a2e]">
+      <motion.div 
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="flex justify-center items-center pb-10 pt-20 bg-[#050a2e]"
+      >
         <SubTitle mainText='About' highlightText=' Us'/>
-      </div>
-      <div className=' bg-gradient-to-r from-[#fba818]/10 to-[#fba818]/5'>
+      </motion.div>
+      <div className='bg-gradient-to-r from-[#fba818]/10 to-[#fba818]/5'>
         
       {/* about section */}
-      <div className="container mx-auto md:py-24 py-6 h-auto ">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+        className="container mx-auto md:py-24 py-6 h-auto"
+      >
         <div className="md:flex space-y-10 md:space-y-0 w-full justify-center items-center">
-          <div className="md:w-2/5 w-full flex justify-center items-center ">
+          <motion.div 
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+            className="md:w-2/5 w-full flex justify-center items-center"
+          >
             <Carouselsection items={carouselItems} />
-          </div>
-          <div className="space-y-8 md:text-xl text-md font-medium leading-normal md:w-3/5 w-full">
-            <p>
-              FIT SIXES is the annual cricket encounter organized by the IT
-              Faculty Students&apos; Union of the University of Moratuwa.
-            </p>
-            <p>
-              collaboration with the industry and create a significant day in
-              our university lives. Along with that, we also want to give our
-              undergraduate students a chance to interact with others who share
-              their interests and grow professionally through these connections.
-            </p>
-            <p>
-              The goal of this effort is to bring the FIT family&lsquo;s hidden
-              sportsmanship to light and help generations after generations tie
-              together friendship and unity.
-            </p>
-            <p>
-              The goal of this effort is to bring the FIT family&lsquo;s hidden
-              sportsmanship to light and help generations after generations tie
-              together friendship and unity.
-            </p>
-          </div>
+          </motion.div>
+          <motion.div 
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            viewport={{ once: true }}
+            className="space-y-8 md:text-xl text-md font-medium leading-normal md:w-3/5 w-full"
+          >
+            <TypeAnimation
+              sequence={[
+                'FIT SIXES is the annual cricket encounter organized by the IT Faculty Students\' Union of the University of Moratuwa.\n\nFIT SIXES aims to foster collaboration with the industry and create a significant day in our university lives. We want to give our undergraduate students a chance to interact with others who share their interests and grow professionally through these connections.\n\nThe goal of this effort is to bring the FIT family\'s hidden sportsmanship to light and help generations after generations tie together friendship and unity.',
+              ]}
+              wrapper="div"
+              speed={99}
+              style={{ whiteSpace: 'pre-line' }}
+              repeat={0}
+              cursor={false}
+            />
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* t shirt section */}
-      <div className="container mx-auto md:py-12 py-6 h-auto ">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.8 }}
+        viewport={{ once: true }}
+        className="container mx-auto md:py-12 py-6 h-auto"
+      >
         <div className="md:flex space-y-10 md:space-y-0 w-full justify-center items-center">
-          <div className="w-full md:w-1/2 space-y-8 md:text-xl text-md font-medium leading-normal ">
+          <motion.div 
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            viewport={{ once: true }}
+            className="w-full md:w-1/2 space-y-8 md:text-xl text-md font-medium leading-normal"
+          >
             <p>
               In the year 2019, the &quot;FIT SIXES Cricket Fiesta&quot; was
               held for the last time. With the support of students from batches
@@ -123,8 +152,14 @@ function page() {
               companies took part in the previous match, which benefited the
               relationship between the faculty of IT and its industry partners.
             </p>
-          </div>
-          <div className="w-full md:w-1/2">
+          </motion.div>
+          <motion.div 
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            viewport={{ once: true }}
+            className="w-full md:w-1/2"
+          >
             <Image
               src="/t-shirt.svg"
               alt="tshirt"
@@ -132,21 +167,21 @@ function page() {
               height={100}
               className="w-full h-auto"
             />
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* previous matches */}
       <div className="container mx-auto py-12 h-auto ">
         <h1 className="md:text-4xl text-xl font-bold bg-custom-text-gradient mb-6 text-gradient md:mb-12">
-          Previous FIT Sixes So Far ...
+          FIT SIXES So Far ...
         </h1>
         <div>
           <PastMatches />
         </div>
       </div>
-</div>
-    </div>
+      </div>
+      </div>
   );
 }
 

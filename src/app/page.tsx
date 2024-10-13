@@ -31,12 +31,10 @@ export default function Home() {
             alt="Wickets Background"
           />
         </div>
-        {/* <div className="z-10"> */}
-          {/* <h1 className="mt-20 text-center text-2xl font-bold">
-            The Annual Cricket Fiesta by FIT
-          </h1> */}
+          <h1 className="mt-32 text-center text-2xl font-bold">
+           { ' '}
+          </h1>
           <RollingBallAbstract />
-        {/* </div> */}
         <div className="z-30 mt-[-5rem] grid grid-cols-5 gap-5 p-2 lg:mt-[-20rem] lg:p-10 lg:px-20">
           <AnimatePresence>
             <motion.div

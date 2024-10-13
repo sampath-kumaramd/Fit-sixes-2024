@@ -35,6 +35,8 @@ const config: Config = {
         '8xl': '8rem',
         '9xl': '9.5rem',
         '10xl': '11rem',
+        '11xl': '12.5rem',
+        '12xl': '14rem',
       },
       fontFamily: {
         schluber: ['var(--font-schluber)'],
@@ -84,6 +86,18 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
+        fadeIn: {
+          from: {
+            opacity: '0',
+            transform: 'translate(0, 100px)',
+            filter: 'blur(33px)',
+          },
+          to: {
+            opacity: '1',
+            transform: 'translate(0)',
+            filter: 'blur(0)',
+          },
+        },
         shimmer: {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
@@ -139,6 +153,7 @@ const config: Config = {
         fliptop: 'fliptop 0.45s both',
         flipbottom: 'flipbottom 0.45s 0.45s both',
         bounce: 'bounce 1s infinite',
+        fadeIn: 'fadeIn 1s ease-in-out',
       },
     },
   },

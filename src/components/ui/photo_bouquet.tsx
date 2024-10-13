@@ -83,7 +83,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             reverse
           />
           <motion.div
-            className="absolute right-[3rem] top-[0.5rem] hidden w-32 text-center font-bold sm:block xl:right-[3rem] xl:top-[38rem]"
+            className="absolute right-[3rem] top-[0.5rem] hidden w-32 text-center font-bold sm:flex xl:right-[3rem] xl:top-[38rem] bg-blue-900 h-32 rounded-full items-center justify-center text-white"
             variants={generalVariants}
             initial="initial"
             animate="visible"

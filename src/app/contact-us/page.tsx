@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 import Contact from '@/components/Contact';
+import SubTitle from '@/components/sub-title';
 
 const contacts = [
   {
@@ -53,14 +54,7 @@ export default function contactUs() {
     >
       <div className="absolute inset-0 hidden bg-[url('/images/background.svg')] bg-[length:80%] bg-no-repeat opacity-5 marker:bg-contain sm:block sm:bg-left-top" />
 
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="pt-3 text-center font-bold sm:pt-1 sm:text-4xl"
-      >
-        CONTACT US
-      </motion.div>
+      <SubTitle mainText='Contact' highlightText=' Us'/>
 
       <motion.div
         initial={{ y: 20, opacity: 0 }}
@@ -97,7 +91,9 @@ export default function contactUs() {
         <div className="py-3">
           <Image src={'/images/email.png'} alt="email" width={40} height={40} />
         </div>
-        <div className="font-sans">Email: itfsu.fitsixes@gmail.com</div>
+        <div className="font-sans">
+          Email: <a href="mailto:itfsu.fitsixes@gmail.com" className="">itfsu.fitsixes@gmail.com</a>
+        </div>
       </motion.div>
     </motion.div>
   );

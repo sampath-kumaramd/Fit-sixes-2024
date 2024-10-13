@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { useMediaQuery } from 'react-responsive';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
@@ -8,6 +9,7 @@ import CountDown from './count-down';
 import StylizedText from './StylizedText';
 import { Button } from './ui';
 import ShinyButton from './ui/ShinyButton';
+
 
 const Model = ({ url, play }: { url: string; play: boolean }) => {
   const gltf = useLoader(GLTFLoader, url);
@@ -56,13 +58,33 @@ const HeroSection: React.FC = () => {
     setHovered(false);
     setModel('animations/model-1.glb');
   };
-    
+  const isSmallMobile = useMediaQuery({ maxWidth: 425 });
+  const isMobile = useMediaQuery({ maxWidth: 639 });
+  const isTablet = useMediaQuery({ minWidth: 640, maxWidth: 1023 });
+  const isDesktop = useMediaQuery({ minWidth: 1024 });
+
+  const [fov, setFov] = useState(45);
+
+  useEffect(() => {
+    if (isMobile) {
+      setFov(70);
+    } else if (isTablet) {
+      setFov(50);
+    } else if(isDesktop){
+      setFov(40);
+    } else if(isSmallMobile){
+      setFov(60);
+    } else{
+      setFov(45);
+    }
+  }, [isMobile, isTablet, isDesktop, isSmallMobile]);
+
   const targetDate = new Date('2024-10-14T08:00:00');
 
   const [isHovering, setIsHovering] = useState(false);
 
   return (
-    <section className="container mx-auto h-screen">
+    <section className="w-full h-screen">
       <div className="mt-0 text-center text-white opacity-90 relative">
        <div className='absolute top-0 left-1/2 -translate-x-1/2  w-full'>
       <StylizedText mainText="FIT SIXES" highlightText="2K24" onClick={handleClick} onMouseEnter={handleHover} onMouseLeave={handleLeave} />
@@ -71,7 +93,7 @@ const HeroSection: React.FC = () => {
       <div className=" -mt-12 ">
         <div className=" flex items-center justify-center relative">
           <Canvas
-            camera={{ position: [0, 1,5.5], fov: 45 }}
+            camera={{ position: [0, 1, 5.5], fov: fov }}
             style={{
               display: 'block',
               width: '800px',
@@ -84,7 +106,7 @@ const HeroSection: React.FC = () => {
 
             <Model url={model} play={true} />
           </Canvas>
-          <div className='absolute bottom-[26rem]'>
+          <div className='absolute lg:bottom-[25rem] md:bottom-[27.5rem] sm:bottom-[27rem] bottom-[31rem] '>
         <CountDown targetDate={targetDate}/>  
           </div>
         </div>
