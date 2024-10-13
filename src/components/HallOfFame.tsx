@@ -6,57 +6,63 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 const teams = [
   {
     id: 1,
-    src: '/assets/images/2023(m).jpg',
+    src: '/champions/2023(m).jpg',
     description:
       'Team DFN Tapro A (DirectFN) demonstrated exceptional skill and teamwork, securing the men’s championship title in 2023.',
   },
   {
     id: 2,
-    src: '/assets/images/2022(m)-1.jpg',
+    src: '/champions/2023(w).jpg',
+    description:
+      'Team DFN Tapro A (DirectFN) demonstrated exceptional skill and teamwork, securing the men’s championship title in 2023.',
+  },
+  {
+    id: 3,
+    src: '/champions/2022(m)-1.jpg',
     description:
       'Creative Software Pvt Ltd displayed remarkable talent and strategy, earning them a joint championship title in the 2022 men’s tournament.',
   },
   {
-    id: 3,
-    src: '/assets/images/2022(w)-2.jpg',
+    id: 4,
+    src: '/champions/2022(m)-2.jpg',
     description:
-      "In a thrilling finale, Virtusa Pvt Ltd shared the championship title with another top-performing team, showcasing their prowess and sportsmanship in the 2022 tournament.",
+      'In a thrilling finale, Virtusa Pvt Ltd shared the championship title with another top-performing team, showcasing their prowess and sportsmanship in the 2022 tournament.',
   },
   {
-    id: 4,
-    src: '/assets/images/2022(w).jpg',
+    id: 5,
+    src: '/champions/2022(w).jpg',
     description:
       "The women's team from FIT BATCH 18 dominated the 2022 tournament with their exceptional skills and teamwork, securing the championship title for the year.",
   },
   {
-    id: 5,
-    src: '/assets/images/2017(m).png',
-    description:
-      "Virtusa once again claimed the men’s championship title in 2017, showcasing their consistency and expertise. ",
-  },
-  {
     id: 6,
-    src: '/assets/images/2017(w).jpg',
+    src: '/champions/2017(m).jpg',
     description:
-      "The Batch 13 women’s team excelled with exceptional talent, taking the women’s championship in 2017.",
+      'Virtusa once again claimed the men’s championship title in 2017, showcasing their consistency and expertise. ',
   },
   {
     id: 7,
-    src: '/assets/images/2016(m).png',
+    src: '/champions/2017(w).png',
     description:
-      "Batch 13 secured the men’s championship title, marking their dominance in 2016.  ",
+      'The Batch 13 women’s team excelled with exceptional talent, taking the women’s championship in 2017.',
   },
   {
     id: 8,
-    src: '/assets/images/2015(w).png',
+    src: '/champions/2016(m).png',
     description:
-      "Virtusa displayed superior strategy and talent, emerging as the 2015 men’s champions.",
+      'Batch 13 secured the men’s championship title, marking their dominance in 2016.  ',
   },
   {
     id: 9,
-    src: '/assets/images/2014(m).png',
+    src: '/champions/2015(m).png',
     description:
-      "Millennium IT’s men’s team showcased remarkable skill, securing the championship title in 2014.",
+      'Virtusa displayed superior strategy and talent, emerging as the 2015 men’s champions.',
+  },
+  {
+    id: 10,
+    src: '/champions/2014(m).png',
+    description:
+      'Millennium IT’s men’s team showcased remarkable skill, securing the championship title in 2014.',
   },
 ];
 
@@ -101,8 +107,17 @@ const HallOfFame = () => {
           <div
             key={item.id}
             className="carousel-item"
-            style={{ backgroundImage: `url(/assets/images/2017(w).png)` }}
+            style={{ backgroundImage: `url(${item.src})` }}
           >
+            <img
+              src={item.src}
+              alt={`Team ${item.id}`}
+              className="h-full w-full object-cover object-center"
+              style={{
+                borderRadius: '20px',
+              }}
+            />
+
             <div className="carousel-content">
               <div className="carousel-des">{item.description}</div>
             </div>
@@ -112,10 +127,10 @@ const HallOfFame = () => {
 
       <div className="buttons">
         <button className="prev bg-darkBlue">
-       <ArrowLeft className="w-8 h-8" />
+          <ArrowLeft className="h-8 w-8" />
         </button>
         <button className="next bg-darkBlue">
-          <ArrowRight className="w-8 h-8" />
+          <ArrowRight className="h-8 w-8" />
         </button>
       </div>
     </div>
