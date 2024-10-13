@@ -24,7 +24,7 @@ const contacts = [
     name: 'Chathura Nimsara',
     position: '  Event coordinator',
     contactNo: '+94 76 562 6145',
-    email: 'Nodani',
+    email: 'karunarathnawakcn.20@itfac.mrt.ac.lk',
     image: '/coordinator/chathura.jpg',
   },
 
@@ -32,7 +32,7 @@ const contacts = [
     name: 'Menura Wijesekara',
     position: 'Event coordinator',
     contactNo: '+94 71 121 4997',
-    email: 'Nodani',
+    email: 'wijesekaramp.20@itfac.mrt.ac.lk',
     image: '/coordinator/menura.jpg',
   },
   {

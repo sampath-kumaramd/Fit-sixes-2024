@@ -10,9 +10,9 @@ import MobileViewFooter from '@/components/mobileViewFooter';
 
 const Footer = () => {
   const socialLinks = [
-    { href: "https://www.facebook.com", icon: FaFacebook, alt: "Facebook" },
-    { href: "https://www.instagram.com", icon: FaInstagram, alt: "Instagram" },
-    { href: "https://www.tiktok.com", icon: FaTiktok, alt: "TikTok" },
+    { href: "https://www.facebook.com/fitsixes", icon: FaFacebook, alt: "Facebook" },
+    { href: "https://www.instagram.com/fitsixescricketfiesta/", icon: FaInstagram, alt: "Instagram" },
+    { href: "https://www.tiktok.com/@fitsixescricketfiesta", icon: FaTiktok, alt: "TikTok" },
     ];
     
     const links = [
