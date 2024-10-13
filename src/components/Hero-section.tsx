@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import Image from 'next/image';
 import { useMediaQuery } from 'react-responsive';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -89,14 +90,14 @@ const HeroSection: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
 
   return (
-    <section className="w-full h-screen">
-      <div className="mt-0 text-center text-white opacity-90 relative">
-       <div className='absolute top-0 left-1/2 -translate-x-1/2  w-full'>
+    <section className="w-full h-screen relative bg-darkBlue">
+      <div className="mt-0 text-center text-white opacity-90 relative z-50">
+       <div className='absolute top-1 left-1/2 -translate-x-1/2  w-full'>
       <StylizedText mainText="FIT SIXES" highlightText="2K24" onClick={handleClick} onMouseEnter={handleHover} onMouseLeave={handleLeave} />
     </div>
       </div>
-      <div className=" -mt-12 ">
-        <div className=" flex items-center justify-center relative ">
+      <div className=" -mt-12 z-50 ">
+        <div className=" flex items-center justify-center relative z-50 ">
           <Canvas
             camera={{ position: [0, 1, 5.5], fov: fov }}
             style={{
@@ -115,7 +116,9 @@ const HeroSection: React.FC = () => {
           </div>
         </div>
       </div>
-    
+      <div className='absolute bottom-0 left-0 w-full h-full'>
+    <Image src="/pattern-transparent.png" alt="hero-section" width={1920} height={1080} className='w-full h-full object-cover opacity-[1%] ' />
+      </div>
     </section>
   );
 };

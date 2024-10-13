@@ -88,7 +88,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             initial="initial"
             animate="visible"
           >
-            Memories
+            30+ companies
           </motion.div>
           <motion.div
             className="absolute left-[1rem] top-[2rem] h-24 w-40 shadow-xl sd:left-[3rem] sd:h-32 sd:w-56 sm:left-[2rem] sm:top-[5rem] sm:h-64 sm:w-[26rem] md:left-[5rem] xl:left-20 xl:top-[4rem]"
@@ -114,8 +114,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             initial="initial"
             animate="visible"
           >
-            Fun &<br />
-            Games
+            50+ Matches
           </motion.div>
           <motion.div
             className="absolute right-[2rem] top-[4rem] h-24 w-40 shadow-xl sd:right-[4rem] sd:h-32 sd:w-56 sm:right-[2rem] sm:top-[8rem] sm:h-64 sm:w-[26rem] md:right-[6rem] xl:right-[5rem] xl:top-[12rem]"
@@ -138,9 +137,7 @@ export default function PhotoBouquet({ visible }: { visible: boolean }) {
             initial="initial"
             animate="visible"
           >
-            &gt;1000
-            <br />
-            Participants
+            1000+ Undergraduates
           </motion.div>
           <motion.div
             className="absolute left-[5rem] top-[10rem] h-24 w-40 shadow-xl sd:left-[10rem] sd:top-[12rem] sd:h-32 sd:w-56 sm:left-[8rem] sm:top-[20rem] sm:h-64 sm:w-[26rem] md:left-[15rem] xl:left-[12rem] xl:top-[20rem]"
