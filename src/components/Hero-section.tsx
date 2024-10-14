@@ -103,7 +103,7 @@ const HeroSection: React.FC = () => {
       <StylizedText mainText="FIT SIXES" highlightText="2K24" onClick={handleClick} onMouseEnter={handleHover} onMouseLeave={handleLeave} />
     </div>
       </div>
-      <div className=" -mt-12 z-50 ">
+      <div className=" -mt-8 z-50 ">
         <div className=" flex items-center justify-center relative  ">
           <Canvas
             camera={{ position: [0, 0, 5.5], fov: 30 }}
