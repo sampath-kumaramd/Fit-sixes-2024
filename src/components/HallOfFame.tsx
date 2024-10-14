@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 const teams = [
   {
@@ -107,13 +108,15 @@ const HallOfFame = () => {
             className="carousel-item"
             style={{ backgroundImage: `url(${item.src})` }}
           >
-            <img
+            <Image
               src={item.src}
               alt={`Team ${item.id}`}
               className="h-full w-full object-cover object-center"
               style={{
                 borderRadius: '20px',
               }}
+              width={800}
+              height={800}
             />
 
             <div className="carousel-content">
