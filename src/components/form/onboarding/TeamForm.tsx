@@ -1,6 +1,9 @@
 import React from 'react';
+
 import { UseFormReturn } from 'react-hook-form';
-import { OnboardingSchema } from './schema';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   FormField,
   FormItem,
@@ -16,9 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 
+import { OnboardingSchema } from './schema';
 interface TeamFormProps {
   form: UseFormReturn<OnboardingSchema>;
   teamIndex: number;

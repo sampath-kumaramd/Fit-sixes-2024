@@ -1,19 +1,24 @@
 'use client';
 
 import React from 'react';
-import { useForm } from 'react-hook-form';
+
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+
+
+import { Button } from '@/components/ui/button';
+import { Form } from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
+
 import { onboardingSchema, OnboardingSchema } from './schema';
-import { useOnboardingStore } from './store';
-import TeamDetailsStep from './steps/TeamDetailsStep';
-import TeamCardsPreviewStep from './steps/TeamCardsPreviewStep';
 import InvoicePreviewStep from './steps/InvoicePreviewStep';
 import PaymentDetailsStep from './steps/PaymentDetailsStep';
+import TeamCardsPreviewStep from './steps/TeamCardsPreviewStep';
+import TeamDetailsStep from './steps/TeamDetailsStep';
+import { useOnboardingStore } from './store';
 
 export default function OnboardingForm() {
   const { toast } = useToast();

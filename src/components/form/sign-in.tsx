@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import axios from 'axios';
 
 import { useToast } from '@/hooks/use-toast';
+
 import {
   Button,
   Form,
@@ -122,7 +124,7 @@ export default function SignInForm() {
         />
         <Button type="submit">Sign In</Button>
         <div className="mt-4 flex items-center justify-start gap-2">
-          <p>Don't have an account?</p>
+          <p>Don&apos;t have an account?</p>
           <Link href="/auth/sign-up">Sign Up</Link>
         </div>
         <div className="mt-4 flex items-center justify-start gap-2">

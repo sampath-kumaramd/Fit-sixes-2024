@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+
 import {
   Document,
   Page,
@@ -126,7 +127,7 @@ const InvoicePDF: React.FC<InvoicePDFProps> = ({
       </View>
 
       <View style={styles.address}>
-        <Text>Students' Union,</Text>
+        <Text>Students&apos; Union,</Text>
         <Text>Faculty of Information Technology,</Text>
         <Text>University of Moratuwa,</Text>
         <Text>Katubedda,</Text>
@@ -244,7 +245,7 @@ const InvoicePDF: React.FC<InvoicePDFProps> = ({
       <View style={styles.signature}>
         <View style={styles.signatureLine} />
         <Text>{signatory.name}</Text>
-        <Text>{signatory.position} | Students' Union</Text>
+        <Text>{signatory.position} | Students&apos; Union</Text>
         <Text>{signatory.faculty}</Text>
         <Text>{signatory.university}</Text>
       </View>

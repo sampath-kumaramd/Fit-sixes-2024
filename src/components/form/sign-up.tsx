@@ -1,13 +1,14 @@
 'use client';
+import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
-import axios from 'axios';
 
+import { axiosAuthorized } from '@/hooks/axios-intance';
 import { useToast } from '@/hooks/use-toast';
 import { SignUpSchema, signUpSchema } from '@/schemas';
 import { IsSponsor, SponsorshipLevel } from '@/types/enums/sign-up';
@@ -33,11 +34,6 @@ import {
   SelectItem,
 } from '../ui';
 
-// Create a base URL for axios
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
-
 export default function SignUpForm() {
   const { toast } = useToast();
   const router = useRouter();
@@ -47,7 +43,7 @@ export default function SignUpForm() {
       companyName: '',
       password: '',
       isSponsor: IsSponsor.NO,
-      sponsorshipLevel: SponsorshipLevel.BRONZE,
+      sponsorshipLevel: SponsorshipLevel.NONE,
       primaryContact: {
         name: '',
         phone: '',
@@ -64,37 +60,104 @@ export default function SignUpForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (data: SignUpSchema) => {
+    if (data.isSponsor === IsSponsor.YES) {
+       if(data.sponsorshipLevel === SponsorshipLevel.NONE) {
+        toast({
+          title: 'Error',
+          description: 'Please select a sponsorship level.',
+          variant: 'destructive',
+        });
+        return;
+       }
+    }
     setIsSubmitting(true);
     try {
-      const response = await api.post('/api/v1/registration/company/', {
+      const response = await axiosAuthorized.post('/api/v1/auth/registration/', {
+        email: data.primaryContact.email,
+        password1: data.password,
+        password2: data.password,
         company_name: data.companyName,
-        password: data.password,
-        view_status: 'team-registration',
-        package:
-          data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
-        primary_contact_name: data.primaryContact.name,
-        primary_contact_email: data.primaryContact.email,
-        primary_contact_phone: data.primaryContact.phone,
+        package: data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
+        contact_name: data.primaryContact.name,
+        phone: data.primaryContact.phone,
         secondary_contact_name: data.secondaryContact.name,
-        secondary_contact_email: data.secondaryContact.email,
-        secondary_contact_phone: data.secondaryContact.phone,
+        secondary_email: data.secondaryContact.email,
+        secondary_phone: data.secondaryContact.phone,
       });
 
+      if (response.status === 201) {
       toast({
         title: 'Success',
         description: 'Your account has been created successfully.',
       });
+      router.push('/auth/verify-email');
       form.reset();
-      router.push('/auth/sign-in');
+      } else if (response.status === 400) {
+        if (typeof response === 'object' && response !== null) {
+        const errorMessages = Object.entries(response.data)
+          .map(([field, messages]) => {
+            if (Array.isArray(messages)) {
+              return `${field}: ${messages.join(', ')}`;
+            }
+            return null;
+          })
+          .filter(Boolean)
+            .join('\n');
+          toast({
+            title: 'Error',
+            description: errorMessages,
+            variant: 'destructive',
+          });
+        }
+      }
+      else if(response.status === 500) {
+        toast({
+          title: 'Error',
+          description: response.data.message,
+          variant: 'destructive',
+        });
+      }
+      else {
+        toast({
+          title: 'Error',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       console.error('Sign up error:', error);
       if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 400) {
+          const errorMessages = Object.entries(error.response.data)
+            .map(([field, messages]) => {
+              if (Array.isArray(messages)) {
+                return `${field}: ${messages.join(', ')}`;
+              }
+              return null;
+            })
+            .filter(Boolean)
+            .join('\n');
+          toast({
+            title: 'Error',
+            description: errorMessages,
+            variant: 'destructive',
+          });
+        }
+        else if(error.response.status === 500) {
+          toast({
+            title: 'Error',
+            description: error.response.data.message,
+            variant: 'destructive',
+          });
+        }
+        else {
         toast({
           title: 'Error',
           description:
             error.response.data.message || 'An error occurred during sign up.',
           variant: 'destructive',
-        });
+          });
+        }
       } else {
         toast({
           title: 'Error',
@@ -200,9 +263,9 @@ export default function SignUpForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="platinum">Platinum</SelectItem>
-                    <SelectItem value="gold">Gold</SelectItem>
+                    <SelectItem value="bronze">Bronze</SelectItem>
                     <SelectItem value="silver">Silver</SelectItem>
+                    <SelectItem value="gold">Gold</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

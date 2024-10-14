@@ -1,11 +1,14 @@
 import React from 'react';
+
+import { Loader2 } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
-import { OnboardingSchema } from '../schema';
-import { useOnboardingStore } from '../store';
+
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+
+import { OnboardingSchema } from '../schema';
+import { useOnboardingStore } from '../store';
 import TeamForm from '../TeamForm';
-import { Loader2 } from 'lucide-react';
 
 interface TeamDetailsStepProps {
   form: UseFormReturn<OnboardingSchema>;

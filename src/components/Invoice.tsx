@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+
 import {
   Document,
   Page,
@@ -10,7 +11,6 @@ import {
   Font,
   Image,
 } from '@react-pdf/renderer';
-
 import { z } from 'zod';
 
 // Register custom fonts

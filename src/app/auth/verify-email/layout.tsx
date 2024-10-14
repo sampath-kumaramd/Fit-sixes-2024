@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 import AuthLayout from '@/layout/auth-layout';
 export const metadata: Metadata = {
-  title: 'User Verification',
-  description: 'User Verification for Fit Sixes 2K24',
+  title: 'Verify Email',
+  description: 'Verify Email to Fit Sixes 2K24',
 };
 export default function SignInLayout({
   children,
@@ -12,8 +12,8 @@ export default function SignInLayout({
 }>) {
   return (
     <AuthLayout
-      title="Welcome Back!"
-      subTitle="Welcome back to Fit Sixes 2K24"
+      title="Verify Email"
+      subTitle="Verify your email to continue"
       isInSignIn={false}
       currentStep={1}
     >

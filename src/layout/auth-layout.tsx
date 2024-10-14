@@ -1,9 +1,10 @@
+import React from 'react';
+
 import Image from 'next/image';
 
 import { Separator } from '@/components';
 
 import BackToHomeButton from './components/back-to-home-button';
-import React from 'react';
 
 function AuthLayout({
   children,

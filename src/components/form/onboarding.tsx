@@ -1,10 +1,7 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
-import { useForm, useFieldArray, FieldArrayWithId } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { z } from 'zod';
 import {
   Document,
   Page,
@@ -13,11 +10,21 @@ import {
   StyleSheet,
   PDFDownloadLink,
   PDFViewer,
-  PDFViewerProps,
+  pdf
 } from '@react-pdf/renderer';
-import { Loader2 } from 'lucide-react';
-import { X } from 'lucide-react';
+import axios from 'axios';
+import { PlusCircle, Download, X , Loader2} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm, useFieldArray, FieldArrayWithId } from 'react-hook-form';
+import { z } from 'zod';
+import create from 'zustand';
+
 import { useToast } from '@/hooks/use-toast';
+
+import InvoiceDetails from '../InvoiceDetails';
+import InvoicePDF from '../InvoicePDF';
+import TeamCard from '../TeamCard';
+import TeamCardDetails from '../TeamCardDetails';
 import {
   Button,
   Card,
@@ -50,14 +57,7 @@ import {
   AlertDialogTrigger,
   ScrollArea,
 } from '../ui';
-import { PlusCircle, Download } from 'lucide-react';
-import TeamCard from '../TeamCard';
-import InvoicePDF from '../InvoicePDF';
-import axios from 'axios';
-import create from 'zustand';
-import { pdf } from '@react-pdf/renderer';
-import TeamCardDetails from '../TeamCardDetails';
-import InvoiceDetails from '../InvoiceDetails';
+
 
 const playerSchema = z.object({
   name: z.string().min(1, 'Player name is required'),

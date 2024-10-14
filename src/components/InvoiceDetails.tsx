@@ -41,7 +41,7 @@ const InvoiceDetails: React.FC<InvoiceDetailsProps> = ({
       </div>
 
       <div className="mb-6">
-        <p>Students' Union,</p>
+        <p>Students&apos; Union,</p>
         <p>Faculty of Information Technology,</p>
         <p>University of Moratuwa,</p>
         <p>Katubedda,</p>
@@ -119,7 +119,7 @@ const InvoiceDetails: React.FC<InvoiceDetailsProps> = ({
       <div className="mt-8">
         <div className="mb-2 w-64 border-b border-black"></div>
         <p className="font-semibold">{signatory.name}</p>
-        <p>{signatory.position} | Students' Union</p>
+        <p>{signatory.position} | Students&apos; Union</p>
         <p>{signatory.faculty}</p>
         <p>{signatory.university}</p>
       </div>

@@ -1,10 +1,12 @@
 import React from 'react';
+
+import { TeamCard } from '@/components';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useOnboardingStore } from '../store';
-// import { generateAndDownloadPDF } from '../utils';
-import { TeamCard } from '@/components';
 import { ScrollArea } from '@/components/ui/scroll-area';
+
+// import { generateAndDownloadPDF } from '../utils';
+import { useOnboardingStore } from '../store';
 
 interface TeamCardsPreviewStepProps {
   onPrevStep: () => void;

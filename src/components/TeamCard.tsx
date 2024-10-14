@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+
 import {
   Document,
   Page,
@@ -10,7 +11,6 @@ import {
   Font,
   Image,
 } from '@react-pdf/renderer';
-
 import { z } from 'zod';
 
 // Register custom fonts
@@ -182,7 +182,7 @@ const TeamCardPDF = ({ teams }: { teams: z.infer<typeof teamSchema>[] }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
-        <Image source="/LetterHead.png" />
+        {/* <Image source="/LetterHead.png"  /> */}
         <Text style={styles.title}>Team Cards</Text>
         <Text style={styles.companyName}> Company : Company A </Text>{' '}
         {/*make dynamic */}

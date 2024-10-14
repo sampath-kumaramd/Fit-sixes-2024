@@ -1,9 +1,11 @@
 import React from 'react';
+
+import InvoicePDF from '@/components/Invoice';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+
 import { useOnboardingStore } from '../store';
-// import { generateAndDownloadPDF } from '../utils';
-import InvoicePDF from '@/components/Invoice';
+
 
 interface InvoicePreviewStepProps {
   onPrevStep: () => void;

@@ -72,7 +72,7 @@ const HeroSection: React.FC = () => {
   }), []);
 
   // Use useCallback for event handlers
-  const handleClick = useCallback(() => setClicked(true), []);
+  const handleClick = useCallback(() => {setClicked(true) }, []);
   const handleHover = useCallback(() => setHovered(true), []);
   const handleLeave = useCallback(() => {
     setHovered(false);
@@ -112,7 +112,7 @@ const HeroSection: React.FC = () => {
 
     if (clicked) {
       setModel(models.clicked);
-      const timer = setTimeout(() => router.push('/register'), 1200);
+      const timer = setTimeout(() => router.push('/auth/sign-up'), 1200);
       return () => clearTimeout(timer);
     } else if (hovered) {
       setModel(models.hovered);

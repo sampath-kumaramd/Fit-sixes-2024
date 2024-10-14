@@ -1,15 +1,8 @@
 import React from 'react';
+
 import { UseFormReturn } from 'react-hook-form';
-import { OnboardingSchema } from '../schema';
+
 import { Button } from '@/components/ui/button';
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
@@ -18,7 +11,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+
+import { OnboardingSchema } from '../schema';
 import { useOnboardingStore } from '../store';
 
 interface PaymentDetailsStepProps {
