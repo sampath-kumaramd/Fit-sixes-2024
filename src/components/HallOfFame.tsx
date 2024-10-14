@@ -15,7 +15,7 @@ const teams = [
     id: 2,
     src: '/2023(w).png',
     description:
-      'Team DFN Tapro A (DirectFN) demonstrated exceptional skill and teamwork, securing the men’s championship title in 2023.',
+      'Creative Software Pvt Ltd showcased outstanding talent, earning them the 2023 women’s championship title.',
   },
   {
     id: 3,
