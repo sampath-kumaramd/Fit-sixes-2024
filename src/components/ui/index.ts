@@ -11,3 +11,7 @@ export * from './separator';
 export * from './tabs';
 export * from './toast';
 export * from './toaster';
+export * from './dialog';
+export * from './checkbox';
+export * from './alert-dialog';
+export * from './scroll-area';
