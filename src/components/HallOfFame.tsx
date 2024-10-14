@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
@@ -69,23 +69,49 @@ const teams = [
 ];
 
 const HallOfFame = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const componentRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (componentRef.current) {
+      observer.observe(componentRef.current);
+    }
+
+    return () => {
+      if (componentRef.current) {
+        observer.unobserve(componentRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible || !carouselRef.current) return;
+
+    const slide = carouselRef.current;
     const next = document.querySelector('.next');
     const prev = document.querySelector('.prev');
-    const slide = document.querySelector('.carousel-slide');
 
     const handleNext = () => {
-      const items = document.querySelectorAll('.carousel-item');
-
-      if (items.length > 0 && slide) {
+      const items = slide.querySelectorAll('.carousel-item');
+      if (items.length > 0) {
         slide.appendChild(items[0]);
       }
     };
 
     const handlePrev = () => {
-      const items = document.querySelectorAll('.carousel-item');
-
-      if (items.length > 0 && slide) {
+      const items = slide.querySelectorAll('.carousel-item');
+      if (items.length > 0) {
         slide.prepend(items[items.length - 1]);
       }
     };
@@ -93,48 +119,52 @@ const HallOfFame = () => {
     next?.addEventListener('click', handleNext);
     prev?.addEventListener('click', handlePrev);
 
-    // Cleanup event listeners
     return () => {
       next?.removeEventListener('click', handleNext);
       prev?.removeEventListener('click', handlePrev);
     };
-  }, []);
+  }, [isVisible]);
 
   return (
-    <div className="carousel-container">
-      <div className="carousel-slide">
-        {teams.map((item, index) => (
-          <div
-            key={item.id}
-            className="carousel-item"
-            style={{ backgroundImage: `url(${item.src})` }}
-          >
-            <Image
-              src={item.src}
-              alt={`Team ${item.id}`}
-              className="h-full w-full object-cover object-center"
-              style={{
-                borderRadius: '20px',
-              }}
-              width={800}
-              height={800}
-            />
+    <div ref={componentRef} className="carousel-container">
+      {isVisible && (
+        <>
+          <div ref={carouselRef} className="carousel-slide">
+            {teams.map((item) => (
+              <div
+                key={item.id}
+                className="carousel-item"
+                style={{ backgroundImage: `url(${item.src})` }}
+              >
+                <Image
+                  src={item.src}
+                  alt={`Team ${item.id}`}
+                  className="h-full w-full object-cover object-center"
+                  style={{
+                    borderRadius: '20px',
+                  }}
+                  width={800}
+                  height={800}
+                  loading="lazy"
+                />
 
-            <div className="carousel-content">
-              <div className=" text-base   sm:text-2xl font-bold shadow-lg">{item.description}</div>
-            </div>
+                <div className="carousel-content">
+                  <div className="text-base sm:text-2xl font-bold shadow-lg">{item.description}</div>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="buttons">
-        <button className="prev bg-darkBlue">
-          <ArrowLeft className="h-8 w-8" />
-        </button>
-        <button className="next bg-darkBlue">
-          <ArrowRight className="h-8 w-8" />
-        </button>
-      </div>
+          <div className="buttons">
+            <button className="prev bg-darkBlue">
+              <ArrowLeft className="h-8 w-8" />
+            </button>
+            <button className="next bg-darkBlue">
+              <ArrowRight className="h-8 w-8" />
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
