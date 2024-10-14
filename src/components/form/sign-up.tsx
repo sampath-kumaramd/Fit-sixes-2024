@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Info } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -33,6 +33,7 @@ import {
   SelectValue,
   SelectItem,
 } from '../ui';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 export default function SignUpForm() {
   const { toast } = useToast();
@@ -42,6 +43,7 @@ export default function SignUpForm() {
     defaultValues: {
       companyName: '',
       password: '',
+      confirmPassword: '',
       isSponsor: IsSponsor.NO,
       sponsorshipLevel: SponsorshipLevel.NONE,
       primaryContact: {
@@ -60,6 +62,14 @@ export default function SignUpForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (data: SignUpSchema) => {
+    if (data.password !== data.confirmPassword) {
+      toast({
+        title: 'Error',
+        description: 'Passwords do not match.',
+        variant: 'destructive',
+      });
+      return;
+    }
     if (data.isSponsor === IsSponsor.YES) {
        if(data.sponsorshipLevel === SponsorshipLevel.NONE) {
         toast({
@@ -75,7 +85,7 @@ export default function SignUpForm() {
       const response = await axiosAuthorized.post('/api/v1/auth/registration/', {
         email: data.primaryContact.email,
         password1: data.password,
-        password2: data.password,
+        password2: data.confirmPassword,
         company_name: data.companyName,
         package: data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
         contact_name: data.primaryContact.name,
@@ -187,7 +197,34 @@ export default function SignUpForm() {
               </FormItem>
             )}
           />
-          <FormField
+             <FormField
+                  control={form.control}
+                  name="primaryContact.email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Primary Contact Email
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger> <Info className='h-4 w-4 text-red-500 ms-1' /></TooltipTrigger>
+    <TooltipContent>
+      <p>This email will be used for login and communication.</p>
+    </TooltipContent>
+  </Tooltip>
+</TooltipProvider>
+
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Enter primary email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+           <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
@@ -217,6 +254,39 @@ export default function SignUpForm() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password* 
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter confirm password"
+                      {...field}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+         
         </div>
 
         <FormField
