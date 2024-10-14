@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: start;
   background-image: url('/hallOfFame.svg');
-  background-position: right;
+  background-position: right bottom;
   background-repeat: no-repeat;
   min-width: 300px;
 }
@@ -284,6 +284,9 @@
         max-width: 95vw;
         margin: 10px auto;
     } */
+  .carousel-container {
+    height: 70rem;
+  }
 
   .carousel-title {
     font-size: 1.8rem;
@@ -299,6 +302,7 @@
   .carousel-slide .carousel-item:nth-child(1),
   .carousel-slide .carousel-item:nth-child(2) {
     width: 100%;
+    height: fit-content !important;
   }
 
   .carousel-slide .carousel-item:nth-child(n + 3) {
@@ -335,6 +339,10 @@
         height: 60vh;
     } */
 
+  .carousel-container {
+    height: 60rem;
+  }
+
   .carousel-title {
     font-size: 1.5rem;
     width: 100%;
@@ -352,8 +360,32 @@
 }
 
 /* Height-based media query */
-/* @media screen and (max-height: 600px) {
-    .container {
-        height: 100vh;
-    }
-} */
+@media screen and (max-width: 600px) {
+  .carousel-container {
+    height: 55rem;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .carousel-container {
+    height: 50rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .carousel-container {
+    height: 45rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .carousel-container {
+    height: 40rem;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .carousel-container {
+    height: 35rem;
+  }
+}

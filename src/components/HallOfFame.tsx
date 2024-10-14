@@ -121,7 +121,7 @@ const HallOfFame = () => {
             />
 
             <div className="carousel-content">
-              <div className=" text-2xl font-bold shadow-lg">{item.description}</div>
+              <div className=" text-base   sm:text-2xl font-bold shadow-lg">{item.description}</div>
             </div>
           </div>
         ))}
