@@ -4,6 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import axios from 'axios';
 
 import { useToast } from '@/hooks/use-toast';
 import { SignUpSchema, signUpSchema } from '@/schemas';
@@ -30,7 +33,10 @@ import {
   SelectItem,
 } from '../ui';
 
-
+// Create a base URL for axios
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
 
 export default function SignUpForm() {
   const { toast } = useToast();
@@ -54,15 +60,51 @@ export default function SignUpForm() {
       },
     },
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = (data :SignUpSchema) => {
-    console.log(data);
-    toast({
-      title: 'Success',
-      description: JSON.stringify(form.getValues()),
-    });
-    form.reset();
-    router.push('/auth/sign-in');
+  const onSubmit = async (data: SignUpSchema) => {
+    setIsSubmitting(true);
+    try {
+      const response = await api.post('/api/v1/registration/company/', {
+        company_name: data.companyName,
+        password: data.password,
+        view_status: 'team-registration',
+        package:
+          data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
+        primary_contact_name: data.primaryContact.name,
+        primary_contact_email: data.primaryContact.email,
+        primary_contact_phone: data.primaryContact.phone,
+        secondary_contact_name: data.secondaryContact.name,
+        secondary_contact_email: data.secondaryContact.email,
+        secondary_contact_phone: data.secondaryContact.phone,
+      });
+
+      toast({
+        title: 'Success',
+        description: 'Your account has been created successfully.',
+      });
+      form.reset();
+      router.push('/auth/sign-in');
+    } catch (error) {
+      console.error('Sign up error:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        toast({
+          title: 'Error',
+          description:
+            error.response.data.message || 'An error occurred during sign up.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -89,11 +131,24 @@ export default function SignUpForm() {
               <FormItem>
                 <FormLabel>Password*</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter password"
-                    {...field}
-                  />
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter password"
+                      {...field}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -145,9 +200,9 @@ export default function SignUpForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    <SelectItem value="platinum">Platinum</SelectItem>
                     <SelectItem value="gold">Gold</SelectItem>
                     <SelectItem value="silver">Silver</SelectItem>
-                    <SelectItem value="bronze">Bronze</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -159,7 +214,7 @@ export default function SignUpForm() {
         <div className="grid grid-cols-2 gap-4">
           <Card>
             <CardContent className="pt-6">
-              <h3 className="font-semibold mb-4">
+              <h3 className="mb-4 font-semibold">
                 Primary Contact Person Details*
               </h3>
               <div className="space-y-4">
@@ -211,7 +266,7 @@ export default function SignUpForm() {
           </Card>
           <Card>
             <CardContent className="pt-6">
-              <h3 className="font-semibold mb-4">
+              <h3 className="mb-4 font-semibold">
                 Secondary Contact Person Details*
               </h3>
               <div className="space-y-4">
@@ -267,9 +322,9 @@ export default function SignUpForm() {
           <Button
             type="submit"
             className="w-fit"
-            disabled={form.formState.isSubmitting || !form.formState.isValid}
+            disabled={isSubmitting || !form.formState.isValid}
           >
-            {form.formState.isSubmitting ? 'Submitting...' : 'Sign Up'}
+            {isSubmitting ? 'Submitting...' : 'Sign Up'}
           </Button>
         </div>
         <div className="flex justify-center">

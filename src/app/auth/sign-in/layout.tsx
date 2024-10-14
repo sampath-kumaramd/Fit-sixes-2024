@@ -10,5 +10,14 @@ export default function SignInLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <AuthLayout title="Welcome Back!" subTitle='Welcome back to Fit Sixes 2K24' isInSignIn={true}>{children}</AuthLayout>;
+  return (
+    <AuthLayout
+      title="Welcome Back!"
+      subTitle="Welcome back to Fit Sixes 2K24"
+      isInSignIn={false}
+      currentStep={1}
+    >
+      {children}
+    </AuthLayout>
+  );
 }

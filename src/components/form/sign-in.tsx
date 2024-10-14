@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
+import axios from 'axios';
 
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -19,8 +20,12 @@ import {
   Input,
 } from '../ui';
 
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
+
 const signInSchema = z.object({
-  companyName: z.string().min(1, 'Company name is required'),
+  email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
@@ -29,24 +34,60 @@ type SignInSchema = z.infer<typeof signInSchema>;
 export default function SignInForm() {
   const { toast } = useToast();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      companyName: '',
+      email: '',
       password: '',
     },
   });
 
   const onSubmit = async (data: SignInSchema) => {
-    console.log(data);
-    // Here you would typically send the data to your backend for authentication
-    toast({
-      title: 'Success',
-      description: 'Signed in successfully!',
-    });
-    // Redirect to dashboard or onboarding
-    router.push('/auth/onboarding');
+    setIsSubmitting(true);
+    try {
+      const response = await api.post('/api/v1/auth/login/', {
+        username: data.email,
+        password: data.password,
+      });
+
+      // Handle successful login
+      const { access, refresh, user } = response.data;
+
+      // Store tokens in localStorage or a more secure storage method
+      localStorage.setItem('accessToken', access);
+      localStorage.setItem('refreshToken', refresh);
+
+      // You might want to store user info in a global state management solution like Redux or React Context
+      console.log('User info:', user);
+
+      toast({
+        title: 'Success',
+        description: 'Signed in successfully!',
+      });
+
+      // Redirect to dashboard or desired page
+      router.push('/auth/onboarding');
+    } catch (error) {
+      console.error('Sign in error:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        toast({
+          title: 'Error',
+          description:
+            error.response.data.detail || 'An error occurred during sign in.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -55,10 +96,10 @@ export default function SignInForm() {
         <h2 className="mb-4 text-2xl font-bold">Sign In</h2>
         <FormField
           control={form.control}
-          name="companyName"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company Name</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

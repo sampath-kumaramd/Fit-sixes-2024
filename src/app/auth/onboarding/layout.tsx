@@ -15,6 +15,7 @@ export default function SignInLayout({
       title="Welcome Back!"
       subTitle="Welcome back to Fit Sixes 2K24"
       isInSignIn={true}
+      currentStep={1}
     >
       {children}
     </AuthLayout>

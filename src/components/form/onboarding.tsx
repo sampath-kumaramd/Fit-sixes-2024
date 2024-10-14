@@ -14,8 +14,8 @@ import {
   PDFDownloadLink,
   PDFViewer,
 } from '@react-pdf/renderer';
-import { Loader2 } from 'lucide-react'; // Add this import
-
+import { Loader2 } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Button,
@@ -38,10 +38,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  ScrollArea,
 } from '../ui';
 import { PlusCircle, Download } from 'lucide-react';
 import TeamCard from '../TeamCard';
 import InvoicePDF from '../Invoice';
+import axios from 'axios';
 
 const playerSchema = z.object({
   name: z.string().min(1, 'Player name is required'),
@@ -70,21 +81,6 @@ const onboardingSchema = z.object({
 });
 
 type OnboardingSchema = z.infer<typeof onboardingSchema>;
-
-// const TeamCard = ({ team }: { team: z.infer<typeof teamSchema> }) => (
-//   <Card className="mb-4 p-4">
-//     <h3 className="mb-2 text-xl font-bold">{team.name}</h3>
-//     <p className="mb-2">Gender: {team.gender}</p>
-//     <h4 className="mb-2 font-semibold">Players:</h4>
-//     <ul>
-//       {team.players.map((player, index) => (
-//         <li key={index} className="mb-1">
-//           {player.name} - NIC: {player.nic} - Contact: {player.contactNumber}
-//         </li>
-//       ))}
-//     </ul>
-//   </Card>
-// );
 
 const styles = StyleSheet.create({
   page: {
@@ -266,6 +262,46 @@ const TeamCardPDF = ({ teams }: { teams: Team[] }) => (
   </Document>
 );
 
+const rulesAndRegulations = `
+RULES & REGULATIONS
+
+GENERAL 
+• A team must comprise six members plus two reserve players. A fee will be charged for each team. 
+• All team members must be employed by organizations within the information technology (IT) sector or companies specializing in software engineering and development (hereafter referred to as 'organization'). 
+• An organization may register only one team, which must be either a men's team or a women's team; mixed-gender teams are not permitted.
+• If an organization wishes to register an additional team, they must purchase a banner package or become a sponsor.
+• The maximum number of teams that can be registered through the aforementioned method is four, consisting of up to two men's teams and two women's teams.
+• Teams from sponsoring companies, as specified in the sponsorship scheme, will be exempt from the registration fee, and the registration limit will be extended exclusively for these teams. (The exact number of additional teams allowed is detailed within the sponsorship scheme)
+• The tournament committee reserves the right to make decisions on any matters requiring arbitration, with their decision being final and binding.
+• The organizing committee reserves the right to modify or suspend the rules as deemed necessary to ensure the smooth conduct of the tournament. 
+
+TOURNAMENT RULES 
+• All matches will be played on a knockout basis. 
+• Each team must consist of six members, with one member designated as the captain by the team. The captain will be responsible for registration, the coin toss, and other team-related matters.
+• Every team member, excluding the wicketkeeper, is required to bowl one over. The wicketkeeper is not permitted to bowl.
+• Each innings consists of five (5) overs, with four (4) balls per over. This structure may be modified by the organizing committee in the event of time constraints.
+• A full toss delivery above waist height will be called No ball. 
+• Any delivery that passes over head height will be called a wide.
+• The Mankad dismissal mode will not be permitted.
+• If it is determined by the umpires that the ball has been thrown by the bowler, it will be called a No ball, to ensure fair delivery. If it is determined that the ball has been thrown more than once, the bowler's over will be banned, and the batting team will have the opportunity to select a bowler if no additional bowlers remain in the team.
+• Short-pitched balls that rise above head height will be called wide balls. 
+• If short-pitched balls are bowled more than once in an over above shoulder height, they will also be called wide balls, and a warning will be given for the first infraction.
+• For a wide or No ball, 4 runs will be awarded, and the delivery will be counted as a legitimate ball. If a wide or no-ball is delivered as the last ball of the final over in an innings, 1 run will be awarded, and that ball must be re-bowled.
+• Runners for injured batsmen are not permitted.
+• The match referees will have the final authority on any decisions regarding situations that arise during the game.
+
+WINNERS 
+• The team that has scored the greatest number of runs will be declared the winner. 
+• If the scores are tied within the allocated overs, then the team which has lost the lesser number of wickets will be declared the winner. 
+• If both teams are still tied, then the spin of a coin will decide the winner. 
+• If the match is abandoned for any fair reason (like bad weather, etc.) or the team batting second has no chance to bat for at least two overs, then the winner will be decided by a spin of a coin.
+• In case of a tie in the final match and if time and weather conditions permit, it is recommended to conduct a super over with the consent of both teams, foregoing the need for coin toss or wicket count.
+`;
+
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
+
 export default function OnboardingForm() {
   const { toast } = useToast();
   const router = useRouter();
@@ -289,7 +325,11 @@ export default function OnboardingForm() {
     },
   });
 
-  const { fields: teamFields, append: appendTeam } = useFieldArray({
+  const {
+    fields: teamFields,
+    append: appendTeam,
+    remove: removeTeam,
+  } = useFieldArray({
     control: form.control,
     name: 'teams',
   });
@@ -310,8 +350,98 @@ export default function OnboardingForm() {
     });
   }, [teamFields, toast]);
 
+  const submitTeamData = async (teams: OnboardingSchema['teams']) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const formattedTeams = teams.map((team) => ({
+        team_name: team.name,
+        gender: team.gender,
+        team_members: team.players.map((player, index) => ({
+          name: player.name,
+          nic: player.nic,
+          phone_number: player.contactNumber,
+          sort_order: index + 1,
+        })),
+      }));
+
+      const response = await api.post(
+        '/api/v1/registration/team/',
+        formattedTeams,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('API Response:', response.data);
+
+      toast({
+        title: 'Success',
+        description: 'Teams registered successfully!',
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error submitting team data:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        toast({
+          title: 'Error',
+          description:
+            error.response.data.detail ||
+            'Failed to register teams. Please try again.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
+      return false;
+    }
+  };
+
+  const handleNextStep = async () => {
+    if (step === 1) {
+      const isValid = await validateTeams();
+      if (isValid) {
+        setIsGeneratingPDF(true);
+        const teamData = form.getValues('teams');
+        console.log('Data sent from step 1 to step 2:', teamData);
+
+        const success = await submitTeamData(teamData);
+        if (success) {
+          // Simulate PDF generation delay
+          setTimeout(() => {
+            setIsGeneratingPDF(false);
+            setStep(2);
+          }, 1500);
+        } else {
+          setIsGeneratingPDF(false);
+        }
+      }
+    } else if (step === 2) {
+      setIsGeneratingPDF(true);
+      // Simulate PDF generation delay
+      setTimeout(() => {
+        setIsGeneratingPDF(false);
+        setStep(3);
+      }, 1500);
+    } else {
+      setStep(step + 1);
+    }
+  };
+
   const onSubmit = async (data: OnboardingSchema) => {
-    console.log(data);
+    // This function will now handle the final submission
+    console.log('Final form data:', data);
     toast({
       title: 'Success',
       description: 'Onboarding completed successfully!',
@@ -383,27 +513,13 @@ export default function OnboardingForm() {
     return result;
   };
 
-  const handleNextStep = async () => {
-    if (step === 1) {
-      const isValid = await validateTeams();
-      if (isValid) {
-        setIsGeneratingPDF(true);
-        // Simulate PDF generation delay
-        setTimeout(() => {
-          setIsGeneratingPDF(false);
-          setStep(2);
-        }, 1500);
-      }
-    } else if (step === 2) {
-      setIsGeneratingPDF(true);
-      // Simulate PDF generation delay
-      setTimeout(() => {
-        setIsGeneratingPDF(false);
-        setStep(3);
-      }, 1500);
-    } else {
-      setStep(step + 1);
-    }
+  const handleRemoveTeam = (index: number) => {
+    removeTeam(index);
+    setActiveTab(`team${Math.max(0, index - 1)}`);
+    toast({
+      title: 'Team Removed',
+      description: 'The team has been successfully removed.',
+    });
   };
 
   return (
@@ -416,8 +532,43 @@ export default function OnboardingForm() {
               <div className="mb-4 flex items-center">
                 <TabsList className="flex-grow">
                   {teamFields.map((team, index) => (
-                    <TabsTrigger key={index} value={`team${index}`}>
+                    <TabsTrigger
+                      key={team.id}
+                      value={`team${index}`}
+                      className="relative"
+                    >
                       Team {index + 1}
+                      {index > 0 && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute -right-2 -top-2 h-5 w-5 rounded-full p-0"
+                            >
+                              <X size={12} />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete the team and all its data.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleRemoveTeam(index)}
+                              >
+                                Continue
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
                     </TabsTrigger>
                   ))}
                 </TabsList>
@@ -660,17 +811,18 @@ export default function OnboardingForm() {
                         >
                           <DialogTrigger asChild>
                             <span className="cursor-pointer text-blue-600 underline">
-                              terms and conditions
+                              rules and regulations
                             </span>
                           </DialogTrigger>
-                          <DialogContent>
+                          <DialogContent className="max-w-3xl">
                             <DialogHeader>
-                              <DialogTitle>Terms and Conditions</DialogTitle>
+                              <DialogTitle>Rules and Regulations</DialogTitle>
                             </DialogHeader>
-                            <div className="max-h-[60vh] overflow-y-auto">
-                              {/* Add your terms and conditions text here */}
-                              <p>These are the terms and conditions...</p>
-                            </div>
+                            <ScrollArea className="max-h-[60vh]">
+                              <div className="whitespace-pre-wrap p-4">
+                                {rulesAndRegulations}
+                              </div>
+                            </ScrollArea>
                           </DialogContent>
                         </Dialog>
                       </FormLabel>
