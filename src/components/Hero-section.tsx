@@ -31,6 +31,13 @@ const Model = ({ url, play }: { url: string; play: boolean }) => {
         action.play();
       }
     }
+    
+    // Center the model
+    if (gltf.scene) {
+      const box = new THREE.Box3().setFromObject(gltf.scene);
+      const center = box.getCenter(new THREE.Vector3());
+      gltf.scene.position.sub(center);
+    }
   }, [gltf, play]);
 
   return <primitive object={gltf.scene} ref={modelRef} />;
@@ -85,25 +92,25 @@ const HeroSection: React.FC = () => {
     }
   }, [isMobile, isTablet, isDesktop, isSmallMobile]);
 
-  const targetDate = new Date('2024-10-14T08:00:00');
+  const targetDate = new Date('2024-11-09T08:00:00');
 
   const [isHovering, setIsHovering] = useState(false);
 
   return (
-    <section className="w-full h-screen relative bg-darkBlue">
-      <div className="mt-0 text-center text-white opacity-90 relative z-50">
+    <section className="w-full h-fit relative bg-darkBlue">
+      <div className="mt-0 text-center text-white opacity-90 relative  ">
        <div className='absolute top-1 left-1/2 -translate-x-1/2  w-full'>
       <StylizedText mainText="FIT SIXES" highlightText="2K24" onClick={handleClick} onMouseEnter={handleHover} onMouseLeave={handleLeave} />
     </div>
       </div>
       <div className=" -mt-12 z-50 ">
-        <div className=" flex items-center justify-center relative z-50 ">
+        <div className=" flex items-center justify-center relative  ">
           <Canvas
-            camera={{ position: [0, 1, 5.5], fov: fov }}
+            camera={{ position: [0, 0, 5.5], fov: 30 }}
             style={{
               display: 'block',
               width: '800px',
-              height: '1268px',
+              height: '868px',
             }}
           >
             <ambientLight intensity={0.5} />
@@ -111,7 +118,7 @@ const HeroSection: React.FC = () => {
             <pointLight position={[-2, 7, -10]} intensity={100} />
             <Model url={model} play={true} />
           </Canvas>
-          <div className='absolute lg:bottom-[25rem] md:bottom-[27.5rem] sm:bottom-[27rem] sd:bottom-[27rem] bottom-[29rem] '>
+          <div className='absolute bottom-[1rem] '>
         <CountDown targetDate={targetDate}/>  
           </div>
         </div>

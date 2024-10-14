@@ -13,7 +13,7 @@ export default function HomePageLayout({
     const pathname = usePathname();
     const isAuthPage = pathname?.startsWith('/auth');
   return (
-      <section className="relative overflow-y-hidden">
+      <section className="">
       {!isAuthPage && <Header />}
       {children}
       {!isAuthPage && <Footer />}

@@ -6,37 +6,37 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 const teams = [
   {
     id: 1,
-    src: '/champions/2023(m).jpg',
+    src: '/champions/2023(m).png',
     description:
       'Team DFN Tapro A (DirectFN) demonstrated exceptional skill and teamwork, securing the men’s championship title in 2023.',
   },
   {
     id: 2,
-    src: '/champions/2023(w).jpg',
+    src: '/champions/2023(w).png',
     description:
       'Team DFN Tapro A (DirectFN) demonstrated exceptional skill and teamwork, securing the men’s championship title in 2023.',
   },
   {
     id: 3,
-    src: '/champions/2022(m)-1.jpg',
+    src: '/champions/2022(m)1.png',
     description:
       'Creative Software Pvt Ltd displayed remarkable talent and strategy, earning them a joint championship title in the 2022 men’s tournament.',
   },
   {
     id: 4,
-    src: '/champions/2022(m)-2.jpg',
+    src: '/champions/2022(m)2.png',
     description:
       'In a thrilling finale, Virtusa Pvt Ltd shared the championship title with another top-performing team, showcasing their prowess and sportsmanship in the 2022 tournament.',
   },
   {
     id: 5,
-    src: '/champions/2022(w).jpg',
+    src: '/champions/2022(w).png',
     description:
       "The women's team from FIT BATCH 18 dominated the 2022 tournament with their exceptional skills and teamwork, securing the championship title for the year.",
   },
   {
     id: 6,
-    src: '/champions/2017(m).jpg',
+    src: '/champions/2017(m).png',
     description:
       'Virtusa once again claimed the men’s championship title in 2017, showcasing their consistency and expertise. ',
   },
@@ -100,8 +100,6 @@ const HallOfFame = () => {
 
   return (
     <div className="carousel-container">
-      <h1 className="carousel-title">Hall of Fame</h1>
-
       <div className="carousel-slide">
         {teams.map((item, index) => (
           <div
@@ -119,7 +117,7 @@ const HallOfFame = () => {
             />
 
             <div className="carousel-content">
-              <div className="carousel-des">{item.description}</div>
+              <div className=" text-2xl font-bold shadow-lg">{item.description}</div>
             </div>
           </div>
         ))}

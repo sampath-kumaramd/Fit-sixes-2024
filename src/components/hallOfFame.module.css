@@ -52,7 +52,8 @@
   border-radius: 20px;
   width: 60%;
   height: 90%;
-  box-shadow: 1px -1px 10px 5px #a1a1a1;
+  border: 1px solid #faf5e4;
+  box-shadow: 1px -1px 10px 5px #faf5e4;
 }
 
 .carousel-slide .carousel-item:nth-child(3),
@@ -132,9 +133,9 @@
 }
 
 .buttons button {
-  width: 6rem;
-  height: 3.5rem;
-  border-radius: 3px;
+  width: 5rem;
+  height: 3rem;
+  border-radius: 6px;
   cursor: pointer;
   background: #e2981b;
   color: #fff;
@@ -147,7 +148,6 @@
 
 .buttons button:hover {
   background: #af740e;
-  color: #252836;
 }
 
 @keyframes animate {
