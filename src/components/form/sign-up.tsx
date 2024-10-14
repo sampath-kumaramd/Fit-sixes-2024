@@ -385,14 +385,14 @@ export default function SignUpForm() {
           <Button
             type="submit"
             className="w-fit"
-            disabled={isSubmitting || !form.formState.isValid}
+            disabled={isSubmitting }
           >
             {isSubmitting ? 'Submitting...' : 'Sign Up'}
           </Button>
         </div>
         <div className="flex justify-center">
-          <p className="text-sm text-gray-500">
-            Already have an account? <Link href="/auth/sign-in">Sign In</Link>
+          <p className="text-sm text-gray-900">
+            Already have an account? <Link href="/auth/sign-in" className=' font-bold'>Sign In</Link>
           </p>
         </div>
       </form>

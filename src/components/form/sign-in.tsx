@@ -50,9 +50,17 @@ export default function SignInForm() {
     setIsSubmitting(true);
     try {
       const response = await api.post('/api/v1/auth/login/', {
-        username: data.email,
+        email: data.email,
         password: data.password,
       });
+
+      console.log(response);
+
+      if (response.status === 200) {
+        toast({
+          title: 'Success',
+          description: 'Signed in successfully!',
+        });
 
       // Handle successful login
       const { access, refresh, user } = response.data;
@@ -70,14 +78,21 @@ export default function SignInForm() {
       });
 
       // Redirect to dashboard or desired page
-      router.push('/auth/onboarding');
-    } catch (error) {
-      console.error('Sign in error:', error);
-      if (axios.isAxiosError(error) && error.response) {
+        router.push('/auth/onboarding');
+      } else if (response.status === 400) {
         toast({
           title: 'Error',
+          description: 'Invalid email or password.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Sign in error:', error);
+      if (axios.isAxiosError(error) && error.code === 'ERR_BAD_REQUEST') {
+        toast({
+          title: 'Invalid email or password.',
           description:
-            error.response.data.detail || 'An error occurred during sign in.',
+            error.response?.data.detail || 'Please check your email and password and try again.',
           variant: 'destructive',
         });
       } else {
@@ -122,7 +137,9 @@ export default function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Sign In</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Signing in...' : 'Sign In'}
+        </Button>
         <div className="mt-4 flex items-center justify-start gap-2">
           <p>Don&apos;t have an account?</p>
           <Link href="/auth/sign-up">Sign Up</Link>
