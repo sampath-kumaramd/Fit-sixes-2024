@@ -7,9 +7,6 @@ import ShinyButton from './ui/ShinyButton';
 interface StylizedTextProps {
   mainText: string;
   highlightText: string;
-  onClick: () => void;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
 }
 
 const containerVariants = {
@@ -44,7 +41,7 @@ const buttonVariants = {
   visible: { opacity: 1, y: 0 , transition: { duration: 0.5 , delay: 0.8 }},
 };
 
-const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText, onClick, onMouseEnter, onMouseLeave }) => {
+const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText}) => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
@@ -81,16 +78,14 @@ const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText, on
           </motion.span>
           <motion.div
             variants={buttonVariants}
-            className='absolute -bottom-10 sm:-bottom-12 right-0 z-50'
+            className='absolute -bottom-10 sm:-bottom-10 right-0 z-50'
           >
-            <ShinyButton
-              className='text-sm sm:text-xl bg-yellow text-white w-fit px-3 sm:px-4 py-1 sm:py-2 '
-              onMouseEnter={onMouseEnter}
-              onMouseLeave={onMouseLeave}
-              onClick={onClick}
+            <div
+              className='text-sm sm:text-xl  text-white w-fit px-3 sm:px-4 py-1 sm:py-2 font-thin '
             >
-              Coming Soon
-            </ShinyButton>
+            On November 09 <sup className='text-sm'>th</sup>
+            </div>
+            
           </motion.div>
         </div>
       </motion.div>

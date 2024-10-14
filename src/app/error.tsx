@@ -2,6 +2,8 @@
  
 import { useEffect } from 'react'
 
+import Image from 'next/image';
+
 import { Logo } from '@/components'
  
 export default function Error500({
@@ -11,14 +13,11 @@ export default function Error500({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error)
-  }, [error])
  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-darkBlue">
-      <Logo logoSize="large" />
+      <Image src="/logo/logo-light.svg" alt="logo" width={150} height={150} />
+
           <h2 className='text-2xl font-bold text-white mt-8'>Something went wrong!</h2>
           <p className='text-white mt-4'>Oops! An error occurred while processing your request.</p>
       <button
