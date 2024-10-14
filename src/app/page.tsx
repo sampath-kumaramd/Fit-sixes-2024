@@ -18,8 +18,8 @@ export default function Home() {
   const router = useRouter();
     const [boquetVisible, setBoquetVisible] = useState(false);
   return (
-    <div className=" relative">
-      <div className="h-screen  text-white items-center flex flex-col justify-center relative">
+    <div className="">
+      <div className="  text-white items-center flex flex-col justify-center relative">
         <HeroSection />
       </div>
       <div className="relative m-auto grid bg-gradient-to-br from-amber-300 to-zinc-50">

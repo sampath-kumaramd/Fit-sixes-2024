@@ -19,7 +19,7 @@ const FitSixesCard = ({ item }: FitSixesCardProps) => {
       href={item.url}
       className="block transition-transform hover:scale-105"
     >
-      <Card className="overflow-hidden bg-navy-900 text-white">
+      <Card className="bg-navy-900 overflow-hidden text-white">
         <CardContent className="p-0">
           <div className="relative h-48 w-full">
             <Image
@@ -30,7 +30,7 @@ const FitSixesCard = ({ item }: FitSixesCardProps) => {
               priority
             />
           </div>
-          <div className="p-4 text-center bg-[#03082a] text-white">
+          <div className="bg-[#03082a] p-4 text-center text-white">
             <h3 className="text-lg font-bold">FIT SIXES {item.year}</h3>
           </div>
         </CardContent>
@@ -43,28 +43,28 @@ const FitSixesCard = ({ item }: FitSixesCardProps) => {
 const data: FitSixesItem[] = [
   {
     year: '2K23',
-    imageUrl: '/past-matches/2016.jpg',
-    url: '/fit-sixes/2k23',
+    imageUrl: '/past-matches/2023.jpg',
+    url: 'https://www.facebook.com/media/set/?set=a.816354847167060&type=3',
   },
   {
     year: '2K22',
-    imageUrl: '/past-matches/2016.jpg',
-    url: '/fit-sixes/2k22',
-  },
-  {
-    year: '2K21',
-    imageUrl: '/past-matches/2016.jpg',
-    url: '/fit-sixes/2k22',
-  },
-  {
-    year: '2K20',
-    imageUrl: '/past-matches/2016.jpg',
-    url: '/fit-sixes/2k22',
+    imageUrl: '/past-matches/2022.jpeg',
+    url: 'https://www.facebook.com/media/set/?set=a.531992388936642&type=3',
   },
   {
     year: '2K19',
-    imageUrl: '/past-matches/2016.jpg',
-    url: '/fit-sixes/2k22',
+    imageUrl: '/past-matches/2019.png',
+    url: 'https://www.facebook.com/media/set/?set=a.812927909140724&type=3',
+  },
+  {
+    year: '2K18',
+    imageUrl: '/past-matches/2018.png',
+    url: 'https://www.facebook.com/media/set/?set=a.514149139018604&type=3',
+  },
+  {
+    year: '2K17',
+    imageUrl: '/past-matches/2017.jpg',
+    url: 'https://www.facebook.com/media/set/?set=a.373342933099226&type=3',
   },
 ];
 

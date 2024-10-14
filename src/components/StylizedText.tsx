@@ -54,7 +54,7 @@ const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText, on
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      className="relative"
+      className="relative "
     >
       <motion.div
         variants={divVariants}
@@ -81,10 +81,10 @@ const StylizedText: React.FC<StylizedTextProps> = ({ mainText, highlightText, on
           </motion.span>
           <motion.div
             variants={buttonVariants}
-            className='absolute -bottom-10 sm:-bottom-12 right-0'
+            className='absolute -bottom-10 sm:-bottom-12 right-0 z-50'
           >
             <ShinyButton
-              className='text-sm sm:text-xl bg-yellow text-white w-fit px-3 sm:px-4 py-1 sm:py-2'
+              className='text-sm sm:text-xl bg-yellow text-white w-fit px-3 sm:px-4 py-1 sm:py-2 '
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
               onClick={onClick}
