@@ -13,6 +13,7 @@ import {
   StyleSheet,
   PDFDownloadLink,
   PDFViewer,
+  PDFViewerProps,
 } from '@react-pdf/renderer';
 import { Loader2 } from 'lucide-react';
 import { X } from 'lucide-react';
@@ -51,8 +52,12 @@ import {
 } from '../ui';
 import { PlusCircle, Download } from 'lucide-react';
 import TeamCard from '../TeamCard';
-import InvoicePDF from '../Invoice';
+import InvoicePDF from '../InvoicePDF';
 import axios from 'axios';
+import create from 'zustand';
+import { pdf } from '@react-pdf/renderer';
+import TeamCardDetails from '../TeamCardDetails';
+import InvoiceDetails from '../InvoiceDetails';
 
 const playerSchema = z.object({
   name: z.string().min(1, 'Player name is required'),
@@ -81,6 +86,31 @@ const onboardingSchema = z.object({
 });
 
 type OnboardingSchema = z.infer<typeof onboardingSchema>;
+
+const invoiceData = {
+  invoiceNumber: 'INV-FS24-0002',
+  billTo: {
+    name: 'Pagero,',
+    address: ['413, R A De Mel Mawatha,', 'Colombo 03,', 'Sri Lanka.'],
+  },
+  packageInfo: {
+    item: 'FIT Sixes 2K24 - Silver Partnership',
+    price: 100000,
+  },
+  bankDetails: {
+    accountHolder: "IT Faculty Students' Union",
+    accountNo: '747044223',
+    bankName: 'Bank of Ceylon',
+    branch: 'University of Moratuwa branch',
+    branchCode: '631',
+  },
+  signatory: {
+    name: 'Mr. Thushan Fernando',
+    position: 'Junior Treasurer',
+    faculty: 'Faculty of Information Technology',
+    university: 'University of Moratuwa.',
+  },
+};
 
 const styles = StyleSheet.create({
   page: {
@@ -302,14 +332,72 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
+// Define the store
+interface OnboardingStore {
+  step: number;
+  activeTab: string;
+  teamCounts: { male: number; female: number };
+  termsModalOpen: boolean;
+  isGeneratingPDF: boolean;
+  isUpdatingPDF: boolean;
+  isGeneratingTeamCardPDF: boolean;
+  teams: OnboardingSchema['teams'];
+  setTeams: (teams: OnboardingSchema['teams']) => void;
+  pdfContent: string | null;
+  setPdfContent: (content: string | null) => void;
+  setStep: (step: number) => void;
+  setActiveTab: (tab: string) => void;
+  setTeamCounts: (counts: { male: number; female: number }) => void;
+  setTermsModalOpen: (open: boolean) => void;
+  setIsGeneratingPDF: (generating: boolean) => void;
+  setIsUpdatingPDF: (updating: boolean) => void;
+  setIsGeneratingTeamCardPDF: (generating: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+}
+
+const useOnboardingStore = create<OnboardingStore>((set) => ({
+  step: 1,
+  activeTab: 'team0',
+  teamCounts: { male: 0, female: 0 },
+  termsModalOpen: false,
+  isGeneratingPDF: false,
+  isUpdatingPDF: false,
+  isGeneratingTeamCardPDF: false,
+  teams: [],
+  setTeams: (teams) => set({ teams }),
+  pdfContent: null,
+  setPdfContent: (content) => set({ pdfContent: content }),
+  setStep: (step) => set({ step }),
+  setActiveTab: (activeTab) => set({ activeTab }),
+  setTeamCounts: (teamCounts) => set({ teamCounts }),
+  setTermsModalOpen: (termsModalOpen) => set({ termsModalOpen }),
+  setIsGeneratingPDF: (isGeneratingPDF) => set({ isGeneratingPDF }),
+  setIsUpdatingPDF: (isUpdatingPDF) => set({ isUpdatingPDF }),
+  setIsGeneratingTeamCardPDF: (isGeneratingTeamCardPDF) =>
+    set({ isGeneratingTeamCardPDF }),
+  isLoading: false,
+  setIsLoading: (isLoading) => set({ isLoading }),
+}));
+
 export default function OnboardingForm() {
   const { toast } = useToast();
   const router = useRouter();
-  const [step, setStep] = useState(1);
-  const [activeTab, setActiveTab] = useState('team0');
-  const [teamCounts, setTeamCounts] = useState({ male: 0, female: 0 });
-  const [termsModalOpen, setTermsModalOpen] = useState(false);
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const {
+    step,
+    activeTab,
+    teamCounts,
+    termsModalOpen,
+    teams,
+    setTeams,
+    pdfContent,
+    setPdfContent,
+    setStep,
+    setActiveTab,
+    setTeamCounts,
+    setTermsModalOpen,
+    isLoading,
+  } = useOnboardingStore();
 
   const form = useForm<OnboardingSchema>({
     resolver: zodResolver(onboardingSchema),
@@ -334,7 +422,27 @@ export default function OnboardingForm() {
     name: 'teams',
   });
 
+  //   useEffect(() => {
+  //     if (step === 1 && !pdfContent) {
+  //       const generatePDF = async () => {
+  //         const blob = await pdf(<TeamCard teams={teams} />).toBlob();
+  //         setPdfContent(URL.createObjectURL(blob));
+  //       };
+  //       generatePDF();
+  //     }
+  //   }, [step, teams, pdfContent, setPdfContent]);
+
+  // Update Zustand store when form changes
   useEffect(() => {
+    const subscription = form.watch((value) => {
+      if (value.teams) {
+        setTeams(value.teams as OnboardingSchema['teams']);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setTeams]);
+
+  React.useEffect(() => {
     const maleTeams = teamFields.filter(
       (team) => team.gender === 'male'
     ).length;
@@ -348,7 +456,7 @@ export default function OnboardingForm() {
       description: `Male teams: ${maleTeams}, Female teams: ${femaleTeams}`,
       duration: 3000,
     });
-  }, [teamFields, toast]);
+  }, [teamFields, toast, setTeamCounts]);
 
   const submitTeamData = async (teams: OnboardingSchema['teams']) => {
     try {
@@ -368,18 +476,18 @@ export default function OnboardingForm() {
         })),
       }));
 
-      const response = await api.post(
-        '/api/v1/registration/team/',
-        formattedTeams,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      //   const response = await api.post(
+      //     '/api/v1/registration/team/',
+      //     formattedTeams,
+      //     {
+      //       headers: {
+      //         Authorization: `Bearer ${accessToken}`,
+      //         'Content-Type': 'application/json',
+      //       },
+      //     }
+      //   );
 
-      console.log('API Response:', response.data);
+      //   console.log('API Response:', response.data);
 
       toast({
         title: 'Success',
@@ -410,28 +518,29 @@ export default function OnboardingForm() {
 
   const handleNextStep = async () => {
     if (step === 1) {
-      const isValid = await validateTeams();
+      //   const isValid = await validateTeams();
+      const isValid = true;
       if (isValid) {
-        setIsGeneratingPDF(true);
         const teamData = form.getValues('teams');
         console.log('Data sent from step 1 to step 2:', teamData);
 
         const success = await submitTeamData(teamData);
         if (success) {
-          // Simulate PDF generation delay
+          form.setValue('teams', [...teamData]);
+
+          // Add a loading state
+          const setIsLoading = useOnboardingStore.getState().setIsLoading;
+          setIsLoading(true);
+
+          // Wait for 5 seconds before moving to the next step
           setTimeout(() => {
-            setIsGeneratingPDF(false);
+            setIsLoading(false);
             setStep(2);
-          }, 1500);
-        } else {
-          setIsGeneratingPDF(false);
+          }, 5000);
         }
       }
     } else if (step === 2) {
-      setIsGeneratingPDF(true);
-      // Simulate PDF generation delay
       setTimeout(() => {
-        setIsGeneratingPDF(false);
         setStep(3);
       }, 1500);
     } else {
@@ -488,16 +597,6 @@ export default function OnboardingForm() {
     });
   };
 
-  const generateTeamCard = (
-    team: FieldArrayWithId<OnboardingSchema, 'teams', 'id'>
-  ) => {
-    // In a real application, you would generate a PDF or image here
-    // For this example, we'll just create a data URL with team info
-    const teamInfo = JSON.stringify(team, null, 2);
-    const dataUrl = `data:text/plain;charset=utf-8,${encodeURIComponent(teamInfo)}`;
-    return dataUrl;
-  };
-
   const validateTeams = async () => {
     const result = await form.trigger('teams');
     if (!result) {
@@ -520,6 +619,20 @@ export default function OnboardingForm() {
       title: 'Team Removed',
       description: 'The team has been successfully removed.',
     });
+  };
+
+  // New function to generate and download PDF
+  const generateAndDownloadPDF = async (
+    documentComponent: React.ReactElement,
+    fileName: string
+  ) => {
+    const blob = await pdf(documentComponent).toBlob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -692,8 +805,19 @@ export default function OnboardingForm() {
               ))}
             </Tabs>
             <div className="mt-4 flex justify-end">
-              <Button type="button" onClick={handleNextStep}>
-                Next
+              <Button
+                type="button"
+                onClick={handleNextStep}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Next'
+                )}
               </Button>
             </div>
           </div>
@@ -702,19 +826,44 @@ export default function OnboardingForm() {
         {step === 2 && (
           <div>
             <h2 className="mb-4 text-2xl font-bold">Team Cards Preview</h2>
-            {isGeneratingPDF ? (
-              <div className="flex h-[80vh] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin" />
-                <span className="ml-2">Generating Team Cards...</span>
-              </div>
-            ) : (
-              <div className="mb-4 flex h-screen items-center justify-center">
-                <PDFViewer className="h-full max-h-[80vh] w-full max-w-5xl">
-                  <TeamCard teams={teamFields} />
-                </PDFViewer>
-              </div>
-            )}
-
+            {/* {teamFields.map((team, index) => (
+              <Card key={index} className="mb-4">
+                <CardContent>
+                  <h3 className="text-xl font-semibold">{team.name}</h3>
+                  <p>Gender: {team.gender}</p>
+                  <table className="mt-2 w-full">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>NIC</th>
+                        <th>Contact Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {team.players.map((player, playerIndex) => (
+                        <tr key={playerIndex}>
+                          <td>{player.name}</td>
+                          <td>{player.nic}</td>
+                          <td>{player.contactNumber}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+            ))} */}
+            <TeamCardDetails teams={teamFields} companyName={'companyName'} />;
+            <Button
+              onClick={() =>
+                generateAndDownloadPDF(
+                  <TeamCard teams={teamFields} />,
+                  'team_cards.pdf'
+                )
+              }
+              className="mt-4"
+            >
+              Download Team Cards PDF
+            </Button>
             <div className="mt-4 flex justify-between">
               <Button type="button" onClick={() => setStep(1)}>
                 Previous
@@ -729,19 +878,18 @@ export default function OnboardingForm() {
         {step === 3 && (
           <div>
             <h2 className="mb-4 text-2xl font-bold">Invoice Preview</h2>
-            {isGeneratingPDF ? (
-              <div className="flex h-[80vh] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin" />
-                <span className="ml-2">Generating Invoice...</span>
-              </div>
-            ) : (
-              <div className="mb-4 flex h-screen items-center justify-center">
-                <PDFViewer className="h-full max-h-[80vh] w-full max-w-5xl">
-                  <InvoicePDF teams={teamFields} />
-                </PDFViewer>
-              </div>
-            )}
-
+            <InvoiceDetails {...invoiceData} />
+            <Button
+              onClick={() =>
+                generateAndDownloadPDF(
+                  <InvoicePDF {...invoiceData} />,
+                  'invoice.pdf'
+                )
+              }
+              className="mt-4"
+            >
+              Download Invoice PDF
+            </Button>
             <div className="mt-4 flex items-center justify-between">
               <Button type="button" onClick={() => setStep(2)}>
                 Previous

@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0,
     borderTopWidth: 0,
     backgroundColor: '#383B5E',
-    opacity:0.6
+    opacity: 0.6,
   },
   tableCol: {
     width: '33.33%',
@@ -129,13 +129,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   signatureSection: {
-    marginTop: 20, 
+    marginTop: 20,
     padding: 10,
     borderTopWidth: 2,
     borderTopColor: '#030835',
   },
   signatureField: {
-    marginBottom: 15, 
+    marginBottom: 15,
   },
   confirmationText: {
     fontSize: 12,
@@ -182,7 +182,7 @@ const TeamCardPDF = ({ teams }: { teams: z.infer<typeof teamSchema>[] }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
-        <Image source="/LetterHead.png" alt="Image" />
+        <Image source="/LetterHead.png" />
         <Text style={styles.title}>Team Cards</Text>
         <Text style={styles.companyName}> Company : Company A </Text>{' '}
         {/*make dynamic */}
@@ -280,11 +280,18 @@ const TeamCardPDF = ({ teams }: { teams: z.infer<typeof teamSchema>[] }) => (
 
         <View style={styles.signatureDetails}>
           <Text style={styles.signatureField}>
-            Signature of the Human Resource Executive: ________________________________
+            Signature of the Human Resource Executive:
+            ________________________________
           </Text>
-          <Text style={styles.signatureField}>Name: ________________________________</Text>
-          <Text style={styles.signatureField}>Designation: ________________________________</Text>
-          <Text style={styles.signatureField}>Date: ________________________________</Text>
+          <Text style={styles.signatureField}>
+            Name: ________________________________
+          </Text>
+          <Text style={styles.signatureField}>
+            Designation: ________________________________
+          </Text>
+          <Text style={styles.signatureField}>
+            Date: ________________________________
+          </Text>
         </View>
 
         <Text style={styles.note}>
