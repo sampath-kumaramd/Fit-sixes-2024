@@ -138,7 +138,7 @@ function page() {
             >
               <TypeAnimation
                 sequence={[
-                  'In the year 2022, the "FIT SIXES Cricket Fiesta" was\n\nheld for the last time. With the support of students from batches\n\n19, 20, 21, and 22, as well as more than 100 industry visitors, it\n\nwas successfully concluded.',
+                  'In the year 2023, the "FIT SIXES Cricket Fiesta" was\n\nheld for the last time. With the support of students from batches\n\n19, 20, 21, and 22, as well as more than 100 industry visitors, it\n\nwas successfully concluded.',
                 ]}
                 wrapper="div"
                 speed={99}
