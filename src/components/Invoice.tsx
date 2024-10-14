@@ -1,111 +1,202 @@
-import React from 'react';
+'use client';
 
-interface InvoiceProps {
-  invoiceNumber: string;
-  senderAddress: string[];
-  items: { description: string; price: number }[];
-  bankDetails: {
-    accountName: string;
-    accountNumber: string;
-    bankName: string;
-    ifscCode: string;
-  };
-  signatory: {
-    name: string;
-    title: string;
-    department: string;
-    institution: string;
-    signatureImageUrl: string; // Added for signature image
-  };
+import React from 'react';
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Font,
+  Image,
+} from '@react-pdf/renderer';
+
+import { z } from 'zod';
+
+// Register custom fonts
+Font.register({
+  family: 'Roboto',
+  fonts: [
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf',
+      fontWeight: 300,
+    },
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf',
+      fontWeight: 400,
+    },
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf',
+      fontWeight: 500,
+    },
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
+      fontWeight: 700,
+    },
+  ],
+});
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#FFFFFF',
+    padding: 30,
+    fontFamily: 'Roboto',
+  },
+  header: {
+    marginBottom: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: '#3B82F6',
+    paddingBottom: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 700,
+    color: '#1E40AF',
+  },
+  teamCard: {
+    marginBottom: 30,
+    borderRadius: 5,
+    padding: 15,
+    backgroundColor: '#F3F4F6',
+  },
+  teamName: {
+    fontSize: 20,
+    fontWeight: 700,
+    marginBottom: 5,
+    color: '#1E40AF',
+  },
+  teamInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  teamGender: {
+    fontSize: 14,
+    color: '#4B5563',
+  },
+  table: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 'auto',
+    borderStyle: 'solid',
+    borderColor: '#E5E7EB',
+    borderWidth: 1,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+  },
+  tableRow: {
+    margin: 'auto',
+    flexDirection: 'row',
+  },
+  tableColHeader: {
+    width: '33.33%',
+    borderStyle: 'solid',
+    borderColor: '#E5E7EB',
+    borderBottomColor: '#3B82F6',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    backgroundColor: '#EFF6FF',
+  },
+  tableCol: {
+    width: '33.33%',
+    borderStyle: 'solid',
+    borderColor: '#E5E7EB',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+  },
+  tableCellHeader: {
+    margin: 5,
+    fontSize: 12,
+    fontWeight: 700,
+    color: '#1E40AF',
+  },
+  tableCell: {
+    margin: 5,
+    fontSize: 10,
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginBottom: 10,
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+  },
+});
+
+interface Player {
+  name: string;
+  nic: string;
+  contactNumber: string;
 }
 
-const Invoice: React.FC<InvoiceProps> = ({
-  invoiceNumber,
-  senderAddress,
-  items,
-  bankDetails,
-  signatory,
-}) => {
-  const total = items.reduce((sum, item) => sum + item.price, 0);
+interface Team {
+  name: string;
+  gender: string;
+  players: Player[];
+}
 
-  return (
-    <div className="mx-auto max-w-3xl bg-white p-8 shadow-lg">
-      {/* Header Image */}
-      <div className="mb-8">
-        <img
-          src="/api/placeholder/800/200"
-          alt="Header"
-          className="h-auto w-full"
-        />
-      </div>
+const teamSchema = z.object({
+  name: z.string(),
+  gender: z.string(),
+  players: z.array(
+    z.object({
+      name: z.string(),
+      nic: z.string(),
+      contactNumber: z.string(),
+    })
+  ),
+});
 
-      {/* Invoice Details */}
-      <div className="mb-8">
-        <h2 className="mb-4 text-xl font-semibold">
-          INVOICE No. {invoiceNumber}
-        </h2>
-        <h3 className="mb-2 font-semibold">Sender:</h3>
-        {senderAddress.map((line, index) => (
-          <p key={index} className="mb-1">
-            {line}
-          </p>
-        ))}
-      </div>
+const InvoicePDF = ({ teams }: { teams: z.infer<typeof teamSchema>[] }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.section}>
+        <Text style={styles.title}>Invoice</Text>
+        <Text style={{ fontSize: 14, marginBottom: 10 }}>
+          Date: {new Date().toLocaleDateString()}
+        </Text>
+        <Text style={{ fontSize: 14, marginBottom: 20 }}>
+          Invoice Number: INV-{Math.floor(Math.random() * 10000)}
+        </Text>
 
-      {/* Items Table */}
-      <div className="mb-8">
-        <h3 className="mb-2 font-semibold">Items:</h3>
-        <table className="mb-4 w-full">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2 text-left">Description</th>
-              <th className="p-2 text-right">Price (Rs.)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item, index) => (
-              <tr key={index}>
-                <td className="p-2">{item.description}</td>
-                <td className="p-2 text-right">{item.price.toFixed(2)}</td>
-              </tr>
-            ))}
-            <tr className="font-bold">
-              <td className="p-2 text-right">Total:</td>
-              <td className="p-2 text-right">{total.toFixed(2)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            <View style={styles.tableCol}>
+              <Text style={styles.tableCell}>Team Name</Text>
+            </View>
+            <View style={styles.tableCol}>
+              <Text style={styles.tableCell}>Gender</Text>
+            </View>
+            <View style={styles.tableCol}>
+              <Text style={styles.tableCell}>Amount</Text>
+            </View>
+          </View>
+          {teams.map((team, index) => (
+            <View style={styles.tableRow} key={index}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{team.name}</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{team.gender}</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>$100.00</Text>
+              </View>
+            </View>
+          ))}
+        </View>
 
-      {/* Bank Details */}
-      <div className="mb-8">
-        <h3 className="mb-2 font-semibold">Bank Details:</h3>
-        <table className="w-full">
-          <tbody>
-            {Object.entries(bankDetails).map(([key, value]) => (
-              <tr key={key}>
-                <td className="p-1 font-medium">{key}</td>
-                <td className="p-1">{value}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        <Text style={{ fontSize: 14, marginTop: 20, textAlign: 'right' }}>
+          Total Amount: ${teams.length * 100}.00
+        </Text>
+      </View>
+    </Page>
+  </Document>
+);
 
-      {/* Signature */}
-      <div className="mt-16">
-        <img
-          src={signatory.signatureImageUrl}
-          alt={`Signature of ${signatory.name}`}
-          className="mb-2 h-16 w-auto"
-        />
-        <p>{signatory.name}</p>
-        <p>{signatory.title}</p>
-        <p>{signatory.department}</p>
-        <p>{signatory.institution}</p>
-      </div>
-    </div>
-  );
-};
-
-export default Invoice;
+export default InvoicePDF;
