@@ -42,7 +42,7 @@ import BackToHomeButton from './components/back-to-home-button';
             <p className="text-lg mt-2 font-thin">
               {subTitle}
             </p>
-            {isInSignIn === true && (
+            {/* {isInSignIn === true && (
               <div className="flex justify-center mt-6 items-center">
                 <div className="w-12 h-12 rounded-lg bg-yellow flex items-center justify-center text-lg font-bold">
                 01
@@ -56,7 +56,7 @@ import BackToHomeButton from './components/back-to-home-button';
                 03
               </div>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="relative z-10"></div>
