@@ -5,66 +5,67 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
 const teams = [
-  {
+   {
     id: 1,
+    src: '/2014(m).png',
+    description:
+      'Millennium IT’s men’s team showcased remarkable skill, securing the championship title in 2014.',
+  },
+  {
+    id: 2,
     src: '/2023(m).png',
     description:
       'Team DFN Tapro A (DirectFN) demonstrated exceptional skill and teamwork, securing the men’s championship title in 2023.',
   },
   {
-    id: 2,
+    id: 3,
     src: '/2023(w).png',
     description:
       'Creative Software Pvt Ltd showcased outstanding talent, earning them the 2023 women’s championship title.',
   },
   {
-    id: 3,
+    id: 4,
     src: '/2022(m)1.png',
     description:
       'Creative Software Pvt Ltd displayed remarkable talent and strategy, earning them a joint championship title in the 2022 men’s tournament.',
   },
   {
-    id: 4,
+    id: 5,
     src: '/2022(m)2.png',
     description:
       'In a thrilling finale, Virtusa Pvt Ltd shared the championship title with another top-performing team, showcasing their prowess and sportsmanship in the 2022 tournament.',
   },
   {
-    id: 5,
+    id: 6,
     src: '/2022(w).png',
     description:
       "The women's team from FIT BATCH 18 dominated the 2022 tournament with their exceptional skills and teamwork, securing the championship title for the year.",
   },
   {
-    id: 6,
+    id: 7,
     src: '/2017(m).png',
     description:
       'Virtusa once again claimed the men’s championship title in 2017, showcasing their consistency and expertise. ',
   },
   {
-    id: 7,
+    id: 8,
     src: '/2017(w).png',
     description:
       'The Batch 13 women’s team excelled with exceptional talent, taking the women’s championship in 2017.',
   },
   {
-    id: 8,
+    id: 9,
     src: '/2016(m).png',
     description:
       'Batch 13 secured the men’s championship title, marking their dominance in 2016.  ',
   },
   {
-    id: 9,
+    id: 10,
     src: '/2015(m).png',
     description:
       'Virtusa displayed superior strategy and talent, emerging as the 2015 men’s champions.',
   },
-  {
-    id: 10,
-    src: '/2014(m).png',
-    description:
-      'Millennium IT’s men’s team showcased remarkable skill, securing the championship title in 2014.',
-  },
+ 
 ];
 
 const HallOfFame = () => {
