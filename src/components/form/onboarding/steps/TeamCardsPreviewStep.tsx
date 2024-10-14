@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TeamCard } from '@/components';
+// import { TeamCard } from '@/components';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
