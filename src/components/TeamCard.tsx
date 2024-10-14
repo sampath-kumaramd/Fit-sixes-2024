@@ -46,19 +46,24 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 20,
     borderBottomWidth: 2,
-    borderBottomColor: '#3B82F6',
+    borderBottomColor: '#030835',
     paddingBottom: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: 700,
-    color: '#1E40AF',
+    marginTop: 10,
+    color: '#030835',
   },
   teamCard: {
     marginBottom: 30,
     borderRadius: 5,
     padding: 15,
     backgroundColor: '#F3F4F6',
+  },
+  companyName: {
+    fontSize: 14,
+    color: '#4B5563',
   },
   teamName: {
     fontSize: 20,
@@ -93,11 +98,12 @@ const styles = StyleSheet.create({
     width: '33.33%',
     borderStyle: 'solid',
     borderColor: '#E5E7EB',
-    borderBottomColor: '#3B82F6',
+    borderBottomColor: '#030835',
     borderWidth: 1,
     borderLeftWidth: 0,
     borderTopWidth: 0,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: '#383B5E',
+    opacity:0.6
   },
   tableCol: {
     width: '33.33%',
@@ -111,7 +117,7 @@ const styles = StyleSheet.create({
     margin: 5,
     fontSize: 12,
     fontWeight: 700,
-    color: '#1E40AF',
+    color: '#030835',
   },
   tableCell: {
     margin: 5,
@@ -121,6 +127,30 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginBottom: 10,
+  },
+  signatureSection: {
+    marginTop: 20, 
+    padding: 10,
+    borderTopWidth: 2,
+    borderTopColor: '#030835',
+  },
+  signatureField: {
+    marginBottom: 15, 
+  },
+  confirmationText: {
+    fontSize: 12,
+    textAlign: 'left',
+    marginBottom: 10,
+  },
+  signatureDetails: {
+    fontSize: 12,
+    marginVertical: 5,
+    textAlign: 'left',
+  },
+  note: {
+    fontSize: 10,
+    marginTop: 10,
+    textAlign: 'left',
   },
 });
 
@@ -152,8 +182,10 @@ const TeamCardPDF = ({ teams }: { teams: z.infer<typeof teamSchema>[] }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
-        <Image style={styles.logo} src="/api/placeholder/50/50" />
+        <Image source="/LetterHead.png" alt="Image" />
         <Text style={styles.title}>Team Cards</Text>
+        <Text style={styles.companyName}> Company : Company A </Text>{' '}
+        {/*make dynamic */}
       </View>
       {teams.map((team, index) => (
         <View key={index} style={styles.teamCard}>
@@ -240,6 +272,29 @@ const TeamCardPDF = ({ teams }: { teams: z.infer<typeof teamSchema>[] }) => (
           </View>
         </View>
       ))}
+      <View style={styles.signatureSection}>
+        <Text style={styles.confirmationText}>
+          I hereby confirm that the individuals listed on this team card/s are
+          official members of our organization.
+        </Text>
+
+        <View style={styles.signatureDetails}>
+          <Text style={styles.signatureField}>
+            Signature of the Human Resource Executive: ________________________________
+          </Text>
+          <Text style={styles.signatureField}>Name: ________________________________</Text>
+          <Text style={styles.signatureField}>Designation: ________________________________</Text>
+          <Text style={styles.signatureField}>Date: ________________________________</Text>
+        </View>
+
+        <Text style={styles.note}>
+          Note: This confirmation is taken only to verify whether each player is
+          an employee of the company. If a member of the squad changes, certain
+          player/players must have sufficient proof (e.g., company ID, email,
+          etc.) on the event day to validate him/her as an employee of the
+          company.
+        </Text>
+      </View>
     </Page>
   </Document>
 );
