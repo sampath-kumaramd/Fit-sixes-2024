@@ -10,5 +10,5 @@ export default function ForgetPasswordLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <AuthLayout title="We've got you!" subTitle='We will send you a link to reset your password' isInSignIn={false}>{children}</AuthLayout>;
+  return <AuthLayout title="We've got you!" subTitle='We will send you a link to reset your password' isInSignIn={false} currentStep={1}>{children}</AuthLayout>;
 }
