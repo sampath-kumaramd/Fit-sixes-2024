@@ -1,5 +1,7 @@
 import * as z from 'zod';
 
+const isBrowser = typeof window !== 'undefined';
+
 const playerSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   nic: z.string().min(1, 'NIC is required'),
@@ -22,7 +24,7 @@ export const signInSchema = z.object({
     .number()
     .min(0, 'Number of female teams cannot be negative'),
   teams: z.array(teamSchema),
-  paymentSlip: z.instanceof(File, { message: 'Payment slip is required' }),
+  paymentSlip: z.instanceof(isBrowser ? File : Object, { message: 'Payment slip is required' }),
 });
 
 export type SignInSchema = z.infer<typeof signInSchema>;

@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { Oswald } from 'next/font/google';
 import Script from 'next/script';
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className={oswald.className}>
         <HomePageLayout>
           {children}
+          <Analytics />
         </HomePageLayout>
         <Toaster />
       </body>

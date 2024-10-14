@@ -99,11 +99,11 @@ const HeroSection: React.FC = () => {
   return (
     <section className="w-full h-fit relative bg-darkBlue">
       <div className="mt-0 text-center text-white opacity-90 relative  ">
-       <div className='absolute top-1 left-1/2 -translate-x-1/2  w-full'>
+       <div className='absolute top-1 left-1/2 -translate-x-1/2  w-full z-10'>
       <StylizedText mainText="FIT SIXES" highlightText="2K24" onClick={handleClick} onMouseEnter={handleHover} onMouseLeave={handleLeave} />
     </div>
       </div>
-      <div className=" -mt-12 z-50 ">
+      <div className=" -mt-8 z-50  relative ">
         <div className=" flex items-center justify-center relative  ">
           <Canvas
             camera={{ position: [0, 0, 5.5], fov: 30 }}
@@ -123,7 +123,7 @@ const HeroSection: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className='absolute bottom-0 left-0 w-full h-full'>
+      <div className='absolute bottom-0 left-0 w-full h-full '>
     <Image src="/pattern-transparent.png" alt="hero-section" width={1920} height={1080} className='w-full h-full object-cover opacity-[1%] ' />
       </div>
     </section>

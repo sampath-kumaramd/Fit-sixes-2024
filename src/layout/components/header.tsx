@@ -77,7 +77,7 @@ export default function Header() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className=" absolute z-40 w-full bg-darkBlue lg:hidden text-right"
+            className=" absolute z-[999] w-full bg-darkBlue lg:hidden text-right"
             initial={{
               opacity: 0,
               y: '-100%',

@@ -31,7 +31,7 @@ const Footer = () => {
                           <Image src={"/images/footerLogo.png"} alt='itfsu' width={180} height={180} />
                           </Link>
                           <div className=' flex justify-start gap-8 items-center pt-6'>
-                    <div className='text-lg '>Follow Us</div>
+                    <div className='text-lg '>Follow Us On</div>
                 <div className='flex space-x-3 text-[6px] sm:text-sm  '>
                   {socialLinks.map((link, index) => (
                     <div key={index}>
