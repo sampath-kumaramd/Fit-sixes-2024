@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { Eye, EyeOff, Info } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -136,7 +136,7 @@ export default function SignUpForm() {
       }
     } catch (error) {
       console.error('Sign up error:', error);
-      if (axios.isAxiosError(error) && error.response) {
+      if (isAxiosError(error) && error.response) {
         if (error.response.status === 400) {
           const errorMessages = Object.entries(error.response.data)
             .map(([field, messages]) => {
@@ -253,7 +253,7 @@ export default function SignUpForm() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          />  
           <FormField
             control={form.control}
             name="confirmPassword"
