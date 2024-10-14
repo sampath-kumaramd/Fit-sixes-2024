@@ -5,7 +5,7 @@ export default function SignUp() {
       <h2 className="text-3xl font-bold mb-2 text-center mt-12">
         Company Details
       </h2>
-      <p className="text-gray-600 mb-6 text-center max-w-xl mx-auto">
+      <p className="text-gray-600 mb-6 text-center max-w-2xl mx-auto">
         Let&apos;s begin with your company information. This ensures we have
         everything in place for your team to participate smoothly.
       </p>

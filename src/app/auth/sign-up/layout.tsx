@@ -11,6 +11,7 @@ export default function SignUpLayout({
   children: React.ReactNode;
 }>) {
   return (
+    
     <AuthLayout
       title="Welcome!"
       subTitle="Welcome to Fit Sixes 2K24"
