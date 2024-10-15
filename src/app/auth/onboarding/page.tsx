@@ -53,6 +53,17 @@ export default function Onboarding() {
     }
   };
 
+  const getStep = () => {
+    switch (companyStatus) {
+      case CompanyViewStatus.TEAM_REGISTRATION:
+        return 1;
+      case CompanyViewStatus.PAYMENT:
+        return 2;
+      default:
+        return 0;
+    }
+  };
+
   return (
 
 
@@ -86,7 +97,8 @@ export default function Onboarding() {
                   <React.Fragment key={step}>
                     <div
                       className={`flex h-12 w-12 items-center justify-center rounded-lg text-lg font-bold ${
-                      Number(step) <= Number(companyStatus) ? 'bg-yellow' : 'bg-gray-600'
+                      // Number(step) <= getStep() ? 'bg-yellow' : 'bg-gray-600 ' 
+                        Number(step) === getStep() ? ' bg-yellow  border-2 border-orange-700' : Number(step) < getStep() ? ' bg-orange-300' : 'bg-gray-600' 
                       }`}
                     >
                       {String(step).padStart(2, '0')}
@@ -101,6 +113,7 @@ export default function Onboarding() {
                 ))}
               </div>
             )}
+            
           </div>
 
           <div className="relative z-10"></div>
@@ -125,7 +138,7 @@ export default function Onboarding() {
         Let&apos;s fill out your team information. This ensures we have
         everything in place for your team to participate smoothly.
       </p>
-      <OnboardingForm />
+      <OnboardingForm currentStep={companyStatus as CompanyViewStatus} />
     </div>
       </div>
       {/* <div className="absolute bottom-1 left-1/2 -translate-x-1/2  text-gray-500 text-xs sm:text-sm ">

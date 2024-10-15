@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
@@ -18,11 +18,23 @@ import TeamCardsPreviewStep from './steps/TeamCardsPreviewStep';
 import TeamDetailsStep from './steps/TeamDetailsStep';
 import { useOnboardingStore } from './store';
 import axios from 'axios';
+import { CompanyViewStatus } from '@/types/enums/company-view-status';
 
-export default function OnboardingForm() {
+interface OnboardingFormProps {
+  currentStep: CompanyViewStatus;
+}
+
+export default function OnboardingForm(
+  { currentStep }: OnboardingFormProps
+) {
+
   const { toast } = useToast();
   const router = useRouter();
   const { step, setStep, isLoading, setIsLoading } = useOnboardingStore();
+
+  useEffect(() => {
+    setStep(Number(currentStep));
+  }, [currentStep , setStep]);
 
   const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
