@@ -37,6 +37,11 @@ const InvoiceDetails: React.FC<InvoiceDetailsProps> = ({
   return (
     <div className="mx-auto my-8 max-w-2xl rounded-lg border-4 border-gray-300 bg-white p-8 shadow-lg">
       <div className="mb-4 text-right">
+        <img
+          src="/LetterHead.png"
+          alt="Letter Head"
+          className="mb-4 h-auto max-w-full"
+        />
         <h1 className="text-xl font-bold">INVOICE No. {invoiceNumber}</h1>
       </div>
 
