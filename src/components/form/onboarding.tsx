@@ -3,15 +3,28 @@ import React, { useState, useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Document,
-  Page,
-  Text,
-  View,
   StyleSheet,
   PDFDownloadLink,
   PDFViewer,
   pdf,
 } from '@react-pdf/renderer';
+
+const Document = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.Document),
+  { ssr: false }
+);
+const Page = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.Page),
+  { ssr: false }
+);
+const Text = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.Text),
+  { ssr: false }
+);
+const View = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.View),
+  { ssr: false }
+);
 import axios from 'axios';
 import { PlusCircle, Download, X, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -57,6 +70,7 @@ import {
   AlertDialogTrigger,
   ScrollArea,
 } from '../ui';
+import dynamic from 'next/dynamic';
 
 const playerSchema = z.object({
   name: z.string().min(1, 'Player name is required'),
@@ -70,7 +84,17 @@ const teamSchema = z.object({
   players: z
     .array(playerSchema)
     .min(6, 'Each team must have at least 6 players')
-    .max(8, 'Each team can have a maximum of 8 players'),
+    .max(8, 'Each team can have a maximum of 8 players')
+    .refine(
+      (players) =>
+        players
+          .slice(0, 6)
+          .every((player) => player.name && player.nic && player.contactNumber),
+      {
+        message: 'The first 6 players must have all fields filled',
+        path: ['players'],
+      }
+    ),
 });
 
 const onboardingSchema = z.object({
@@ -163,134 +187,6 @@ interface Team {
     contactNumber: string;
   }[];
 }
-
-const TeamCardPDF = ({ teams }: { teams: Team[] }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.title}>Team Cards</Text>
-        {teams.map(
-          (
-            team: {
-              name:
-                | string
-                | number
-                | bigint
-                | boolean
-                | React.ReactElement<
-                    any,
-                    string | React.JSXElementConstructor<any>
-                  >
-                | Iterable<React.ReactNode>
-                | React.ReactPortal
-                | Promise<React.AwaitedReactNode>
-                | null
-                | undefined;
-              gender:
-                | string
-                | number
-                | bigint
-                | boolean
-                | React.ReactElement<
-                    any,
-                    string | React.JSXElementConstructor<any>
-                  >
-                | Iterable<React.ReactNode>
-                | React.ReactPortal
-                | Promise<React.AwaitedReactNode>
-                | null
-                | undefined;
-              players: any[];
-            },
-            index: React.Key | null | undefined
-          ) => (
-            <View key={index} style={{ marginBottom: 20 }}>
-              <Text style={{ fontSize: 18, marginBottom: 10 }}>
-                {team.name} ({team.gender})
-              </Text>
-              <View style={styles.table}>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Name</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>NIC</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Contact Number</Text>
-                  </View>
-                </View>
-                {team.players.map(
-                  (
-                    player: {
-                      name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                      nic:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                      contactNumber:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                    },
-                    playerIndex: React.Key | null | undefined
-                  ) => (
-                    <View style={styles.tableRow} key={playerIndex}>
-                      <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>{player.name}</Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>{player.nic}</Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>
-                          {player.contactNumber}
-                        </Text>
-                      </View>
-                    </View>
-                  )
-                )}
-              </View>
-            </View>
-          )
-        )}
-      </View>
-    </Page>
-  </Document>
-);
 
 const rulesAndRegulations = `
 RULES & REGULATIONS
@@ -397,6 +293,10 @@ export default function OnboardingForm() {
     setTeamCounts,
     setTermsModalOpen,
     isLoading,
+    isGeneratingPDF,
+    setIsGeneratingPDF,
+    isGeneratingTeamCardPDF,
+    setIsGeneratingTeamCardPDF,
   } = useOnboardingStore();
 
   const form = useForm<OnboardingSchema>({
@@ -421,6 +321,50 @@ export default function OnboardingForm() {
     control: form.control,
     name: 'teams',
   });
+
+  // Add this new effect to fetch existing team data
+  useEffect(() => {
+    const fetchExistingTeams = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          throw new Error('Access token not found');
+        }
+
+        const response = await api.get('/api/v1/registration/team/', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const existingTeams = response.data;
+        if (existingTeams && existingTeams.length > 0) {
+          const formattedTeams = existingTeams.map((team: any) => ({
+            name: team.team_name,
+            gender: team.gender,
+            players: team.team_members.map((member: any) => ({
+              name: member.name,
+              nic: member.nic,
+              contactNumber: member.phone_number,
+            })),
+          }));
+
+          form.reset({ teams: formattedTeams });
+          setTeams(formattedTeams);
+          setActiveTab('team0');
+        }
+      } catch (error) {
+        console.error('Error fetching existing teams:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to fetch existing team data. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    };
+
+    fetchExistingTeams();
+  }, []);
 
   //   useEffect(() => {
   //     if (step === 1 && !pdfContent) {
@@ -476,18 +420,18 @@ export default function OnboardingForm() {
         })),
       }));
 
-      //   const response = await api.post(
-      //     '/api/v1/registration/team/',
-      //     formattedTeams,
-      //     {
-      //       headers: {
-      //         Authorization: `Bearer ${accessToken}`,
-      //         'Content-Type': 'application/json',
-      //       },
-      //     }
-      //   );
+      const response = await api.post(
+        '/api/v1/registration/team/',
+        formattedTeams,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-      //   console.log('API Response:', response.data);
+      console.log('API Response:', response.data);
 
       toast({
         title: 'Success',
@@ -518,31 +462,24 @@ export default function OnboardingForm() {
 
   const handleNextStep = async () => {
     if (step === 1) {
-        const isValid = await validateTeams();
-      // const isValid = true;
+      const isValid = await validateTeams();
       if (isValid) {
         const teamData = form.getValues('teams');
         console.log('Data sent from step 1 to step 2:', teamData);
 
+        // Add a loading state
+        const setIsLoading = useOnboardingStore.getState().setIsLoading;
+        setIsLoading(true);
+
         const success = await submitTeamData(teamData);
         if (success) {
           form.setValue('teams', [...teamData]);
-
-          // Add a loading state
-          const setIsLoading = useOnboardingStore.getState().setIsLoading;
-          setIsLoading(true);
-
-          // Wait for 5 seconds before moving to the next step
-          setTimeout(() => {
-            setIsLoading(false);
-            setStep(2);
-          }, 5000);
+          setStep(2);
         }
+        setIsLoading(false);
       }
     } else if (step === 2) {
-      setTimeout(() => {
-        setStep(3);
-      }, 1500);
+      setStep(3);
     } else {
       setStep(step + 1);
     }
@@ -624,15 +561,49 @@ export default function OnboardingForm() {
   // New function to generate and download PDF
   const generateAndDownloadPDF = async (
     documentComponent: React.ReactElement,
-    fileName: string
+    fileName: string,
+    setGeneratingState: (generating: boolean) => void
   ) => {
-    const blob = await pdf(documentComponent).toBlob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.click();
-    URL.revokeObjectURL(url);
+    setGeneratingState(true);
+    try {
+      console.log('Starting PDF generation');
+      const blob = await pdf(documentComponent).toBlob();
+      console.log('PDF blob created');
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log('Delay completed');
+
+      const url = URL.createObjectURL(blob);
+      console.log('URL created:', url);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      console.log('Link appended to body');
+
+      link.click();
+      console.log('Link clicked');
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      console.log('Cleanup completed');
+
+      toast({
+        title: 'Success',
+        description: 'PDF generated and downloaded successfully.',
+      });
+    } catch (error: any) {
+      console.error('Error generating PDF:', error);
+      console.error('Error stack:', error.stack);
+      toast({
+        title: 'Error',
+        description: `Failed to generate PDF: ${error.message}`,
+        variant: 'destructive',
+      });
+    } finally {
+      setGeneratingState(false);
+    }
   };
 
   return (
@@ -752,7 +723,10 @@ export default function OnboardingForm() {
                         )}
                       />
                       {[0, 1, 2, 3, 4, 5, 6, 7].map((playerIndex) => (
-                        <div key={playerIndex} className="space-y-2 border-2 md:border-0  border-gray-200 p-4 md:p-0 rounded-lg">
+                        <div
+                          key={playerIndex}
+                          className="space-y-2 rounded-lg border-2 border-gray-200 p-4 md:border-0 md:p-0"
+                        >
                           <h4 className="font-semibold">
                             Player {playerIndex + 1}
                             {playerIndex >= 6 && (
@@ -761,7 +735,7 @@ export default function OnboardingForm() {
                               </span>
                             )}
                           </h4>
-                          <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
+                          <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
                             <FormField
                               control={form.control}
                               name={`teams.${teamIndex}.players.${playerIndex}.name`}
@@ -837,11 +811,20 @@ export default function OnboardingForm() {
                 onClick={() =>
                   generateAndDownloadPDF(
                     <TeamCard teams={teamFields} companyName={'companyName'} />,
-                    'team_cards.pdf'
+                    'team_cards.pdf',
+                    setIsGeneratingTeamCardPDF
                   )
                 }
+                disabled={isGeneratingTeamCardPDF}
               >
-                Download Team Cards PDF
+                {isGeneratingTeamCardPDF ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating PDF...
+                  </>
+                ) : (
+                  'Download Team Cards PDF'
+                )}
               </Button>
               <p className="text-sm text-gray-600">
                 Please download the team card PDF and have it verified and
@@ -867,7 +850,8 @@ export default function OnboardingForm() {
               onClick={() =>
                 generateAndDownloadPDF(
                   <InvoicePDF {...invoiceData} />,
-                  'invoice.pdf'
+                  'invoice.pdf',
+                  setIsGeneratingPDF
                 )
               }
               className="mt-4"
