@@ -1,30 +1,11 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  StyleSheet,
-  PDFDownloadLink,
-  PDFViewer,
-  pdf,
-} from '@react-pdf/renderer';
+import { StyleSheet, pdf } from '@react-pdf/renderer';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
-const Document = dynamic(
-  () => import('@react-pdf/renderer').then((mod) => mod.Document),
-  { ssr: false }
-);
-const Page = dynamic(
-  () => import('@react-pdf/renderer').then((mod) => mod.Page),
-  { ssr: false }
-);
-const Text = dynamic(
-  () => import('@react-pdf/renderer').then((mod) => mod.Text),
-  { ssr: false }
-);
-const View = dynamic(
-  () => import('@react-pdf/renderer').then((mod) => mod.View),
-  { ssr: false }
-);
 import axios from 'axios';
 import { PlusCircle, Download, X, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -32,7 +13,7 @@ import { useForm, useFieldArray, FieldArrayWithId } from 'react-hook-form';
 import { z } from 'zod';
 import create from 'zustand';
 
-import { useToast } from '@/hooks/use-toast';
+import { toast, useToast } from '@/hooks/use-toast';
 
 import InvoiceDetails from '../InvoiceDetails';
 import InvoicePDF from '../InvoicePDF';
@@ -70,7 +51,6 @@ import {
   AlertDialogTrigger,
   ScrollArea,
 } from '../ui';
-import dynamic from 'next/dynamic';
 
 const playerSchema = z.object({
   name: z.string().min(1, 'Player name is required'),
@@ -102,6 +82,7 @@ const onboardingSchema = z.object({
     .array(teamSchema)
     .min(1, 'At least one team is required')
     .max(4, 'Maximum of 4 teams allowed'),
+  includeHut: z.boolean().default(false),
   paymentSlip: z.any(),
   certifiedTeamCard: z.any(),
   acceptTerms: z.boolean().refine((val) => val === true, {
@@ -135,48 +116,6 @@ const invoiceData = {
     university: 'University of Moratuwa.',
   },
 };
-
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    backgroundColor: '#E4E4E4',
-    padding: 30,
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 10,
-  },
-  table: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: 'auto',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-  },
-  tableRow: {
-    margin: 'auto',
-    flexDirection: 'row',
-  },
-  tableCol: {
-    width: '25%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-  },
-  tableCell: {
-    margin: 'auto',
-    marginTop: 5,
-    fontSize: 10,
-  },
-});
 
 interface Team {
   name: string;
@@ -250,6 +189,8 @@ interface OnboardingStore {
   setIsGeneratingTeamCardPDF: (generating: boolean) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  includeHut: boolean;
+  setIncludeHut: (include: boolean) => void;
 }
 
 const useOnboardingStore = create<OnboardingStore>((set) => ({
@@ -274,7 +215,133 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
     set({ isGeneratingTeamCardPDF }),
   isLoading: false,
   setIsLoading: (isLoading) => set({ isLoading }),
+  includeHut: false,
+  setIncludeHut: (includeHut) => set({ includeHut }),
 }));
+
+// New function to generate and download PDF using jsPDF
+function saveDiv(divId: string, title: string) {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const element = document.getElementById(divId);
+  if (element) {
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const elementWidth = element.offsetWidth;
+    const scale = pageWidth / elementWidth;
+
+    doc.html(element, {
+      callback: function (doc) {
+        doc.save(`${title}.pdf`);
+      },
+      x: 0,
+      y: 0,
+      html2canvas: {
+        scale: scale,
+        width: elementWidth,
+        windowWidth: elementWidth,
+      },
+    });
+  }
+}
+
+// Update the generateAndDownloadPDF function to use saveDiv
+const generateAndDownloadPDF = async (
+  divId: string,
+  title: string,
+  setGeneratingState: (generating: boolean) => void
+) => {
+  setGeneratingState(true);
+  try {
+    saveDiv(divId, title);
+    toast({
+      title: 'Success',
+      description: 'PDF generated and downloaded successfully.',
+    });
+  } catch (error: any) {
+    console.error('Error generating PDF:', error);
+    toast({
+      title: 'Error',
+      description: `Failed to generate PDF: ${error.message}`,
+      variant: 'destructive',
+    });
+  } finally {
+    setGeneratingState(false);
+  }
+};
+
+// Add this function to calculate the invoice details
+const calculateInvoiceDetails = (teams: Team[], includeHut: boolean) => {
+  const initialRegistrationFee = 20000;
+  const additionalTeamFee = 25000;
+  const hutFee = 8000;
+
+  const additionalTeams = Math.max(0, teams.length - 1);
+  const additionalTeamsCost = additionalTeams * additionalTeamFee;
+  const hutCost = includeHut ? hutFee : 0;
+
+  const total = initialRegistrationFee + additionalTeamsCost + hutCost;
+
+  return {
+    initialRegistrationFee,
+    additionalTeamsCost,
+    hutCost,
+    total,
+  };
+};
+
+// Add this interface above the component
+interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+}
+
+// Add this function to generate PDF blob
+const generatePDF = async (
+  element: HTMLElement,
+  title: string
+): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    html2canvas(element, {
+      scale: 2, // Increase resolution
+      useCORS: true,
+      logging: false,
+    })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+        });
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        resolve(pdf.output('blob'));
+      })
+      .catch(reject);
+  });
+};
+
+// Helper function to convert Blob to base64
+const blobToBase64 = (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      // Remove the data URL prefix
+      resolve(base64String.split(',')[1]);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
 
 export default function OnboardingForm() {
   const { toast } = useToast();
@@ -293,10 +360,12 @@ export default function OnboardingForm() {
     setTeamCounts,
     setTermsModalOpen,
     isLoading,
-    isGeneratingPDF,
-    setIsGeneratingPDF,
+    // isGeneratingPDF,
+    // setIsGeneratingPDF,
     isGeneratingTeamCardPDF,
     setIsGeneratingTeamCardPDF,
+    includeHut,
+    setIncludeHut,
   } = useOnboardingStore();
 
   const form = useForm<OnboardingSchema>({
@@ -309,6 +378,7 @@ export default function OnboardingForm() {
           players: Array(8).fill({ name: '', nic: '', contactNumber: '' }),
         },
       ],
+      includeHut: false,
       acceptTerms: false,
     },
   });
@@ -321,6 +391,271 @@ export default function OnboardingForm() {
     control: form.control,
     name: 'teams',
   });
+
+  const [invoiceData, setInvoiceData] = useState<{
+    id: string;
+    billTo: { name: string };
+    items: InvoiceItem[];
+    total: number;
+    bankDetails: {
+      accountHolder: { boc: string; commercial: string };
+      accountNo: { boc: string; commercial: string };
+      bankName: { boc: string; commercial: string };
+      branch: { boc: string; commercial: string };
+      branchCode: { boc: string; commercial: string };
+    };
+  }>({
+    id: '',
+    billTo: { name: '' },
+    items: [],
+    total: 0,
+    bankDetails: {
+      accountHolder: {
+        boc: 'IT Faculty Students Union',
+        commercial: 'Thushan Fernando',
+      },
+      accountNo: { boc: '74704423', commercial: '8013653015' },
+      bankName: { boc: 'Bank of Ceylon', commercial: 'Commercial Bank' },
+      branch: {
+        boc: 'University of Moratuwa branch',
+        commercial: 'Anuradhapura',
+      },
+      branchCode: { boc: '631', commercial: '53' },
+    },
+  });
+  const [invoiceId, setInvoiceId] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState<string>('');
+  const invoiceDivRef = useRef<HTMLDivElement>(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  // Add this useEffect to fetch company name from local storage
+  useEffect(() => {
+    const companyData = localStorage.getItem('companyData');
+    if (companyData) {
+      const { company_name } = JSON.parse(companyData);
+      setCompanyName(company_name);
+    }
+  }, []);
+
+  const generateInvoice = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) throw new Error('Access token not found');
+
+      const invoiceDetails = calculateInvoiceDetails(teams, includeHut);
+
+      const createResponse = await api.post(
+        '/api/v1/registration/invoice/',
+        { amount: invoiceDetails.total.toFixed(2) },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
+
+      const newInvoiceId = createResponse.data.id;
+      setInvoiceId(newInvoiceId);
+
+      const newInvoiceData = {
+        id: newInvoiceId,
+        billTo: { name: companyName },
+        items: [
+          {
+            description: 'Initial Registration Fee',
+            quantity: 1,
+            unit_price: invoiceDetails.initialRegistrationFee,
+            total: invoiceDetails.initialRegistrationFee,
+          },
+          {
+            description: 'Additional Team(s) Fee',
+            quantity: Math.max(0, teams.length - 1),
+            unit_price: 25000,
+            total: invoiceDetails.additionalTeamsCost,
+          },
+          {
+            description: 'Hut Fee',
+            quantity: includeHut ? 1 : 0,
+            unit_price: 8000,
+            total: invoiceDetails.hutCost,
+          },
+        ],
+        total: invoiceDetails.total,
+        bankDetails: {
+          accountHolder: {
+            boc: 'IT Faculty Students Union',
+            commercial: 'Thushan Fernando',
+          },
+          accountNo: { boc: '74704423', commercial: '8013653015' },
+          bankName: { boc: 'Bank of Ceylon', commercial: 'Commercial Bank' },
+          branch: {
+            boc: 'University of Moratuwa branch',
+            commercial: 'Anuradhapura',
+          },
+          branchCode: { boc: '631', commercial: '53' },
+        },
+      };
+
+      setInvoiceData(newInvoiceData);
+    } catch (error) {
+      console.error('Error generating invoice:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to generate invoice. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const generateAndUploadPDF = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) throw new Error('Access token not found');
+
+      if (!invoiceDivRef.current) {
+        throw new Error('Invoice div not found');
+      }
+
+      const pdfBlob = await generatePDF(
+        invoiceDivRef.current,
+        `invoice_${invoiceId}.pdf`
+      );
+
+      // Create FormData
+      const formData = new FormData();
+      formData.append('invoice', pdfBlob, `invoice_${invoiceId}.pdf`);
+
+      const updateResponse = await api.patch(
+        `/api/v1/registration/invoice/${invoiceId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('Invoice Update Response:', updateResponse.data);
+      toast({
+        title: 'Success',
+        description: 'Invoice generated and uploaded successfully!',
+      });
+
+      // Trigger download
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `invoice_${invoiceId}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error generating or uploading PDF:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to generate or upload PDF. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
+  const handleNextStep = async () => {
+    if (step === 1) {
+      const isValid = await validateTeams();
+      if (isValid) {
+        const teamData = form.getValues('teams');
+        console.log('Data sent from step 1 to step 2:', teamData);
+
+        // Add a loading state
+        const setIsLoading = useOnboardingStore.getState().setIsLoading;
+        setIsLoading(true);
+
+        const success = await submitTeamData(teamData);
+        if (success) {
+          form.setValue('teams', [...teamData]);
+          setStep(2);
+        }
+        setIsLoading(false);
+      }
+    } else if (step === 2) {
+      await generateInvoice();
+      setStep(3);
+    } else {
+      setStep(step + 1);
+    }
+  };
+
+  const onSubmit = async (data: OnboardingSchema) => {
+    // This function will now handle the final submission
+    console.log('Final form data:', data);
+    toast({
+      title: 'Success',
+      description: 'Onboarding completed successfully!',
+    });
+    form.reset();
+    router.push('/dashboard');
+  };
+
+  const addNewTeam = () => {
+    if (teamFields.length >= 4) {
+      toast({
+        title: 'Maximum Teams Reached',
+        description: 'You cannot add more than 4 teams in total.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const newTeamGender = teamCounts.male < 2 ? 'male' : 'female';
+
+    if (
+      (newTeamGender === 'male' && teamCounts.male >= 2) ||
+      (newTeamGender === 'female' && teamCounts.female >= 2)
+    ) {
+      toast({
+        title: 'Gender Limit Reached',
+        description: `You cannot add more than 2 ${newTeamGender} teams.`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const newTeamIndex = teamFields.length;
+    appendTeam({
+      name: '',
+      gender: newTeamGender,
+      players: Array(8).fill({ name: '', nic: '', contactNumber: '' }),
+    });
+    setActiveTab(`team${newTeamIndex}`);
+
+    toast({
+      title: 'Team Added',
+      description: `New ${newTeamGender} team added successfully.`,
+    });
+  };
+
+  const validateTeams = async () => {
+    const result = await form.trigger('teams');
+    if (!result) {
+      const errors = form.formState.errors;
+      if (errors.teams) {
+        toast({
+          title: 'Validation Error',
+          description: 'Please check all team details and try again.',
+          variant: 'destructive',
+        });
+      }
+    }
+    return result;
+  };
+
+  const handleRemoveTeam = (index: number) => {
+    removeTeam(index);
+    setActiveTab(`team${Math.max(0, index - 1)}`);
+    toast({
+      title: 'Team Removed',
+      description: 'The team has been successfully removed.',
+    });
+  };
 
   // Add this new effect to fetch existing team data
   useEffect(() => {
@@ -365,16 +700,6 @@ export default function OnboardingForm() {
 
     fetchExistingTeams();
   }, []);
-
-  //   useEffect(() => {
-  //     if (step === 1 && !pdfContent) {
-  //       const generatePDF = async () => {
-  //         const blob = await pdf(<TeamCard teams={teams} />).toBlob();
-  //         setPdfContent(URL.createObjectURL(blob));
-  //       };
-  //       generatePDF();
-  //     }
-  //   }, [step, teams, pdfContent, setPdfContent]);
 
   // Update Zustand store when form changes
   useEffect(() => {
@@ -457,152 +782,6 @@ export default function OnboardingForm() {
         });
       }
       return false;
-    }
-  };
-
-  const handleNextStep = async () => {
-    if (step === 1) {
-      const isValid = await validateTeams();
-      if (isValid) {
-        const teamData = form.getValues('teams');
-        console.log('Data sent from step 1 to step 2:', teamData);
-
-        // Add a loading state
-        const setIsLoading = useOnboardingStore.getState().setIsLoading;
-        setIsLoading(true);
-
-        const success = await submitTeamData(teamData);
-        if (success) {
-          form.setValue('teams', [...teamData]);
-          setStep(2);
-        }
-        setIsLoading(false);
-      }
-    } else if (step === 2) {
-      setStep(3);
-    } else {
-      setStep(step + 1);
-    }
-  };
-
-  const onSubmit = async (data: OnboardingSchema) => {
-    // This function will now handle the final submission
-    console.log('Final form data:', data);
-    toast({
-      title: 'Success',
-      description: 'Onboarding completed successfully!',
-    });
-    form.reset();
-    router.push('/dashboard');
-  };
-
-  const addNewTeam = () => {
-    if (teamFields.length >= 4) {
-      toast({
-        title: 'Maximum Teams Reached',
-        description: 'You cannot add more than 4 teams in total.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    const newTeamGender = teamCounts.male < 2 ? 'male' : 'female';
-
-    if (
-      (newTeamGender === 'male' && teamCounts.male >= 2) ||
-      (newTeamGender === 'female' && teamCounts.female >= 2)
-    ) {
-      toast({
-        title: 'Gender Limit Reached',
-        description: `You cannot add more than 2 ${newTeamGender} teams.`,
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    const newTeamIndex = teamFields.length;
-    appendTeam({
-      name: '',
-      gender: newTeamGender,
-      players: Array(8).fill({ name: '', nic: '', contactNumber: '' }),
-    });
-    setActiveTab(`team${newTeamIndex}`);
-
-    toast({
-      title: 'Team Added',
-      description: `New ${newTeamGender} team added successfully.`,
-    });
-  };
-
-  const validateTeams = async () => {
-    const result = await form.trigger('teams');
-    if (!result) {
-      const errors = form.formState.errors;
-      if (errors.teams) {
-        toast({
-          title: 'Validation Error',
-          description: 'Please check all team details and try again.',
-          variant: 'destructive',
-        });
-      }
-    }
-    return result;
-  };
-
-  const handleRemoveTeam = (index: number) => {
-    removeTeam(index);
-    setActiveTab(`team${Math.max(0, index - 1)}`);
-    toast({
-      title: 'Team Removed',
-      description: 'The team has been successfully removed.',
-    });
-  };
-
-  // New function to generate and download PDF
-  const generateAndDownloadPDF = async (
-    documentComponent: React.ReactElement,
-    fileName: string,
-    setGeneratingState: (generating: boolean) => void
-  ) => {
-    setGeneratingState(true);
-    try {
-      console.log('Starting PDF generation');
-      const blob = await pdf(documentComponent).toBlob();
-      console.log('PDF blob created');
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log('Delay completed');
-
-      const url = URL.createObjectURL(blob);
-      console.log('URL created:', url);
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName;
-      document.body.appendChild(link);
-      console.log('Link appended to body');
-
-      link.click();
-      console.log('Link clicked');
-
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      console.log('Cleanup completed');
-
-      toast({
-        title: 'Success',
-        description: 'PDF generated and downloaded successfully.',
-      });
-    } catch (error: any) {
-      console.error('Error generating PDF:', error);
-      console.error('Error stack:', error.stack);
-      toast({
-        title: 'Error',
-        description: `Failed to generate PDF: ${error.message}`,
-        variant: 'destructive',
-      });
-    } finally {
-      setGeneratingState(false);
     }
   };
 
@@ -783,7 +962,33 @@ export default function OnboardingForm() {
                 </TabsContent>
               ))}
             </Tabs>
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4">
+              <FormField
+                control={form.control}
+                name="includeHut"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          setIncludeHut(checked as boolean);
+                        }}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Include Hut (Additional 8,000 LKR)</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <div className="text-sm text-gray-600">
+                {includeHut ? 'Hut included' : 'Hut not included'}
+              </div>
               <Button
                 type="button"
                 onClick={handleNextStep}
@@ -805,13 +1010,15 @@ export default function OnboardingForm() {
         {step === 2 && (
           <div>
             <h2 className="mb-4 text-2xl font-bold">Team Cards Preview</h2>
-            <TeamCardDetails teams={teamFields} companyName={'companyName'} />
+            <div id="teamCardDivId">
+              <TeamCardDetails teams={teamFields} companyName={'companyName'} />
+            </div>
             <div className="mt-4 space-y-4">
               <Button
                 onClick={() =>
                   generateAndDownloadPDF(
-                    <TeamCard teams={teamFields} companyName={'companyName'} />,
-                    'team_cards.pdf',
+                    'teamCardDivId',
+                    'Team Cards',
                     setIsGeneratingTeamCardPDF
                   )
                 }
@@ -845,18 +1052,26 @@ export default function OnboardingForm() {
         {step === 3 && (
           <div>
             <h2 className="mb-4 text-2xl font-bold">Invoice Preview</h2>
-            <InvoiceDetails {...invoiceData} />
+            {invoiceData.id && (
+              <p className="mb-2 text-sm text-gray-600">
+                Invoice ID: {invoiceData.id}
+              </p>
+            )}
+            <div ref={invoiceDivRef}>
+              <InvoiceDetails
+                id={invoiceData.id}
+                billTo={invoiceData.billTo}
+                items={invoiceData.items}
+                total={invoiceData.total}
+                bankDetails={invoiceData.bankDetails}
+              />
+            </div>
             <Button
-              onClick={() =>
-                generateAndDownloadPDF(
-                  <InvoicePDF {...invoiceData} />,
-                  'invoice.pdf',
-                  setIsGeneratingPDF
-                )
-              }
+              onClick={generateAndUploadPDF}
               className="mt-4"
+              disabled={isGeneratingPDF}
             >
-              Download Invoice PDF
+              {isGeneratingPDF ? 'Generating PDF...' : 'Download Invoice PDF'}
             </Button>
             <div className="mt-4 flex items-center justify-between">
               <Button type="button" onClick={() => setStep(2)}>
