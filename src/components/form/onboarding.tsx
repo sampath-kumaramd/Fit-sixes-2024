@@ -585,14 +585,66 @@ export default function OnboardingForm() {
   };
 
   const onSubmit = async (data: OnboardingSchema) => {
-    // This function will now handle the final submission
-    console.log('Final form data:', data);
-    toast({
-      title: 'Success',
-      description: 'Onboarding completed successfully!',
-    });
-    form.reset();
-    router.push('/dashboard');
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const companyData = localStorage.getItem('companyData');
+      if (!accessToken || !companyData) {
+        throw new Error('Access token or company data not found');
+      }
+
+      const { id: companyId } = JSON.parse(companyData);
+
+      const formData = new FormData();
+
+      // Append payment slip file
+      if (data.paymentSlip && data.paymentSlip[0]) {
+        formData.append('payment_slip', data.paymentSlip[0]);
+      }
+
+      // Append signed team card file
+      if (data.certifiedTeamCard && data.certifiedTeamCard[0]) {
+        formData.append('signed_team_card', data.certifiedTeamCard[0]);
+      }
+
+      // Make the API call to upload files
+      const response = await api.patch(
+        `/api/v1/registration/company/${companyId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('File upload response:', response.data);
+
+      toast({
+        title: 'Success',
+        description: 'Onboarding completed successfully!',
+      });
+
+      form.reset();
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Error submitting final data:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        toast({
+          title: 'Error',
+          description:
+            error.response.data.detail ||
+            'Failed to complete onboarding. Please try again.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    }
   };
 
   const addNewTeam = () => {
@@ -730,9 +782,12 @@ export default function OnboardingForm() {
   const submitTeamData = async (teams: OnboardingSchema['teams']) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('Access token not found');
+      const companyData = localStorage.getItem('companyData');
+      if (!accessToken || !companyData) {
+        throw new Error('Access token or company data not found');
       }
+
+      const { id: companyId } = JSON.parse(companyData);
 
       const formattedTeams = teams.map((team) => ({
         team_name: team.name,
@@ -745,7 +800,8 @@ export default function OnboardingForm() {
         })),
       }));
 
-      const response = await api.post(
+      // Submit team data
+      const teamResponse = await api.post(
         '/api/v1/registration/team/',
         formattedTeams,
         {
@@ -756,22 +812,40 @@ export default function OnboardingForm() {
         }
       );
 
-      console.log('API Response:', response.data);
+      console.log('Team API Response:', teamResponse.data);
+
+      // Update company data
+      const formData = new FormData();
+      formData.append('is_hut', includeHut.toString());
+
+      // const companyResponse = await api.patch(
+      //   `/api/v1/registration/company/${companyId}/`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   }
+      // );
+
+      // console.log('Company API Response:', companyResponse.data);
 
       toast({
         title: 'Success',
-        description: 'Teams registered successfully!',
+        description:
+          'Teams registered and company details updated successfully!',
       });
 
       return true;
     } catch (error) {
-      console.error('Error submitting team data:', error);
+      console.error('Error submitting data:', error);
       if (axios.isAxiosError(error) && error.response) {
         toast({
           title: 'Error',
           description:
             error.response.data.detail ||
-            'Failed to register teams. Please try again.',
+            'Failed to register teams or update company details. Please try again.',
           variant: 'destructive',
         });
       } else {
