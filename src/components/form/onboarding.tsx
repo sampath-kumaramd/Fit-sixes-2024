@@ -518,8 +518,8 @@ export default function OnboardingForm() {
 
   const handleNextStep = async () => {
     if (step === 1) {
-      //   const isValid = await validateTeams();
-      const isValid = true;
+        const isValid = await validateTeams();
+      // const isValid = true;
       if (isValid) {
         const teamData = form.getValues('teams');
         console.log('Data sent from step 1 to step 2:', teamData);
@@ -699,7 +699,7 @@ export default function OnboardingForm() {
               {teamFields.map((team, teamIndex) => (
                 <TabsContent key={teamIndex} value={`team${teamIndex}`}>
                   <Card>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 pt-6">
                       <FormField
                         control={form.control}
                         name={`teams.${teamIndex}.name`}
@@ -752,7 +752,7 @@ export default function OnboardingForm() {
                         )}
                       />
                       {[0, 1, 2, 3, 4, 5, 6, 7].map((playerIndex) => (
-                        <div key={playerIndex} className="space-y-2">
+                        <div key={playerIndex} className="space-y-2 border-2 md:border-0  border-gray-200 p-4 md:p-0 rounded-lg">
                           <h4 className="font-semibold">
                             Player {playerIndex + 1}
                             {playerIndex >= 6 && (
@@ -761,7 +761,7 @@ export default function OnboardingForm() {
                               </span>
                             )}
                           </h4>
-                          <div className="grid grid-cols-3 gap-2">
+                          <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
                             <FormField
                               control={form.control}
                               name={`teams.${teamIndex}.players.${playerIndex}.name`}
