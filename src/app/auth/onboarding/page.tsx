@@ -1,10 +1,11 @@
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import OnboardingForm from '@/components/form/onboarding';
+import OnboardingForm from '@/components/form/onboarding/OnboardingForm';
 
 import { CompanyViewStatus } from '@/types/enums/company-view-status';
 import { Separator } from '@/components';

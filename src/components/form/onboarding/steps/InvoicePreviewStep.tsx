@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { useOnboardingStore } from '../store';
 
-
 interface InvoicePreviewStepProps {
   onPrevStep: () => void;
   onNextStep: () => void;
@@ -20,19 +19,15 @@ export default function InvoicePreviewStep({
 
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold">Invoice Preview</h2>
-      {/* ... (Invoice preview content) */}
-      <Button
-        // onClick={() =>
-        //   generateAndDownloadPDF(
-        //     <InvoicePDF teams={teamFields} />,
-        //     'invoice.pdf'
-        //   )
-        // }
-        className="mt-4"
-      >
-        Download Invoice PDF
-      </Button>
+      <h2 className="mb-4 text-2xl font-bold">Invoice and Team Card</h2>
+      <Card className="mb-6">
+        <CardContent className="p-6">
+          <p className="text-lg">
+            Thank you for providing your information. We will send the invoice
+            and team card to your company via email within the next 24 hours.
+          </p>
+        </CardContent>
+      </Card>
       <div className="mt-4 flex justify-between">
         <Button type="button" onClick={onPrevStep}>
           Previous
