@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -6,19 +8,23 @@ import { Separator } from '@/components';
 
 import BackToHomeButton from './components/back-to-home-button';
 
+
+interface AuthLayoutProps {
+  children: React.ReactNode;
+  title: string;
+  subTitle: string;
+  isInSignIn: boolean;
+  currentStep: number;
+}
+
 function AuthLayout({
   children,
   title,
   subTitle,
   isInSignIn,
   currentStep,
-}: Readonly<{
-  children: React.ReactNode;
-  title: string;
-  subTitle: string;
-  isInSignIn: boolean;
-  currentStep: number;
-}>) {
+}: AuthLayoutProps) {
+
   return (
     <section className="relative overflow-y-hidden">
       <div className="absolute -left-[20rem] -top-[20rem] z-20 -m-8 lg:h-[40rem] lg:w-[40rem] rounded-full bg-[#fae4c1] blur-3xl" />
