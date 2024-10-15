@@ -1,5 +1,5 @@
-import OnboardingForm from '@/components/form/onboarding';
-
+// import OnboardingForm from '@/components/form/onboarding';
+import OnboardingForm from '@/components/form/onboarding/OnboardingForm';
 export default function Onboarding() {
   return (
     <div className="col-span-8 items-center p-8">

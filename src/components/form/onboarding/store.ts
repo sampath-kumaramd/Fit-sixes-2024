@@ -11,9 +11,13 @@ interface OnboardingStore {
   setActiveTab: (tab: string) => void;
   teamFields: OnboardingSchema['teams'];
   addNewTeam: () => void;
+  teamCounts: { male: number; female: number };
+  setTeamCounts: (teamCounts: { male: number; female: number }) => void;
   handleRemoveTeam: (index: number) => void;
   termsModalOpen: boolean;
   setTermsModalOpen: (open: boolean) => void;
+  includeHut: boolean;
+  setIncludeHut: (include: boolean) => void;
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set) => ({
@@ -23,6 +27,8 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   setIsLoading: (isLoading) => set({ isLoading }),
   activeTab: 'team0',
   setActiveTab: (tab) => set({ activeTab: tab }),
+  teamCounts: { male: 0, female: 0 },
+  setTeamCounts: (teamCounts) => set({ teamCounts }),
   teamFields: [
     {
       name: '',
@@ -49,4 +55,6 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
     })),
   termsModalOpen: false,
   setTermsModalOpen: (open) => set({ termsModalOpen: open }),
+  includeHut: false,
+  setIncludeHut: (includeHut) => set({ includeHut }),
 }));
