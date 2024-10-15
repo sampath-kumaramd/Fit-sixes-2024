@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { setCookie } from 'cookies-next';
 
 import { useToast } from '@/hooks/use-toast';
 
@@ -58,9 +59,18 @@ export default function SignInForm() {
       if (response.status === 200) {
         const { access, refresh, user } = response.data;
 
-        // Store tokens in localStorage
-        localStorage.setItem('accessToken', access);
-        localStorage.setItem('refreshToken', refresh);
+        // Store tokens in cookies
+        setCookie('accessToken', access, {
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+          path: '/',
+        });
+        setCookie('refreshToken', refresh, {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/',
+        });
+
+        // Store user data in localStorage
+        localStorage.setItem('userData', JSON.stringify(user));
 
         // Fetch company data
         try {
@@ -85,7 +95,7 @@ export default function SignInForm() {
           description: 'Signed in successfully!',
         });
 
-        // Redirect to dashboard or desired page
+        // Redirect to onboarding page
         router.push('/auth/onboarding');
       } else if (response.status === 400) {
         toast({
