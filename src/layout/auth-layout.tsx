@@ -21,16 +21,16 @@ function AuthLayout({
 }>) {
   return (
     <section className="relative overflow-y-hidden">
-      <div className="absolute -left-[20rem] -top-[20rem] z-20 -m-8 h-[40rem] w-[40rem] rounded-full bg-[#fae4c1] blur-3xl" />
+      <div className="absolute -left-[20rem] -top-[20rem] z-20 -m-8 lg:h-[40rem] lg:w-[40rem] rounded-full bg-[#fae4c1] blur-3xl" />
       <div
-        className="grid min-h-screen grid-cols-12"
+        className="lg:grid min-h-screen lg:grid-cols-12"
         style={{
           backgroundImage: 'linear-gradient(to right, #fff4e5, white)',
           backgroundSize: '350px',
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="z-50 col-span-4 m-8 flex flex-col justify-between overflow-hidden rounded-xl bg-darkBlue p-4 text-white">
+        <div className="z-50 lg:col-span-4 m-8 hidden lg:flex flex-col justify-between overflow-hidden rounded-xl bg-darkBlue p-4 text-white">
           <div className="relative z-10">
             <BackToHomeButton />
           </div>
@@ -69,13 +69,24 @@ function AuthLayout({
 
           <div className="relative z-10"></div>
         </div>
-
+        <div className='lg:hidden bg-darkBlue w-full'>
+        <div className=' flex justify-center items-center w-full py-6'>
+           <Image
+              src="/logo/logo-light.svg"
+              alt="Fit Sixes 2k24"
+              width={100}
+              height={100}
+            />
+</div>
+            <h1 className="text-white text-2xl font-bold text-center">{title}</h1>
+            <p className="text-white text-sm font-thin text-center pb-6">{subTitle}</p>
+        </div>
         {children}
       </div>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-gray-500">
-        All right reserved &copy; Fit Sixes 2K24 | ITFSU
-      </div>
-      <div className="absolute -bottom-[20rem] -left-[20rem] z-20 -m-8 h-[40rem] w-[40rem] rounded-full bg-[#fae4c1] blur-3xl" />
+      {/* <div className="absolute bottom-1 left-1/2 -translate-x-1/2  text-gray-500 text-xs sm:text-sm ">
+        All right reserved &copy;  FIT SIXES 2K24 | ITFSU
+      </div> */}
+      <div className="absolute -bottom-[20rem] -left-[20rem] z-20 -m-8 lg:h-[40rem] lg:w-[40rem] rounded-full bg-[#fae4c1] blur-3xl" />
     </section>
   );
 }

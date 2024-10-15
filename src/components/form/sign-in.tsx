@@ -13,6 +13,8 @@ import { useToast } from '@/hooks/use-toast';
 
 import {
   Button,
+  Card,
+  CardContent,
   Form,
   FormControl,
   FormField,
@@ -22,9 +24,7 @@ import {
   Input,
 } from '../ui';
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
+
 
 const signInSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -45,7 +45,10 @@ export default function SignInForm() {
       password: '',
     },
   });
-
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
+  
   const onSubmit = async (data: SignInSchema) => {
     setIsSubmitting(true);
     try {
@@ -108,9 +111,10 @@ export default function SignInForm() {
   };
 
   return (
+    <Card className='max-w-md mx-auto' >
+      <CardContent className='p-6'>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <h2 className="mb-4 text-2xl font-bold">Sign In</h2>
         <FormField
           control={form.control}
           name="email"
@@ -136,18 +140,22 @@ export default function SignInForm() {
               <FormMessage />
             </FormItem>
           )}
-        />
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Signing in...' : 'Sign In'}
+            />
+            <div className='flex justify-end'>
+              <Button type="submit" disabled={isSubmitting} className='w-fit px-10 '>
+        {isSubmitting ? 'Signing in...' : 'Sign In'}
         </Button>
-        <div className="mt-4 flex items-center justify-start gap-2">
+        </div>
+        <div className="mt-4 flex items-center justify-start gap-2 text-gray-900">
           <p>Don&apos;t have an account?</p>
-          <Link href="/auth/sign-up">Sign Up</Link>
+          <Link href="/auth/sign-up" className=' font-bold'>Register here</Link>
         </div>
         <div className="mt-4 flex items-center justify-start gap-2">
-          <Link href="/auth/forgot-password">Forgot Password?</Link>
+          <Link href="/auth/forgot-password">Did you forget your password?</Link>
         </div>
       </form>
-    </Form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

@@ -33,7 +33,12 @@ import {
   SelectValue,
   SelectItem,
 } from '../ui';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
 
 export default function SignUpForm() {
   const { toast } = useToast();
@@ -71,47 +76,51 @@ export default function SignUpForm() {
       return;
     }
     if (data.isSponsor === IsSponsor.YES) {
-       if(data.sponsorshipLevel === SponsorshipLevel.NONE) {
+      if (data.sponsorshipLevel === SponsorshipLevel.NONE) {
         toast({
           title: 'Error',
           description: 'Please select a sponsorship level.',
           variant: 'destructive',
         });
         return;
-       }
+      }
     }
     setIsSubmitting(true);
     try {
-      const response = await axiosAuthorized.post('/api/v1/auth/registration/', {
-        email: data.primaryContact.email,
-        password1: data.password,
-        password2: data.confirmPassword,
-        company_name: data.companyName,
-        package: data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
-        contact_name: data.primaryContact.name,
-        phone: data.primaryContact.phone,
-        secondary_contact_name: data.secondaryContact.name,
-        secondary_email: data.secondaryContact.email,
-        secondary_phone: data.secondaryContact.phone,
-      });
+      const response = await axiosAuthorized.post(
+        '/api/v1/auth/registration/',
+        {
+          email: data.primaryContact.email,
+          password1: data.password,
+          password2: data.confirmPassword,
+          company_name: data.companyName,
+          package:
+            data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
+          contact_name: data.primaryContact.name,
+          phone: data.primaryContact.phone,
+          secondary_contact_name: data.secondaryContact.name,
+          secondary_email: data.secondaryContact.email,
+          secondary_phone: data.secondaryContact.phone,
+        }
+      );
 
       if (response.status === 201) {
-      toast({
-        title: 'Success',
-        description: 'Your account has been created successfully.',
-      });
-      router.push('/auth/verify-email');
-      form.reset();
+        toast({
+          title: 'Success',
+          description: 'Your account has been created successfully.',
+        });
+        router.push('/auth/verify-email');
+        form.reset();
       } else if (response.status === 400) {
         if (typeof response === 'object' && response !== null) {
-        const errorMessages = Object.entries(response.data)
-          .map(([field, messages]) => {
-            if (Array.isArray(messages)) {
-              return `${field}: ${messages.join(', ')}`;
-            }
-            return null;
-          })
-          .filter(Boolean)
+          const errorMessages = Object.entries(response.data)
+            .map(([field, messages]) => {
+              if (Array.isArray(messages)) {
+                return `${field}: ${messages.join(', ')}`;
+              }
+              return null;
+            })
+            .filter(Boolean)
             .join('\n');
           toast({
             title: 'Error',
@@ -119,15 +128,13 @@ export default function SignUpForm() {
             variant: 'destructive',
           });
         }
-      }
-      else if(response.status === 500) {
+      } else if (response.status === 500) {
         toast({
           title: 'Error',
           description: response.data.message,
           variant: 'destructive',
         });
-      }
-      else {
+      } else {
         toast({
           title: 'Error',
           description: 'An unexpected error occurred. Please try again.',
@@ -152,20 +159,19 @@ export default function SignUpForm() {
             description: errorMessages,
             variant: 'destructive',
           });
-        }
-        else if(error.response.status === 500) {
+        } else if (error.response.status === 500) {
           toast({
             title: 'Error',
             description: error.response.data.message,
             variant: 'destructive',
           });
-        }
-        else {
-        toast({
-          title: 'Error',
-          description:
-            error.response.data.message || 'An error occurred during sign up.',
-          variant: 'destructive',
+        } else {
+          toast({
+            title: 'Error',
+            description:
+              error.response.data.message ||
+              'An error occurred during sign up.',
+            variant: 'destructive',
           });
         }
       } else {
@@ -183,7 +189,7 @@ export default function SignUpForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white lg:bg-transparent p-4 lg:p-0 rounded-lg border-2 border-gray-200 lg:border-0 ">
           <FormField
             control={form.control}
             name="companyName"
@@ -197,34 +203,38 @@ export default function SignUpForm() {
               </FormItem>
             )}
           />
-             <FormField
-                  control={form.control}
-                  name="primaryContact.email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel> Primary Contact Email
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger> <Info className='h-4 w-4 text-red-500 ms-1' /></TooltipTrigger>
-    <TooltipContent>
-      <p>This email will be used for login and communication.</p>
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>
-
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Enter primary email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-           <FormField
+          <FormField
+            control={form.control}
+            name="primaryContact.email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Primary Contact Email
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Info className="ms-1 h-4 w-4 text-red-500" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          This email will be used for login and communication.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Enter primary email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
@@ -253,14 +263,13 @@ export default function SignUpForm() {
                 <FormMessage />
               </FormItem>
             )}
-          />  
+          />
           <FormField
             control={form.control}
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password* 
-                </FormLabel>
+                <FormLabel>Confirm Password*</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
@@ -285,10 +294,8 @@ export default function SignUpForm() {
               </FormItem>
             )}
           />
-
-         
         </div>
-
+        <div className='bg-white lg:bg-transparent p-4 lg:p-0 rounded-lg border-2 border-gray-200 lg:border-0 space-y-4 '>
         <FormField
           control={form.control}
           name="isSponsor"
@@ -343,8 +350,8 @@ export default function SignUpForm() {
             )}
           />
         )}
-
-        <div className="grid grid-cols-2 gap-4">
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Card>
             <CardContent className="pt-6">
               <h3 className="mb-4 font-semibold">
@@ -451,18 +458,17 @@ export default function SignUpForm() {
           </Card>
         </div>
 
-        <div className="flex justify-center">
-          <Button
-            type="submit"
-            className="w-fit"
-            disabled={isSubmitting }
-          >
+        <div className="flex justify-center sm:justify-end ">
+          <Button type="submit" className="w-fit px-8" disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : 'Sign Up'}
           </Button>
         </div>
         <div className="flex justify-center">
           <p className="text-sm text-gray-900">
-            Already have an account? <Link href="/auth/sign-in" className=' font-bold'>Sign In</Link>
+            Already have an account?{' '}
+            <Link href="/auth/sign-in" className="font-bold">
+              Sign In
+            </Link>
           </p>
         </div>
       </form>
