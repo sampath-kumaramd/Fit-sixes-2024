@@ -3,15 +3,34 @@
 import React from 'react';
 
 import {
-  Document,
-  Page,
-  Text,
-  View,
   StyleSheet,
-  Font,
+  PDFDownloadLink,
+  PDFViewer,
   pdf,
-  Image,
+  Font,
 } from '@react-pdf/renderer';
+import dynamic from 'next/dynamic';
+
+const Document = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.Document),
+  { ssr: false }
+);
+const Page = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.Page),
+  { ssr: false }
+);
+const Text = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.Text),
+  { ssr: false }
+);
+const View = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.View),
+  { ssr: false }
+);
+const Image = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.Image),
+  { ssr: false }
+);
 
 // Register custom font
 Font.register({

@@ -29,6 +29,6 @@
     "src/components/Hero-section.jsx",
     "src/components/ui/timer.jsx",
     "src/components/ui/timer.jsx"
-  ],
+, "next.config.js"  ],
   "exclude": ["node_modules"]
 }

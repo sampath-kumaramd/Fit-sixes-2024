@@ -1,17 +1,11 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  PDFDownloadLink,
-  PDFViewer,
-  pdf,
-} from '@react-pdf/renderer';
+import { StyleSheet, pdf } from '@react-pdf/renderer';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 import axios from 'axios';
 import { PlusCircle, Download, X, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -19,7 +13,7 @@ import { useForm, useFieldArray, FieldArrayWithId } from 'react-hook-form';
 import { z } from 'zod';
 import create from 'zustand';
 
-import { useToast } from '@/hooks/use-toast';
+import { toast, useToast } from '@/hooks/use-toast';
 
 import InvoiceDetails from '../InvoiceDetails';
 import InvoicePDF from '../InvoicePDF';
@@ -70,7 +64,17 @@ const teamSchema = z.object({
   players: z
     .array(playerSchema)
     .min(6, 'Each team must have at least 6 players')
-    .max(8, 'Each team can have a maximum of 8 players'),
+    .max(8, 'Each team can have a maximum of 8 players')
+    .refine(
+      (players) =>
+        players
+          .slice(0, 6)
+          .every((player) => player.name && player.nic && player.contactNumber),
+      {
+        message: 'The first 6 players must have all fields filled',
+        path: ['players'],
+      }
+    ),
 });
 
 const onboardingSchema = z.object({
@@ -78,6 +82,7 @@ const onboardingSchema = z.object({
     .array(teamSchema)
     .min(1, 'At least one team is required')
     .max(4, 'Maximum of 4 teams allowed'),
+  includeHut: z.boolean().default(false),
   paymentSlip: z.any(),
   certifiedTeamCard: z.any(),
   acceptTerms: z.boolean().refine((val) => val === true, {
@@ -112,48 +117,6 @@ const invoiceData = {
   },
 };
 
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    backgroundColor: '#E4E4E4',
-    padding: 30,
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 10,
-  },
-  table: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: 'auto',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-  },
-  tableRow: {
-    margin: 'auto',
-    flexDirection: 'row',
-  },
-  tableCol: {
-    width: '25%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-  },
-  tableCell: {
-    margin: 'auto',
-    marginTop: 5,
-    fontSize: 10,
-  },
-});
-
 interface Team {
   name: string;
   gender: string;
@@ -163,134 +126,6 @@ interface Team {
     contactNumber: string;
   }[];
 }
-
-const TeamCardPDF = ({ teams }: { teams: Team[] }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.title}>Team Cards</Text>
-        {teams.map(
-          (
-            team: {
-              name:
-                | string
-                | number
-                | bigint
-                | boolean
-                | React.ReactElement<
-                    any,
-                    string | React.JSXElementConstructor<any>
-                  >
-                | Iterable<React.ReactNode>
-                | React.ReactPortal
-                | Promise<React.AwaitedReactNode>
-                | null
-                | undefined;
-              gender:
-                | string
-                | number
-                | bigint
-                | boolean
-                | React.ReactElement<
-                    any,
-                    string | React.JSXElementConstructor<any>
-                  >
-                | Iterable<React.ReactNode>
-                | React.ReactPortal
-                | Promise<React.AwaitedReactNode>
-                | null
-                | undefined;
-              players: any[];
-            },
-            index: React.Key | null | undefined
-          ) => (
-            <View key={index} style={{ marginBottom: 20 }}>
-              <Text style={{ fontSize: 18, marginBottom: 10 }}>
-                {team.name} ({team.gender})
-              </Text>
-              <View style={styles.table}>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Name</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>NIC</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Contact Number</Text>
-                  </View>
-                </View>
-                {team.players.map(
-                  (
-                    player: {
-                      name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                      nic:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                      contactNumber:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                    },
-                    playerIndex: React.Key | null | undefined
-                  ) => (
-                    <View style={styles.tableRow} key={playerIndex}>
-                      <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>{player.name}</Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>{player.nic}</Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>
-                          {player.contactNumber}
-                        </Text>
-                      </View>
-                    </View>
-                  )
-                )}
-              </View>
-            </View>
-          )
-        )}
-      </View>
-    </Page>
-  </Document>
-);
 
 const rulesAndRegulations = `
 RULES & REGULATIONS
@@ -354,6 +189,8 @@ interface OnboardingStore {
   setIsGeneratingTeamCardPDF: (generating: boolean) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  includeHut: boolean;
+  setIncludeHut: (include: boolean) => void;
 }
 
 const useOnboardingStore = create<OnboardingStore>((set) => ({
@@ -378,7 +215,133 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
     set({ isGeneratingTeamCardPDF }),
   isLoading: false,
   setIsLoading: (isLoading) => set({ isLoading }),
+  includeHut: false,
+  setIncludeHut: (includeHut) => set({ includeHut }),
 }));
+
+// New function to generate and download PDF using jsPDF
+function saveDiv(divId: string, title: string) {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const element = document.getElementById(divId);
+  if (element) {
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const elementWidth = element.offsetWidth;
+    const scale = pageWidth / elementWidth;
+
+    doc.html(element, {
+      callback: function (doc) {
+        doc.save(`${title}.pdf`);
+      },
+      x: 0,
+      y: 0,
+      html2canvas: {
+        scale: scale,
+        width: elementWidth,
+        windowWidth: elementWidth,
+      },
+    });
+  }
+}
+
+// Update the generateAndDownloadPDF function to use saveDiv
+const generateAndDownloadPDF = async (
+  divId: string,
+  title: string,
+  setGeneratingState: (generating: boolean) => void
+) => {
+  setGeneratingState(true);
+  try {
+    saveDiv(divId, title);
+    toast({
+      title: 'Success',
+      description: 'PDF generated and downloaded successfully.',
+    });
+  } catch (error: any) {
+    console.error('Error generating PDF:', error);
+    toast({
+      title: 'Error',
+      description: `Failed to generate PDF: ${error.message}`,
+      variant: 'destructive',
+    });
+  } finally {
+    setGeneratingState(false);
+  }
+};
+
+// Add this function to calculate the invoice details
+const calculateInvoiceDetails = (teams: Team[], includeHut: boolean) => {
+  const initialRegistrationFee = 20000;
+  const additionalTeamFee = 25000;
+  const hutFee = 8000;
+
+  const additionalTeams = Math.max(0, teams.length - 1);
+  const additionalTeamsCost = additionalTeams * additionalTeamFee;
+  const hutCost = includeHut ? hutFee : 0;
+
+  const total = initialRegistrationFee + additionalTeamsCost + hutCost;
+
+  return {
+    initialRegistrationFee,
+    additionalTeamsCost,
+    hutCost,
+    total,
+  };
+};
+
+// Add this interface above the component
+interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+}
+
+// Add this function to generate PDF blob
+const generatePDF = async (
+  element: HTMLElement,
+  title: string
+): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    html2canvas(element, {
+      scale: 2, // Increase resolution
+      useCORS: true,
+      logging: false,
+    })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+        });
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        resolve(pdf.output('blob'));
+      })
+      .catch(reject);
+  });
+};
+
+// Helper function to convert Blob to base64
+const blobToBase64 = (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      // Remove the data URL prefix
+      resolve(base64String.split(',')[1]);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
 
 export default function OnboardingForm() {
   const { toast } = useToast();
@@ -397,6 +360,12 @@ export default function OnboardingForm() {
     setTeamCounts,
     setTermsModalOpen,
     isLoading,
+    // isGeneratingPDF,
+    // setIsGeneratingPDF,
+    isGeneratingTeamCardPDF,
+    setIsGeneratingTeamCardPDF,
+    includeHut,
+    setIncludeHut,
   } = useOnboardingStore();
 
   const form = useForm<OnboardingSchema>({
@@ -409,6 +378,7 @@ export default function OnboardingForm() {
           players: Array(8).fill({ name: '', nic: '', contactNumber: '' }),
         },
       ],
+      includeHut: false,
       acceptTerms: false,
     },
   });
@@ -422,87 +392,249 @@ export default function OnboardingForm() {
     name: 'teams',
   });
 
-  //   useEffect(() => {
-  //     if (step === 1 && !pdfContent) {
-  //       const generatePDF = async () => {
-  //         const blob = await pdf(<TeamCard teams={teams} />).toBlob();
-  //         setPdfContent(URL.createObjectURL(blob));
-  //       };
-  //       generatePDF();
-  //     }
-  //   }, [step, teams, pdfContent, setPdfContent]);
+  const [invoiceData, setInvoiceData] = useState<{
+    id: string;
+    billTo: { name: string };
+    items: InvoiceItem[];
+    total: number;
+    bankDetails: {
+      accountHolder: { boc: string; commercial: string };
+      accountNo: { boc: string; commercial: string };
+      bankName: { boc: string; commercial: string };
+      branch: { boc: string; commercial: string };
+      branchCode: { boc: string; commercial: string };
+    };
+  }>({
+    id: '',
+    billTo: { name: '' },
+    items: [],
+    total: 0,
+    bankDetails: {
+      accountHolder: {
+        boc: 'IT Faculty Students Union',
+        commercial: 'Thushan Fernando',
+      },
+      accountNo: { boc: '74704423', commercial: '8013653015' },
+      bankName: { boc: 'Bank of Ceylon', commercial: 'Commercial Bank' },
+      branch: {
+        boc: 'University of Moratuwa branch',
+        commercial: 'Anuradhapura',
+      },
+      branchCode: { boc: '631', commercial: '53' },
+    },
+  });
+  const [invoiceId, setInvoiceId] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState<string>('');
+  const invoiceDivRef = useRef<HTMLDivElement>(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-  // Update Zustand store when form changes
+  // Add this useEffect to fetch company name from local storage
   useEffect(() => {
-    const subscription = form.watch((value) => {
-      if (value.teams) {
-        setTeams(value.teams as OnboardingSchema['teams']);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [form, setTeams]);
+    const companyData = localStorage.getItem('companyData');
+    if (companyData) {
+      const { company_name } = JSON.parse(companyData);
+      setCompanyName(company_name);
+    }
+  }, []);
 
-  React.useEffect(() => {
-    const maleTeams = teamFields.filter(
-      (team) => team.gender === 'male'
-    ).length;
-    const femaleTeams = teamFields.filter(
-      (team) => team.gender === 'female'
-    ).length;
-    setTeamCounts({ male: maleTeams, female: femaleTeams });
-
-    toast({
-      title: 'Team Counts Updated',
-      description: `Male teams: ${maleTeams}, Female teams: ${femaleTeams}`,
-      duration: 3000,
-    });
-  }, [teamFields, toast, setTeamCounts]);
-
-  const submitTeamData = async (teams: OnboardingSchema['teams']) => {
+  const generateInvoice = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        throw new Error('Access token not found');
+      if (!accessToken) throw new Error('Access token not found');
+
+      const invoiceDetails = calculateInvoiceDetails(teams, includeHut);
+
+      const createResponse = await api.post(
+        '/api/v1/registration/invoice/',
+        { amount: invoiceDetails.total.toFixed(2) },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
+
+      const newInvoiceId = createResponse.data.id;
+      setInvoiceId(newInvoiceId);
+
+      const newInvoiceData = {
+        id: newInvoiceId,
+        billTo: { name: companyName },
+        items: [
+          {
+            description: 'Initial Registration Fee',
+            quantity: 1,
+            unit_price: invoiceDetails.initialRegistrationFee,
+            total: invoiceDetails.initialRegistrationFee,
+          },
+          {
+            description: 'Additional Team(s) Fee',
+            quantity: Math.max(0, teams.length - 1),
+            unit_price: 25000,
+            total: invoiceDetails.additionalTeamsCost,
+          },
+          {
+            description: 'Hut Fee',
+            quantity: includeHut ? 1 : 0,
+            unit_price: 8000,
+            total: invoiceDetails.hutCost,
+          },
+        ],
+        total: invoiceDetails.total,
+        bankDetails: {
+          accountHolder: {
+            boc: 'IT Faculty Students Union',
+            commercial: 'Thushan Fernando',
+          },
+          accountNo: { boc: '74704423', commercial: '8013653015' },
+          bankName: { boc: 'Bank of Ceylon', commercial: 'Commercial Bank' },
+          branch: {
+            boc: 'University of Moratuwa branch',
+            commercial: 'Anuradhapura',
+          },
+          branchCode: { boc: '631', commercial: '53' },
+        },
+      };
+
+      setInvoiceData(newInvoiceData);
+    } catch (error) {
+      console.error('Error generating invoice:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to generate invoice. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const generateAndUploadPDF = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) throw new Error('Access token not found');
+
+      if (!invoiceDivRef.current) {
+        throw new Error('Invoice div not found');
       }
 
-      const formattedTeams = teams.map((team) => ({
-        team_name: team.name,
-        gender: team.gender,
-        team_members: team.players.map((player, index) => ({
-          name: player.name,
-          nic: player.nic,
-          phone_number: player.contactNumber,
-          sort_order: index + 1,
-        })),
-      }));
+      const pdfBlob = await generatePDF(
+        invoiceDivRef.current,
+        `invoice_${invoiceId}.pdf`
+      );
 
-      //   const response = await api.post(
-      //     '/api/v1/registration/team/',
-      //     formattedTeams,
-      //     {
-      //       headers: {
-      //         Authorization: `Bearer ${accessToken}`,
-      //         'Content-Type': 'application/json',
-      //       },
-      //     }
-      //   );
+      // Create FormData
+      const formData = new FormData();
+      formData.append('invoice', pdfBlob, `invoice_${invoiceId}.pdf`);
 
-      //   console.log('API Response:', response.data);
+      const updateResponse = await api.patch(
+        `/api/v1/registration/invoice/${invoiceId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('Invoice Update Response:', updateResponse.data);
+      toast({
+        title: 'Success',
+        description: 'Invoice generated and uploaded successfully!',
+      });
+
+      // Trigger download
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `invoice_${invoiceId}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error generating or uploading PDF:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to generate or upload PDF. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
+  const handleNextStep = async () => {
+    if (step === 1) {
+      const isValid = await validateTeams();
+      if (isValid) {
+        const teamData = form.getValues('teams');
+        console.log('Data sent from step 1 to step 2:', teamData);
+
+        // Add a loading state
+        const setIsLoading = useOnboardingStore.getState().setIsLoading;
+        setIsLoading(true);
+
+        const success = await submitTeamData(teamData);
+        if (success) {
+          form.setValue('teams', [...teamData]);
+          setStep(2);
+        }
+        setIsLoading(false);
+      }
+    } else if (step === 2) {
+      await generateInvoice();
+      setStep(3);
+    } else {
+      setStep(step + 1);
+    }
+  };
+
+  const onSubmit = async (data: OnboardingSchema) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const companyData = localStorage.getItem('companyData');
+      if (!accessToken || !companyData) {
+        throw new Error('Access token or company data not found');
+      }
+
+      const { id: companyId } = JSON.parse(companyData);
+
+      const formData = new FormData();
+
+      // Append payment slip file
+      if (data.paymentSlip && data.paymentSlip[0]) {
+        formData.append('payment_slip', data.paymentSlip[0]);
+      }
+
+      // Append signed team card file
+      if (data.certifiedTeamCard && data.certifiedTeamCard[0]) {
+        formData.append('signed_team_card', data.certifiedTeamCard[0]);
+      }
+
+      // Make the API call to upload files
+      const response = await api.patch(
+        `/api/v1/registration/company/${companyId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('File upload response:', response.data);
 
       toast({
         title: 'Success',
-        description: 'Teams registered successfully!',
+        description: 'Onboarding completed successfully!',
       });
 
-      return true;
+      form.reset();
+      router.push('/dashboard');
     } catch (error) {
-      console.error('Error submitting team data:', error);
+      console.error('Error submitting final data:', error);
       if (axios.isAxiosError(error) && error.response) {
         toast({
           title: 'Error',
           description:
             error.response.data.detail ||
-            'Failed to register teams. Please try again.',
+            'Failed to complete onboarding. Please try again.',
           variant: 'destructive',
         });
       } else {
@@ -512,51 +644,7 @@ export default function OnboardingForm() {
           variant: 'destructive',
         });
       }
-      return false;
     }
-  };
-
-  const handleNextStep = async () => {
-    if (step === 1) {
-        const isValid = await validateTeams();
-      // const isValid = true;
-      if (isValid) {
-        const teamData = form.getValues('teams');
-        console.log('Data sent from step 1 to step 2:', teamData);
-
-        const success = await submitTeamData(teamData);
-        if (success) {
-          form.setValue('teams', [...teamData]);
-
-          // Add a loading state
-          const setIsLoading = useOnboardingStore.getState().setIsLoading;
-          setIsLoading(true);
-
-          // Wait for 5 seconds before moving to the next step
-          setTimeout(() => {
-            setIsLoading(false);
-            setStep(2);
-          }, 5000);
-        }
-      }
-    } else if (step === 2) {
-      setTimeout(() => {
-        setStep(3);
-      }, 1500);
-    } else {
-      setStep(step + 1);
-    }
-  };
-
-  const onSubmit = async (data: OnboardingSchema) => {
-    // This function will now handle the final submission
-    console.log('Final form data:', data);
-    toast({
-      title: 'Success',
-      description: 'Onboarding completed successfully!',
-    });
-    form.reset();
-    router.push('/dashboard');
   };
 
   const addNewTeam = () => {
@@ -621,18 +709,154 @@ export default function OnboardingForm() {
     });
   };
 
-  // New function to generate and download PDF
-  const generateAndDownloadPDF = async (
-    documentComponent: React.ReactElement,
-    fileName: string
-  ) => {
-    const blob = await pdf(documentComponent).toBlob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.click();
-    URL.revokeObjectURL(url);
+  // Add this new effect to fetch existing team data
+  useEffect(() => {
+    const fetchExistingTeams = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          throw new Error('Access token not found');
+        }
+
+        const response = await api.get('/api/v1/registration/team/', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const existingTeams = response.data;
+        if (existingTeams && existingTeams.length > 0) {
+          const formattedTeams = existingTeams.map((team: any) => ({
+            name: team.team_name,
+            gender: team.gender,
+            players: team.team_members.map((member: any) => ({
+              name: member.name,
+              nic: member.nic,
+              contactNumber: member.phone_number,
+            })),
+          }));
+
+          form.reset({ teams: formattedTeams });
+          setTeams(formattedTeams);
+          setActiveTab('team0');
+        }
+      } catch (error) {
+        console.error('Error fetching existing teams:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to fetch existing team data. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    };
+
+    fetchExistingTeams();
+  }, []);
+
+  // Update Zustand store when form changes
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      if (value.teams) {
+        setTeams(value.teams as OnboardingSchema['teams']);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setTeams]);
+
+  React.useEffect(() => {
+    const maleTeams = teamFields.filter(
+      (team) => team.gender === 'male'
+    ).length;
+    const femaleTeams = teamFields.filter(
+      (team) => team.gender === 'female'
+    ).length;
+    setTeamCounts({ male: maleTeams, female: femaleTeams });
+
+    toast({
+      title: 'Team Counts Updated',
+      description: `Male teams: ${maleTeams}, Female teams: ${femaleTeams}`,
+      duration: 3000,
+    });
+  }, [teamFields, toast, setTeamCounts]);
+
+  const submitTeamData = async (teams: OnboardingSchema['teams']) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const companyData = localStorage.getItem('companyData');
+      if (!accessToken || !companyData) {
+        throw new Error('Access token or company data not found');
+      }
+
+      const { id: companyId } = JSON.parse(companyData);
+
+      const formattedTeams = teams.map((team) => ({
+        team_name: team.name,
+        gender: team.gender,
+        team_members: team.players.map((player, index) => ({
+          name: player.name,
+          nic: player.nic,
+          phone_number: player.contactNumber,
+          sort_order: index + 1,
+        })),
+      }));
+
+      // Submit team data
+      const teamResponse = await api.post(
+        '/api/v1/registration/team/',
+        formattedTeams,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('Team API Response:', teamResponse.data);
+
+      // Update company data
+      const formData = new FormData();
+      formData.append('is_hut', includeHut.toString());
+
+      // const companyResponse = await api.patch(
+      //   `/api/v1/registration/company/${companyId}/`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   }
+      // );
+
+      // console.log('Company API Response:', companyResponse.data);
+
+      toast({
+        title: 'Success',
+        description:
+          'Teams registered and company details updated successfully!',
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error submitting data:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        toast({
+          title: 'Error',
+          description:
+            error.response.data.detail ||
+            'Failed to register teams or update company details. Please try again.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
+      return false;
+    }
   };
 
   return (
@@ -752,7 +976,10 @@ export default function OnboardingForm() {
                         )}
                       />
                       {[0, 1, 2, 3, 4, 5, 6, 7].map((playerIndex) => (
-                        <div key={playerIndex} className="space-y-2 border-2 md:border-0  border-gray-200 p-4 md:p-0 rounded-lg">
+                        <div
+                          key={playerIndex}
+                          className="space-y-2 rounded-lg border-2 border-gray-200 p-4 md:border-0 md:p-0"
+                        >
                           <h4 className="font-semibold">
                             Player {playerIndex + 1}
                             {playerIndex >= 6 && (
@@ -761,7 +988,7 @@ export default function OnboardingForm() {
                               </span>
                             )}
                           </h4>
-                          <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
+                          <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
                             <FormField
                               control={form.control}
                               name={`teams.${teamIndex}.players.${playerIndex}.name`}
@@ -809,7 +1036,33 @@ export default function OnboardingForm() {
                 </TabsContent>
               ))}
             </Tabs>
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4">
+              <FormField
+                control={form.control}
+                name="includeHut"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          setIncludeHut(checked as boolean);
+                        }}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Include Hut (Additional 8,000 LKR)</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <div className="text-sm text-gray-600">
+                {includeHut ? 'Hut included' : 'Hut not included'}
+              </div>
               <Button
                 type="button"
                 onClick={handleNextStep}
@@ -831,17 +1084,28 @@ export default function OnboardingForm() {
         {step === 2 && (
           <div>
             <h2 className="mb-4 text-2xl font-bold">Team Cards Preview</h2>
-            <TeamCardDetails teams={teamFields} companyName={'companyName'} />
+            <div id="teamCardDivId">
+              <TeamCardDetails teams={teamFields} companyName={'companyName'} />
+            </div>
             <div className="mt-4 space-y-4">
               <Button
                 onClick={() =>
                   generateAndDownloadPDF(
-                    <TeamCard teams={teamFields} companyName={'companyName'} />,
-                    'team_cards.pdf'
+                    'teamCardDivId',
+                    'Team Cards',
+                    setIsGeneratingTeamCardPDF
                   )
                 }
+                disabled={isGeneratingTeamCardPDF}
               >
-                Download Team Cards PDF
+                {isGeneratingTeamCardPDF ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating PDF...
+                  </>
+                ) : (
+                  'Download Team Cards PDF'
+                )}
               </Button>
               <p className="text-sm text-gray-600">
                 Please download the team card PDF and have it verified and
@@ -862,17 +1126,26 @@ export default function OnboardingForm() {
         {step === 3 && (
           <div>
             <h2 className="mb-4 text-2xl font-bold">Invoice Preview</h2>
-            <InvoiceDetails {...invoiceData} />
+            {invoiceData.id && (
+              <p className="mb-2 text-sm text-gray-600">
+                Invoice ID: {invoiceData.id}
+              </p>
+            )}
+            <div ref={invoiceDivRef}>
+              <InvoiceDetails
+                id={invoiceData.id}
+                billTo={invoiceData.billTo}
+                items={invoiceData.items}
+                total={invoiceData.total}
+                bankDetails={invoiceData.bankDetails}
+              />
+            </div>
             <Button
-              onClick={() =>
-                generateAndDownloadPDF(
-                  <InvoicePDF {...invoiceData} />,
-                  'invoice.pdf'
-                )
-              }
+              onClick={generateAndUploadPDF}
               className="mt-4"
+              disabled={isGeneratingPDF}
             >
-              Download Invoice PDF
+              {isGeneratingPDF ? 'Generating PDF...' : 'Download Invoice PDF'}
             </Button>
             <div className="mt-4 flex items-center justify-between">
               <Button type="button" onClick={() => setStep(2)}>
