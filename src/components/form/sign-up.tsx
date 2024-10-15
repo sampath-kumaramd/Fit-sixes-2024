@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
-import { axiosAuthorized } from '@/hooks/axios-intance';
 import { useToast } from '@/hooks/use-toast';
 import { SignUpSchema, signUpSchema } from '@/schemas';
 import { IsSponsor, SponsorshipLevel } from '@/types/enums/sign-up';
@@ -66,6 +65,10 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
+
   const onSubmit = async (data: SignUpSchema) => {
     if (data.password !== data.confirmPassword) {
       toast({
@@ -87,7 +90,7 @@ export default function SignUpForm() {
     }
     setIsSubmitting(true);
     try {
-      const response = await axiosAuthorized.post(
+      const response = await api.post(
         '/api/v1/auth/registration/',
         {
           email: data.primaryContact.email,
