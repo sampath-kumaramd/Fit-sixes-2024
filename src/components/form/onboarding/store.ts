@@ -9,7 +9,10 @@ interface OnboardingStore {
   setIsLoading: (isLoading: boolean) => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  companyName: string;
+  setCompanyName: (companyName: string) => void;
   teamFields: OnboardingSchema['teams'];
+  setTeamFields: (teamFields: OnboardingSchema['teams']) => void;
   addNewTeam: () => void;
   teamCounts: { male: number; female: number };
   setTeamCounts: (teamCounts: { male: number; female: number }) => void;
@@ -27,6 +30,8 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   setIsLoading: (isLoading) => set({ isLoading }),
   activeTab: 'team0',
   setActiveTab: (tab) => set({ activeTab: tab }),
+  companyName: '',
+  setCompanyName: (companyName) => set({ companyName }),
   teamCounts: { male: 0, female: 0 },
   setTeamCounts: (teamCounts) => set({ teamCounts }),
   teamFields: [
@@ -36,6 +41,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       players: Array(6).fill({ name: '', nic: '', contactNumber: '' }),
     },
   ],
+  setTeamFields: (teamFields) => set({ teamFields }),
   addNewTeam: () =>
     set((state) => ({
       teamFields: [
