@@ -17,8 +17,9 @@ import PaymentDetailsStep from './steps/PaymentDetailsStep';
 import TeamCardsPreviewStep from './steps/TeamCardsPreviewStep';
 import TeamDetailsStep from './steps/TeamDetailsStep';
 import { useOnboardingStore } from './store';
-import axios from 'axios';
+import api from '@/utils/api';
 import { CompanyViewStatus } from '@/types/enums/company-view-status';
+import axios from 'axios';
 
 interface OnboardingFormProps {
   currentStep: number;
@@ -40,9 +41,6 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
     setInvoiceStatus,
   } = useOnboardingStore();
 
-  const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-  });
   const form = useForm<OnboardingSchema>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
@@ -221,11 +219,39 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
   const onSubmit = async (data: OnboardingSchema) => {
     setIsLoading(true);
     try {
-      // Here you would typically send the data to your backend
-      console.log('Form submitted:', data);
+      const accessToken = localStorage.getItem('accessToken');
+      const companyData = localStorage.getItem('companyData');
+      if (!accessToken || !companyData) {
+        throw new Error('Access token or company data not found');
+      }
 
-      // Simulate an API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const { id: companyId } = JSON.parse(companyData);
+
+      const formData = new FormData();
+      console.log(data);
+      if (data.paymentSlip) {
+        formData.append('payment_slip', data.paymentSlip);
+      }
+      if (data.certifiedTeamCard) {
+        formData.append('signed_team_card', data.certifiedTeamCard);
+      }
+
+      const api = axios.create({
+        baseURL: process.env.NEXT_PUBLIC_API_URL,
+      });
+
+      const response = await api.patch(
+        `/api/v1/registration/company/${companyId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('API Response:', response.data);
 
       toast({
         title: 'Success',
@@ -233,7 +259,7 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
       });
 
       // Redirect to a success page or dashboard
-      router.push('/dashboard');
+      router.push('/auth/success');
     } catch (error) {
       console.error('Submission error:', error);
       toast({

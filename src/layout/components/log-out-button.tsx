@@ -4,17 +4,13 @@ import { LogOutIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components';
-import axios from 'axios';
+import api from '@/utils/api';
 
 export default function LogOutButton() {
   const router = useRouter();
 
-  const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-  });
-  
   const handleLogOut = async () => {
-     const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
 
     console.log(accessToken);
     
