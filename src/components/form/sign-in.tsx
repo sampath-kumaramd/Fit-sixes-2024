@@ -210,6 +210,11 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
                 </FormItem>
               )}
             />
+            <div className="  flex items-center justify-end text-sm underline">
+              <Link href="/auth/forgot-password">
+                Did you forget your password?
+              </Link>
+            </div>
             <div className="flex justify-end">
               <Button
                 type="submit"
@@ -219,17 +224,13 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
                 {isSubmitting ? 'Signing in...' : 'Sign In'}
               </Button>
             </div>
-            <div className="mt-4 flex items-center justify-start gap-2 text-gray-900">
+            <div className="mt-4 flex items-center justify-center gap-2 text-gray-900">
               <p>Don&apos;t have an account?</p>
               <Link href="/auth/sign-up" className="font-bold">
                 Register here
               </Link>
             </div>
-            <div className="mt-4 flex items-center justify-start gap-2">
-              <Link href="/auth/forgot-password">
-                Did you forget your password?
-              </Link>
-            </div>
+            
           </form>
         </Form>
       </CardContent>
