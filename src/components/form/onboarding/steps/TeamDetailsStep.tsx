@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Loader2, PlusCircle, X } from 'lucide-react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
@@ -65,6 +65,8 @@ export default function TeamDetailsStep({
 
   const { toast } = useToast();
 
+  const [optionalPlayers, setOptionalPlayers] = useState(0);
+
   useEffect(() => {
     const maleTeams = teamFields.filter(
       (team) => team.gender === 'male'
@@ -121,7 +123,7 @@ export default function TeamDetailsStep({
     appendTeam({
       name: '',
       gender: newTeamGender,
-      players: Array(8).fill({ name: '', nic: '', contactNumber: '' }),
+      players: Array(6).fill({ name: '', nic: '', contactNumber: '' }),
     });
     setActiveTab(`team${newTeamIndex}`);
 
@@ -129,6 +131,12 @@ export default function TeamDetailsStep({
       title: 'Team Added',
       description: `New ${newTeamGender} team added successfully.`,
     });
+  };
+
+  const addOptionalPlayer = () => {
+    if (optionalPlayers < 2) {
+      setOptionalPlayers(optionalPlayers + 1);
+    }
   };
 
   return (
@@ -242,7 +250,7 @@ export default function TeamDetailsStep({
                     </FormItem>
                   )}
                 />
-                {[0, 1, 2, 3, 4, 5, 6, 7].map((playerIndex) => (
+                {[0, 1, 2, 3, 4, 5].map((playerIndex) => (
                   <div
                     key={playerIndex}
                     className="space-y-2 rounded-lg border-2 border-gray-200 p-4 md:border-0 md:p-0"
@@ -298,6 +306,68 @@ export default function TeamDetailsStep({
                     </div>
                   </div>
                 ))}
+                {[...Array(optionalPlayers)].map((_, index) => (
+                  <div
+                    key={`optional-${index}`}
+                    className="space-y-2 rounded-lg border-2 border-gray-200 p-4 md:border-0 md:p-0"
+                  >
+                    <h4 className="font-semibold">
+                      Optional Player {index + 1}
+                      <span className="ml-2 text-sm font-normal text-gray-500">
+                        (Optional)
+                      </span>
+                    </h4>
+                    <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+                      <FormField
+                        control={form.control}
+                        name={`teams.${teamIndex}.players.${6 + index}.name`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`teams.${teamIndex}.players.${6 + index}.nic`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>NIC</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`teams.${teamIndex}.players.${6 + index}.contactNumber`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Number</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                ))}
+                {optionalPlayers < 2 && (
+                  <Button
+                    type="button"
+                    onClick={addOptionalPlayer}
+                    className="mt-4"
+                    variant="outline"
+                  >
+                    <PlusCircle className="mr-2" size={16} />
+                    Add Optional Player
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

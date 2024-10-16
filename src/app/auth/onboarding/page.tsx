@@ -11,6 +11,7 @@ import { CompanyViewStatus } from '@/types/enums/company-view-status';
 import { Separator } from '@/components';
 import BackToHomeButton from '@/layout/components/back-to-home-button';
 import Image from 'next/image';
+import LogOutButton from '@/layout/components/log-out-button';
 
 export default function Onboarding() {
 
@@ -78,8 +79,9 @@ export default function Onboarding() {
         }}
       >
         <div className="z-50 lg:col-span-4 m-8 hidden lg:flex flex-col justify-between overflow-hidden rounded-xl bg-darkBlue p-4 text-white">
-          <div className="relative z-10">
+          <div className="relative z-10 flex justify-between">
             <BackToHomeButton />
+            <LogOutButton />
           </div>
 
           <div className="relative z-10 flex flex-col items-center text-center">
@@ -119,7 +121,11 @@ export default function Onboarding() {
           <div className="relative z-10"></div>
         </div>
         <div className='lg:hidden bg-darkBlue w-full'>
-        <div className=' flex justify-center items-center w-full py-6'>
+             <div className='flex justify-between items-center px-4 pt-4'>
+            <BackToHomeButton />
+            <LogOutButton />
+          </div>
+          <div className=' flex justify-center items-center w-full py-6'>
            <Image
               src="/logo/logo-light.svg"
               alt="Fit Sixes 2k24"
@@ -137,8 +143,9 @@ export default function Onboarding() {
       <p className="mx-auto mb-6 max-w-xl text-center text-gray-600">
         Let&apos;s fill out your team information. This ensures we have
         everything in place for your team to participate smoothly.
-      </p>
-      <OnboardingForm currentStep={companyStatus as CompanyViewStatus} />
+          </p>
+          {companyStatus}
+      <OnboardingForm currentStep={getStep()} />
     </div>
       </div>
       {/* <div className="absolute bottom-1 left-1/2 -translate-x-1/2  text-gray-500 text-xs sm:text-sm ">

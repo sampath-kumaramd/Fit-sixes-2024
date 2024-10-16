@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Separator } from '@/components';
 
 import BackToHomeButton from './components/back-to-home-button';
-
+import LogOutButton from './components/log-out-button';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -37,8 +37,9 @@ function AuthLayout({
         }}
       >
         <div className="z-50 lg:col-span-4 m-8 hidden lg:flex flex-col justify-between overflow-hidden rounded-xl bg-darkBlue p-4 text-white">
-          <div className="relative z-10">
+          <div className="relative z-10 flex justify-between">
             <BackToHomeButton />
+            <LogOutButton />
           </div>
 
           <div className="relative z-10 flex flex-col items-center text-center">
@@ -76,6 +77,10 @@ function AuthLayout({
           <div className="relative z-10"></div>
         </div>
         <div className='lg:hidden bg-darkBlue w-full'>
+          <div className='flex justify-between items-center px-4 pt-4'>
+            <BackToHomeButton />
+            <LogOutButton />
+          </div>
         <div className=' flex justify-center items-center w-full py-6'>
            <Image
               src="/logo/logo-light.svg"

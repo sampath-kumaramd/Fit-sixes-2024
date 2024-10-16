@@ -21,7 +21,7 @@ import axios from 'axios';
 import { CompanyViewStatus } from '@/types/enums/company-view-status';
 
 interface OnboardingFormProps {
-  currentStep: CompanyViewStatus;
+  currentStep: number;
 }
 
 export default function OnboardingForm(
@@ -46,7 +46,7 @@ export default function OnboardingForm(
         {
           name: '',
           gender: 'male',
-          players: Array(8).fill({ name: '', nic: '', contactNumber: '' }),
+          players: Array(6).fill({ name: '', nic: '', contactNumber: '' }),
         },
       ],
       includeHut: false,
@@ -71,8 +71,8 @@ export default function OnboardingForm(
 
   const handleNextStep = async () => {
     if (step === 1) {
-      const isValid = true;
-      // const isValid = await validateTeams();
+      // const isValid = true;
+      const isValid = await validateTeams();
       if (isValid) {
         const teamData = form.getValues('teams');
         console.log('Data sent from step 1 to step 2:', teamData);
