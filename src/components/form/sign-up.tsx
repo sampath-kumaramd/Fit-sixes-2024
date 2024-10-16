@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { isAxiosError } from 'axios';
-import { Eye, EyeOff, Info } from 'lucide-react';
+import { Eye, EyeOff, Info, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -87,22 +87,19 @@ export default function SignUpForm() {
     }
     setIsSubmitting(true);
     try {
-      const response = await api.post(
-        '/api/v1/auth/registration/',
-        {
-          email: data.primaryContact.email,
-          password1: data.password,
-          password2: data.confirmPassword,
-          company_name: data.companyName,
-          package:
-            data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
-          contact_name: data.primaryContact.name,
-          phone: data.primaryContact.phone,
-          secondary_contact_name: data.secondaryContact.name,
-          secondary_email: data.secondaryContact.email,
-          secondary_phone: data.secondaryContact.phone,
-        }
-      );
+      const response = await api.post('/api/v1/auth/registration/', {
+        email: data.primaryContact.email,
+        password1: data.password,
+        password2: data.confirmPassword,
+        company_name: data.companyName,
+        package:
+          data.isSponsor === IsSponsor.YES ? data.sponsorshipLevel : 'none',
+        contact_name: data.primaryContact.name,
+        phone: data.primaryContact.phone,
+        secondary_contact_name: data.secondaryContact.name,
+        secondary_email: data.secondaryContact.email,
+        secondary_phone: data.secondaryContact.phone,
+      });
 
       if (response.status === 201) {
         toast({
@@ -189,7 +186,7 @@ export default function SignUpForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white lg:bg-transparent p-4 lg:p-0 rounded-lg border-2 border-gray-200 lg:border-0 ">
+        <div className="grid grid-cols-1 gap-4 rounded-lg border-2 border-gray-200 bg-white p-4 sm:grid-cols-2 lg:border-0 lg:bg-transparent lg:p-0">
           <FormField
             control={form.control}
             name="companyName"
@@ -295,63 +292,63 @@ export default function SignUpForm() {
             )}
           />
         </div>
-        <div className='bg-white lg:bg-transparent p-4 lg:p-0 rounded-lg border-2 border-gray-200 lg:border-0 space-y-4 '>
-        <FormField
-          control={form.control}
-          name="isSponsor"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Have You Registered as a Sponsor?</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex space-x-4"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="yes" id="yes" />
-                    <Label htmlFor="yes">Yes</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="no" id="no" />
-                    <Label htmlFor="no">No</Label>
-                  </div>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {form.watch('isSponsor') === 'yes' && (
+        <div className="space-y-4 rounded-lg border-2 border-gray-200 bg-white p-4 lg:border-0 lg:bg-transparent lg:p-0">
           <FormField
             control={form.control}
-            name="sponsorshipLevel"
+            name="isSponsor"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Select Sponsorship Level*</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select package" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="bronze">Bronze</SelectItem>
-                    <SelectItem value="silver">Silver</SelectItem>
-                    <SelectItem value="gold">Gold</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormLabel>Have You Registered as a Sponsor?</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex space-x-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="yes" />
+                      <Label htmlFor="yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="no" />
+                      <Label htmlFor="no">No</Label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-        )}
+
+          {form.watch('isSponsor') === 'yes' && (
+            <FormField
+              control={form.control}
+              name="sponsorshipLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Sponsorship Level*</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select package" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="bronze">Bronze</SelectItem>
+                      <SelectItem value="silver">Silver</SelectItem>
+                      <SelectItem value="gold">Gold</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Card>
             <CardContent className="pt-6">
               <h3 className="mb-4 font-semibold">
@@ -458,9 +455,16 @@ export default function SignUpForm() {
           </Card>
         </div>
 
-        <div className="flex justify-center sm:justify-end ">
+        <div className="flex justify-center sm:justify-end">
           <Button type="submit" className="w-fit px-8" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Sign Up'}
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              'Sign Up'
+            )}
           </Button>
         </div>
         <div className="flex justify-center">

@@ -61,7 +61,9 @@ export default function Onboarding() {
       case CompanyViewStatus.TEAM_REGISTRATION:
         return 1;
       case CompanyViewStatus.PAYMENT:
-        return 2;
+        return 3;
+      case CompanyViewStatus.VERIFICATION:
+        return 4;
       default:
         return 0;
     }
