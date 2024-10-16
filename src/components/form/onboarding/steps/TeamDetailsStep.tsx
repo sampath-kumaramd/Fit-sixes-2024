@@ -101,9 +101,6 @@ export default function TeamDetailsStep({
     }
 
     const newTeamGender = teamCounts.male < 2 ? 'male' : 'female';
-    console.log(teamCounts);
-
-    console.log(newTeamGender);
 
     if (
       (newTeamGender === 'male' && teamCounts.male >= 2) ||

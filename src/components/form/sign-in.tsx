@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { setCookie } from 'cookies-next';
 
 import { useToast } from '@/hooks/use-toast';
+import { useOnboardingStore } from './onboarding/store';
 
 import {
   Button,
@@ -36,6 +37,7 @@ export default function SignInForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setTeamFields, setCompanyName } = useOnboardingStore();
 
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -64,6 +66,8 @@ export default function SignInForm() {
           maxAge: 60 * 60 * 24 * 7, // 7 days
           path: '/',
         });
+
+        localStorage.setItem('accessToken', access);
         setCookie('refreshToken', refresh, {
           maxAge: 60 * 60 * 24 * 30, // 30 days
           path: '/',
@@ -85,8 +89,26 @@ export default function SignInForm() {
               JSON.stringify(companyResponse.data)
             );
           }
-        } catch (companyError) {
-          console.error('Error fetching company data:', companyError);
+
+          setCompanyName(companyResponse.data.company_name);
+
+          const existingTeams = companyResponse.data.teams;
+          if (existingTeams && existingTeams.length > 0) {
+            const formattedTeams = existingTeams.map((team: any) => ({
+              name: team.team_name,
+              gender: team.gender,
+              players: team.team_members.map((member: any) => ({
+                name: member.name,
+                nic: member.nic,
+                contactNumber: member.phone_number,
+              })),
+            }));
+
+            // Store teams in the onboarding store
+            setTeamFields(formattedTeams);
+          }
+        } catch (dataError) {
+          console.error('Error fetching data:', dataError);
           // You might want to handle this error, e.g., show a warning toast
         }
 

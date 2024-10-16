@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 
@@ -14,16 +14,16 @@ export default function TeamCardsPreviewStep({
   onPrevStep,
   onNextStep,
 }: TeamCardsPreviewStepProps) {
-  const { teamFields, setStep } = useOnboardingStore();
+  const { teamFields, companyName, setStep } = useOnboardingStore();
 
   return (
     <div>
       <h2 className="mb-4 text-2xl font-bold">Team Cards Preview</h2>
       <div id="teamCardDivId">
-        <TeamCardDetails teams={teamFields} companyName={'companyName'} />
+        <TeamCardDetails teams={teamFields} companyName={companyName} />
       </div>
       <div className="mt-4 flex justify-between">
-        <Button type="button" onClick={() => setStep(1)}>
+        <Button type="button" onClick={onPrevStep}>
           Previous
         </Button>
         <Button type="button" onClick={onNextStep}>

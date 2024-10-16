@@ -24,17 +24,18 @@ interface OnboardingFormProps {
   currentStep: CompanyViewStatus;
 }
 
-export default function OnboardingForm(
-  { currentStep }: OnboardingFormProps
-) {
-
+export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
   const { toast } = useToast();
   const router = useRouter();
-  const { step, setStep, isLoading, setIsLoading } = useOnboardingStore();
-
-  useEffect(() => {
-    setStep(Number(currentStep));
-  }, [currentStep , setStep]);
+  const {
+    step,
+    setStep,
+    isLoading,
+    setIsLoading,
+    teamFields,
+    setTeamFields,
+    includeHut,
+  } = useOnboardingStore();
 
   const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -53,6 +54,20 @@ export default function OnboardingForm(
       acceptTerms: false,
     },
   });
+
+  useEffect(() => {
+    console.log(currentStep);
+
+    console.log(teamFields);
+  }, []);
+
+  useEffect(() => {
+    setStep(Number(currentStep));
+
+    if (teamFields.length > 0) {
+      form.reset({ teams: teamFields });
+    }
+  }, [currentStep, setStep, teamFields, form]);
 
   const validateTeams = async () => {
     const result = await form.trigger('teams');
@@ -77,14 +92,15 @@ export default function OnboardingForm(
         const teamData = form.getValues('teams');
         console.log('Data sent from step 1 to step 2:', teamData);
 
-        const setIsLoading = useOnboardingStore.getState().setIsLoading;
         setIsLoading(true);
+        setTeamFields([...teamData]);
 
-        // const success = await submitTeamData(teamData);
-        // if (success) {
-        //   form.setValue('teams', [...teamData]);
-        setStep(2);
-        // }
+        const success = await submitTeamData(teamData);
+        if (success) {
+          form.setValue('teams', [...teamData]);
+
+          setStep(2);
+        }
         setIsLoading(false);
       } else {
         toast({
@@ -136,21 +152,21 @@ export default function OnboardingForm(
       console.log('Team API Response:', teamResponse.data);
 
       // Update company data
-      // const formData = new FormData();
-      // formData.append('is_hut', includeHut.toString());
+      const formData = new FormData();
+      formData.append('is_hut', includeHut.toString());
 
-      // const companyResponse = await api.patch(
-      //   `/api/v1/registration/company/${companyId}/`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${accessToken}`,
-      //       'Content-Type': 'multipart/form-data',
-      //     },
-      //   }
-      // );
+      const companyResponse = await api.patch(
+        `/api/v1/registration/company/${companyId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
 
-      // console.log('Company API Response:', companyResponse.data);
+      console.log('Company API Response:', companyResponse.data);
 
       toast({
         title: 'Success',
@@ -229,21 +245,6 @@ export default function OnboardingForm(
         )}
         {step === 4 && (
           <PaymentDetailsStep form={form} onPrevStep={() => setStep(3)} />
-        )}
-
-        {step === 4 && (
-          <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                'Submit Registration'
-              )}
-            </Button>
-          </div>
         )}
       </form>
     </Form>
