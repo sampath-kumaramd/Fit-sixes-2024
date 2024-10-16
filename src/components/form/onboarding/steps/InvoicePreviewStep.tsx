@@ -19,11 +19,9 @@ export default function InvoicePreviewStep({
 }: InvoicePreviewStepProps) {
   const { invoiceStatus, setInvoiceStatus } = useOnboardingStore();
 
-
   useEffect(() => {
     const fetchCompanyData = async () => {
       try {
-
         const access = localStorage.getItem('accessToken'); // Assuming you store the token in localStorage
 
         const companyResponse = await api.get('/api/v1/registration/me/', {
@@ -56,12 +54,23 @@ export default function InvoicePreviewStep({
 
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold">Invoice and Team Card</h2>
-      <Card className="mb-6">
+      <Card className="mx-auto mb-6 max-w-2xl">
         <CardContent className="p-6">
           <p className="text-lg">
-            Thank you for providing your information. We will send the invoice
-            and team card to your company via email within the next 24 hours.
+            You're All Set! <br />
+            <br />
+            Thank you for registering! Once we verify your submission, we'll
+            send your invoice and team card within 24 hours to the primary email
+            you have provided. <br />
+            <br />
+            The team card will include your team details, and you will need to
+            have your HR executive certify that all members are employees of
+            your company. After obtaining the certification and making the
+            payment, please upload it back here or email both documents back to
+            us at itfsu.fitsixes@gmail.com.
+            <br />
+            <br />
+            Thank you and we're excited to have you with us!
           </p>
         </CardContent>
       </Card>

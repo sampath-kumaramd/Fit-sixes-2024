@@ -47,7 +47,7 @@ const TeamCardDetails: React.FC<TeamCardDetailsProps> = ({
               {team.name}
             </h2>
             <div className="mb-4 flex justify-between text-sm text-[#4B5563]">
-              <p>Gender: {team.gender}</p>
+              <p>Gender: {team.gender == 'male' ? 'Male' : 'Female'}</p>
               <p>
                 Team {index + 1} of {teams.length}
               </p>
@@ -89,21 +89,6 @@ const TeamCardDetails: React.FC<TeamCardDetailsProps> = ({
 
         <div className="mt-8 border-t-2 border-[#030835] pt-4">
           <p className="mb-4 text-sm">
-            I hereby confirm that the individuals listed on this team card/s are
-            official members of our organization.
-          </p>
-          <div className="mb-6 text-sm">
-            <p className="mb-4">
-              Signature of the Human Resource Executive:
-              ________________________________
-            </p>
-            <p className="mb-4">Name: ________________________________</p>
-            <p className="mb-4">
-              Designation: ________________________________
-            </p>
-            <p className="mb-4">Date: ________________________________</p>
-          </div>
-          <p className="mt-4 text-xs">
             Note: This confirmation is taken only to verify whether each player
             is an employee of the company. If a member of the squad changes,
             certain player/players must have sufficient proof (e.g., company ID,
