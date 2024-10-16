@@ -24,7 +24,7 @@ export default function InvoicePreviewStep({
   useEffect(() => {
     const fetchCompanyData = async () => {
       try {
-        const access = localStorage.getItem('access_token'); // Assuming you store the token in localStorage
+        const access = localStorage.getItem('accessToken');
         const companyResponse = await api.get('/api/v1/registration/me/', {
           headers: { Authorization: `Bearer ${access}` },
         });
