@@ -94,6 +94,7 @@ export default function PaymentDetailsStep({
       const { id: companyId } = JSON.parse(companyData);
 
       const formData = new FormData();
+      console.log(data);
       if (data.paymentSlip) {
         formData.append('payment_slip', data.paymentSlip);
       }
@@ -124,7 +125,7 @@ export default function PaymentDetailsStep({
       });
 
       // Redirect to a success page or dashboard
-      router.push('/dashboard');
+      // router.push('/dashboard');
     } catch (error) {
       console.error('Submission error:', error);
       toast({
