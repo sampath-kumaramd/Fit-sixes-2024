@@ -178,8 +178,8 @@ const HeroSection: React.FC = () => {
     <Image src="/pattern-transparent.png" alt="hero-section" width={1920} height={1080} className='w-full h-full object-cover opacity-[1%] ' />
       </div>
         <div className=' fixed  bottom-20 right-4 z-[999]   w-40 h-40 rounded-full '>
-       
-      <div 
+       {/* ROUTES FOR AUTH */}
+      {/* <div 
         className=" absolute" 
         style={{ top: `${y}px` }}
           >
@@ -195,12 +195,9 @@ const HeroSection: React.FC = () => {
             objectFit="contain"
             alt="Wickets Background"
           />
-          {/* <div className=''>
-            Register
-            <div className='text-2xl -mt-1'>Now</div>
-          </div> */}
         </Button>
-            </div>
+        </div> */}
+        
       </div>
 
       
