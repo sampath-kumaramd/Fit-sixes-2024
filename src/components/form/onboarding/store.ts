@@ -21,6 +21,8 @@ interface OnboardingStore {
   setTermsModalOpen: (open: boolean) => void;
   includeHut: boolean;
   setIncludeHut: (include: boolean) => void;
+  invoiceStatus: string;
+  setInvoiceStatus: (invoiceStatus: string) => void;
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set) => ({
@@ -63,4 +65,6 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   setTermsModalOpen: (open) => set({ termsModalOpen: open }),
   includeHut: false,
   setIncludeHut: (includeHut) => set({ includeHut }),
+  invoiceStatus: 'pending',
+  setInvoiceStatus: (invoiceStatus) => set({ invoiceStatus }),
 }));
