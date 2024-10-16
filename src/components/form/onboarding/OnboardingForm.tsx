@@ -218,35 +218,6 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
     }
   };
 
-  // const onSubmit = async (data: OnboardingSchema) => {
-  //   setIsLoading(true);
-  //   try {
-  //     // Here you would typically send the data to your backend
-  //     console.log('Form submitted:', data);
-
-  //     // Simulate an API call
-  //     await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  //     toast({
-  //       title: 'Success',
-  //       description: 'Your registration has been submitted successfully!',
-  //     });
-
-  //     // Redirect to a success page or dashboard
-  //     router.push('/dashboard');
-  //   } catch (error) {
-  //     console.error('Submission error:', error);
-  //     toast({
-  //       title: 'Error',
-  //       description:
-  //         'There was an error submitting your registration. Please try again.',
-  //       variant: 'destructive',
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const onSubmit = async (data: OnboardingSchema) => {
     setIsLoading(true);
     try {

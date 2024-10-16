@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -12,11 +11,14 @@ import { Separator } from '@/components';
 import BackToHomeButton from '@/layout/components/back-to-home-button';
 import Image from 'next/image';
 import LogOutButton from '@/layout/components/log-out-button';
+import { useOnboardingStore } from '@/components/form/onboarding/store';
 
 export default function Onboarding() {
-
   const router = useRouter();
-  const [companyStatus, setCompanyStatus] = useState<CompanyViewStatus | null>(null);
+  const [companyStatus, setCompanyStatus] = useState<CompanyViewStatus | null>(
+    null
+  );
+  const { step: currentStep } = useOnboardingStore();
 
   useEffect(() => {
     const companyData = localStorage.getItem('companyData');
@@ -66,19 +68,17 @@ export default function Onboarding() {
   };
 
   return (
-
-
- <section className="relative overflow-y-hidden">
-      <div className="absolute -left-[20rem] -top-[20rem] z-20 -m-8 lg:h-[40rem] lg:w-[40rem] rounded-full bg-[#fae4c1] blur-3xl" />
+    <section className="relative overflow-y-hidden">
+      <div className="absolute -left-[20rem] -top-[20rem] z-20 -m-8 rounded-full bg-[#fae4c1] blur-3xl lg:h-[40rem] lg:w-[40rem]" />
       <div
-        className="lg:grid min-h-screen lg:grid-cols-12"
+        className="min-h-screen lg:grid lg:grid-cols-12"
         style={{
           backgroundImage: 'linear-gradient(to right, #fff4e5, white)',
           backgroundSize: '350px',
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="z-50 lg:col-span-4 m-8 hidden lg:flex flex-col justify-between overflow-hidden rounded-xl bg-darkBlue p-4 text-white">
+        <div className="z-50 m-8 hidden flex-col justify-between overflow-hidden rounded-xl bg-darkBlue p-4 text-white lg:col-span-4 lg:flex">
           <div className="relative z-10 flex justify-between">
             <BackToHomeButton />
             <LogOutButton />
@@ -99,8 +99,12 @@ export default function Onboarding() {
                   <React.Fragment key={step}>
                     <div
                       className={`flex h-12 w-12 items-center justify-center rounded-lg text-lg font-bold ${
-                      // Number(step) <= getStep() ? 'bg-yellow' : 'bg-gray-600 ' 
-                        Number(step) === getStep() ? ' bg-yellow  border-2 border-orange-700' : Number(step) < getStep() ? ' bg-orange-300' : 'bg-gray-600' 
+                        // Number(step) <= getStep() ? 'bg-yellow' : 'bg-gray-600 '
+                        Number(step) === currentStep
+                          ? 'border-2 border-orange-700 bg-yellow'
+                          : Number(step) < currentStep
+                            ? 'bg-orange-300'
+                            : 'bg-gray-600'
                       }`}
                     >
                       {String(step).padStart(2, '0')}
@@ -115,46 +119,46 @@ export default function Onboarding() {
                 ))}
               </div>
             )}
-            
           </div>
 
           <div className="relative z-10"></div>
         </div>
-        <div className='lg:hidden bg-darkBlue w-full'>
-             <div className='flex justify-between items-center px-4 pt-4'>
+        <div className="w-full bg-darkBlue lg:hidden">
+          <div className="flex items-center justify-between px-4 pt-4">
             <BackToHomeButton />
             <LogOutButton />
           </div>
-          <div className=' flex justify-center items-center w-full py-6'>
-           <Image
+          <div className="flex w-full items-center justify-center py-6">
+            <Image
               src="/logo/logo-light.svg"
               alt="Fit Sixes 2k24"
               width={100}
               height={100}
             />
-</div>
-            <h1 className="text-white text-2xl font-bold text-center">{getTitle()}</h1>
-            <p className="text-white text-sm font-thin text-center pb-6">{getSubTitle()}</p>
+          </div>
+          <h1 className="text-center text-2xl font-bold text-white">
+            {getTitle()}
+          </h1>
+          <p className="pb-6 text-center text-sm font-thin text-white">
+            {getSubTitle()}
+          </p>
         </div>
         <div className="col-span-8 items-center p-8">
-      <h2 className="mb-2 mt-12 text-center text-3xl font-bold">
-        Team Details
-      </h2>
-      <p className="mx-auto mb-6 max-w-xl text-center text-gray-600">
-        Let&apos;s fill out your team information. This ensures we have
-        everything in place for your team to participate smoothly.
+          <h2 className="mb-2 mt-12 text-center text-3xl font-bold">
+            Team Details
+          </h2>
+          <p className="mx-auto mb-6 max-w-xl text-center text-gray-600">
+            Let&apos;s fill out your team information. This ensures we have
+            everything in place for your team to participate smoothly.
           </p>
           {companyStatus}
-      <OnboardingForm currentStep={getStep()} />
-    </div>
+          <OnboardingForm currentStep={getStep()} />
+        </div>
       </div>
       {/* <div className="absolute bottom-1 left-1/2 -translate-x-1/2  text-gray-500 text-xs sm:text-sm ">
         All right reserved &copy;  FIT SIXES 2K24 | ITFSU
       </div> */}
-      <div className="absolute -bottom-[20rem] -left-[20rem] z-20 -m-8 lg:h-[40rem] lg:w-[40rem] rounded-full bg-[#fae4c1] blur-3xl" />
+      <div className="absolute -bottom-[20rem] -left-[20rem] z-20 -m-8 rounded-full bg-[#fae4c1] blur-3xl lg:h-[40rem] lg:w-[40rem]" />
     </section>
-
-
-    
   );
 }
