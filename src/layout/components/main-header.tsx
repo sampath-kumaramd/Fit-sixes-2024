@@ -1,17 +1,11 @@
 'use client';
 
-
 import { motion } from 'framer-motion';
-import {
-    useParams,
-    usePathname,
-    useRouter,
-} from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { Button } from '@/components';
 
-interface MainHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface MainHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   closeMenu?: () => void;
 }
@@ -28,8 +22,7 @@ export function MainHeader({
     {
       href: `/`,
       label: 'Home',
-      active:
-        pathname === `/` || pathname === `/`,
+      active: pathname === `/` || pathname === `/`,
     },
     {
       href: `/about`,
@@ -42,12 +35,12 @@ export function MainHeader({
       active: pathname === `/contact-us`,
     },
 
- // ROUTES FOR AUTH
-    // {
-    //   href: `/auth/sign-in`,
-    //   label: 'Sign In',
-    //   active: pathname === `/auth/sign-in`,
-    // },
+    //  ROUTES FOR AUTH
+    {
+      href: `/auth/sign-in`,
+      label: 'Sign In',
+      active: pathname === `/auth/sign-in`,
+    },
   ];
 
   const router = useRouter();
@@ -74,17 +67,10 @@ export function MainHeader({
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <motion.div variants={containerVariants} initial="hidden" animate="visible">
       <div {...props} className={className}>
         {routes.map((route) => (
-          <motion.div
-            key={route.href}
-            variants={itemVariants}
-          >
+          <motion.div key={route.href} variants={itemVariants}>
             <Button
               onClick={() => {
                 router.push(route.href);
@@ -97,7 +83,11 @@ export function MainHeader({
                   : ''
               } w-full justify-start`}
             >
-              <div className={`${route.active ? 'text-yellow' : 'text-white'} text-base`}>{route.label}</div>
+              <div
+                className={`${route.active ? 'text-yellow' : 'text-white'} text-base`}
+              >
+                {route.label}
+              </div>
             </Button>
           </motion.div>
         ))}
