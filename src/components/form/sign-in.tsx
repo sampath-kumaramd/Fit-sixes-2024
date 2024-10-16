@@ -34,14 +34,18 @@ const signInSchema = z.object({
 type SignInSchema = z.infer<typeof signInSchema>;
 
 interface SignInFormProps {
-  onSignInResult: (result: { success: boolean; emailVerified: boolean }) => void;
+  onSignInResult: (result: {
+    success: boolean;
+    emailVerified: boolean;
+  }) => void;
 }
 
 const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setTeamFields, setCompanyName } = useOnboardingStore();
+  const { setTeamFields, setCompanyName, setIncludeHut, setInvoiceStatus } =
+    useOnboardingStore();
 
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -99,6 +103,8 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
           }
 
           setCompanyName(companyResponse.data.company_name);
+          setIncludeHut(companyResponse.data.include_hut);
+          setInvoiceStatus(companyResponse.data.invoice_status);
 
           const existingTeams = companyResponse.data.teams;
           if (existingTeams && existingTeams.length > 0) {
@@ -136,17 +142,23 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 400) {
           const errorData = error.response.data;
-          if (errorData.non_field_errors && errorData.non_field_errors.includes("E-mail is not verified.")) {
+          if (
+            errorData.non_field_errors &&
+            errorData.non_field_errors.includes('E-mail is not verified.')
+          ) {
             // onSignInResult({ success: false, emailVerified: false });
             toast({
               title: 'Email Not Verified',
-              description: 'Please check your email and verify your account to proceed.',
+              description:
+                'Please check your email and verify your account to proceed.',
               variant: 'destructive',
             });
           } else {
             toast({
               title: 'Invalid email or password.',
-              description: errorData.detail || 'Please check your email and password and try again.',
+              description:
+                errorData.detail ||
+                'Please check your email and password and try again.',
               variant: 'destructive',
             });
           }

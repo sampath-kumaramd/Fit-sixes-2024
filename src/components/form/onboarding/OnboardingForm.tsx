@@ -35,6 +35,9 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
     teamFields,
     setTeamFields,
     includeHut,
+    setCompanyName,
+    setIncludeHut,
+    setInvoiceStatus,
   } = useOnboardingStore();
 
   const api = axios.create({
@@ -56,9 +59,28 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
   });
 
   useEffect(() => {
-    console.log(currentStep);
+    const companyData = localStorage.getItem('companyData');
+    if (companyData) {
+      const company = JSON.parse(companyData);
 
-    console.log(teamFields);
+      const existingTeams = company.teams;
+      if (existingTeams && existingTeams.length > 0) {
+        const formattedTeams = existingTeams.map((team: any) => ({
+          name: team.team_name,
+          gender: team.gender,
+          players: team.team_members.map((member: any) => ({
+            name: member.name,
+            nic: member.nic,
+            contactNumber: member.phone_number,
+          })),
+        }));
+        setTeamFields(formattedTeams);
+      }
+
+      setCompanyName(company.company_name);
+      setIncludeHut(company.is_hut);
+      setInvoiceStatus(company.invoice_status);
+    }
   }, []);
 
   useEffect(() => {
