@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Loader2, PlusCircle, X, Trash2 } from 'lucide-react';
-import { useFieldArray, UseFormReturn  , FieldPath} from 'react-hook-form';
+import { useFieldArray, UseFormReturn, FieldPath } from 'react-hook-form';
 
 import { OnboardingSchema } from '../schema';
 import { useOnboardingStore } from '../store';
@@ -64,11 +64,13 @@ export default function TeamDetailsStep({
 
   const { toast } = useToast();
 
-  const [optionalPlayers, setOptionalPlayers] = useState<number[]>(Array(4).fill(0));
+  const [optionalPlayers, setOptionalPlayers] = useState<number[]>(
+    Array(4).fill(0)
+  );
 
   useEffect(() => {
-    const initialOptionalPlayers = teamFields.map(team => 
-      team.players.filter((_, index) => index >= 6).length
+    const initialOptionalPlayers = teamFields.map(
+      (team) => team.players.filter((_, index) => index >= 6).length
     );
     setOptionalPlayers(initialOptionalPlayers);
   }, [teamFields]);
@@ -85,7 +87,7 @@ export default function TeamDetailsStep({
     toast({
       title: 'Team Counts Updated',
       description: `Male teams: ${maleTeams}, Female teams: ${femaleTeams}`,
-      duration: 3000,
+      duration: 100,
     });
   }, [teamFields, toast, setTeamCounts]);
 
@@ -341,7 +343,9 @@ export default function TeamDetailsStep({
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => removeOptionalPlayer(teamIndex, 6 + index)}
+                        onClick={() =>
+                          removeOptionalPlayer(teamIndex, 6 + index)
+                        }
                         className="text-red-500 hover:text-red-700"
                       >
                         <Trash2 size={16} />
@@ -419,17 +423,16 @@ export default function TeamDetailsStep({
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel>Include Hut (Additional 8,000 LKR)</FormLabel>
+                <FormLabel>
+                  Does you need a separate hut (10 x 10)? (Additional LKR 8,000)
+                </FormLabel>
               </div>
             </FormItem>
           )}
         />
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
-        <div className="text-sm text-gray-600">
-          {includeHut ? 'Hut included' : 'Hut not included'}
-        </div>
+      <div className="mt-4 flex justify-end">
         <Button type="button" onClick={onNextStep} disabled={isLoading}>
           {isLoading ? (
             <>

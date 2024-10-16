@@ -26,6 +26,7 @@ import {
   FormMessage,
   Input,
 } from '../ui';
+import { Loader2 } from 'lucide-react';
 
 const signInSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -221,7 +222,14 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
                 disabled={isSubmitting}
                 className="w-fit px-10"
               >
-                {isSubmitting ? 'Signing in...' : 'Sign In'}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
               </Button>
             </div>
             <div className="mt-4 flex items-center justify-center gap-2 text-gray-900">

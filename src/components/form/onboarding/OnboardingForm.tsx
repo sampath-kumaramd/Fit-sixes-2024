@@ -110,8 +110,6 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
       const isValid = await validateTeams();
       if (isValid) {
         const teamData = form.getValues('teams');
-        console.log('Data sent from step 1 to step 2:', teamData);
-
         setIsLoading(true);
         setTeamFields([...teamData]);
 
@@ -168,8 +166,6 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
           },
         }
       );
-
-      console.log('Team API Response:', teamResponse.data);
 
       // Update company data
       const formData = new FormData();
