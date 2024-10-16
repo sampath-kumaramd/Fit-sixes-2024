@@ -32,7 +32,11 @@ const signInSchema = z.object({
 
 type SignInSchema = z.infer<typeof signInSchema>;
 
-export default function SignInForm() {
+interface SignInFormProps {
+  onSignInResult: (result: { success: boolean; emailVerified: boolean }) => void;
+}
+
+const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,16 +52,20 @@ export default function SignInForm() {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
   });
 
-  const onSubmit = async (data: SignInSchema) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsSubmitting(true);
     try {
       const response = await api.post('/api/v1/auth/login/', {
-        email: data.email,
-        password: data.password,
+        email: form.getValues('email'),
+        password: form.getValues('password'),
       });
 
       if (response.status === 200) {
         const { access, refresh, user } = response.data;
+
+        localStorage.setItem('accessToken', access);
+        localStorage.setItem('refreshToken', refresh);
 
         // Store tokens in cookies
         setCookie('accessToken', access, {
@@ -90,10 +98,7 @@ export default function SignInForm() {
           // You might want to handle this error, e.g., show a warning toast
         }
 
-        toast({
-          title: 'Success',
-          description: 'Signed in successfully!',
-        });
+        onSignInResult({ success: true, emailVerified: true });
 
         // Redirect to onboarding page
         router.push('/auth/onboarding');
@@ -106,14 +111,30 @@ export default function SignInForm() {
       }
     } catch (error) {
       console.error('Sign in error:', error);
-      if (axios.isAxiosError(error) && error.code === 'ERR_BAD_REQUEST') {
-        toast({
-          title: 'Invalid email or password.',
-          description:
-            error.response?.data.detail ||
-            'Please check your email and password and try again.',
-          variant: 'destructive',
-        });
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 400) {
+          const errorData = error.response.data;
+          if (errorData.non_field_errors && errorData.non_field_errors.includes("E-mail is not verified.")) {
+            // onSignInResult({ success: false, emailVerified: false });
+            toast({
+              title: 'Email Not Verified',
+              description: 'Please check your email and verify your account to proceed.',
+              variant: 'destructive',
+            });
+          } else {
+            toast({
+              title: 'Invalid email or password.',
+              description: errorData.detail || 'Please check your email and password and try again.',
+              variant: 'destructive',
+            });
+          }
+        } else {
+          toast({
+            title: 'Error',
+            description: 'An unexpected error occurred. Please try again.',
+            variant: 'destructive',
+          });
+        }
       } else {
         toast({
           title: 'Error',
@@ -130,7 +151,7 @@ export default function SignInForm() {
     <Card className="mx-auto max-w-md">
       <CardContent className="p-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <FormField
               control={form.control}
               name="email"
@@ -182,4 +203,6 @@ export default function SignInForm() {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default SignInForm;

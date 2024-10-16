@@ -1,9 +1,11 @@
 import * as z from 'zod';
 
 const playerSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(4, 'Name must be at least 4 characters'),
   nic: z.string().min(1, 'NIC is required'),
-  contactNumber: z.string().min(1, 'Contact number is required'),
+  contactNumber: z.string().regex(/^(?:\+94|0)?[1-9]\d{8}$/, {
+    message: 'Please enter a valid Sri Lankan phone number.',
+  }),
 });
 
 const teamSchema = z.object({

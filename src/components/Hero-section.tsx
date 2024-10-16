@@ -188,11 +188,17 @@ const HeroSection: React.FC = () => {
           onClick={handleClick}
           onMouseEnter={handleHover}
           onMouseLeave={handleLeave}
-        >
-          <div className=''>
+          >
+           <Image
+            src="/ball.png"
+            layout="fill"
+            objectFit="contain"
+            alt="Wickets Background"
+          />
+          {/* <div className=''>
             Register
             <div className='text-2xl -mt-1'>Now</div>
-          </div>
+          </div> */}
         </Button>
             </div>
       </div>
