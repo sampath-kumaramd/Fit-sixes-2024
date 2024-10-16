@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import api from '@/utils/api';
 
 const forgetPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -35,9 +36,7 @@ export default function ForgetPassword() {
     },
   });
 
-  const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-  });
+
 
   const onSubmit = async (data: ForgetPasswordSchema) => {
     setIsSubmitted(true);

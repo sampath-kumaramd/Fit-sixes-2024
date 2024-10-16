@@ -27,6 +27,7 @@ import { toast } from '@/hooks/use-toast';
 import router from 'next/router';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
+import api from '@/utils/api';
 
 interface PaymentDetailsStepProps {
   form: UseFormReturn<OnboardingSchema>;
@@ -77,67 +78,66 @@ export default function PaymentDetailsStep({
   const { termsModalOpen, isLoading, setTermsModalOpen, setIsLoading } =
     useOnboardingStore();
 
-  // const handleSubmit = () => {
-  //   console.log('submit');
-  //   form.handleSubmit(onSubmit);
-  // };
 
-  // const onSubmit = async (data: OnboardingSchema) => {
-  //   setIsLoading(true);
-  //   try {
-  //     const accessToken = localStorage.getItem('accessToken');
-  //     const companyData = localStorage.getItem('companyData');
-  //     if (!accessToken || !companyData) {
-  //       throw new Error('Access token or company data not found');
-  //     }
+  const handleSubmit = () => {
+    console.log('submit');
+    form.handleSubmit(onSubmit);
+  };
 
-  //     const { id: companyId } = JSON.parse(companyData);
+  const onSubmit = async (data: OnboardingSchema) => {
+    setIsLoading(true);
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const companyData = localStorage.getItem('companyData');
+      if (!accessToken || !companyData) {
+        throw new Error('Access token or company data not found');
+      }
 
-  //     const formData = new FormData();
-  //     console.log(data);
-  //     if (data.paymentSlip) {
-  //       formData.append('payment_slip', data.paymentSlip);
-  //     }
-  //     if (data.certifiedTeamCard) {
-  //       formData.append('signed_team_card', data.certifiedTeamCard);
-  //     }
+      const { id: companyId } = JSON.parse(companyData);
 
-  //     const api = axios.create({
-  //       baseURL: process.env.NEXT_PUBLIC_API_URL,
-  //     });
+      const formData = new FormData();
+      console.log(data);
+      if (data.paymentSlip) {
+        formData.append('payment_slip', data.paymentSlip);
+      }
+      if (data.certifiedTeamCard) {
+        formData.append('signed_team_card', data.certifiedTeamCard);
+      }
 
-  //     const response = await api.patch(
-  //       `/api/v1/registration/company/${companyId}/`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //           'Content-Type': 'multipart/form-data',
-  //         },
-  //       }
-  //     );
 
-  //     console.log('API Response:', response.data);
+      const response = await api.patch(
+        `/api/v1/registration/company/${companyId}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
 
-  //     toast({
-  //       title: 'Success',
-  //       description: 'Your registration has been submitted successfully!',
-  //     });
+      console.log('API Response:', response.data);
 
-  //     // Redirect to a success page or dashboard
-  //     // router.push('/dashboard');
-  //   } catch (error) {
-  //     console.error('Submission error:', error);
-  //     toast({
-  //       title: 'Error',
-  //       description:
-  //         'There was an error submitting your registration. Please try again.',
-  //       variant: 'destructive',
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      toast({
+        title: 'Success',
+        description: 'Your registration has been submitted successfully!',
+      });
+
+      // Redirect to a success page or dashboard
+      // router.push('/dashboard');
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast({
+        title: 'Error',
+        description:
+          'There was an error submitting your registration. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   return (
     <div>

@@ -16,12 +16,23 @@ const teamSchema = z.object({
     .min(6, 'Each team must have at least 6 players')
     .max(8, 'Each team can have a maximum of 8 players')
     .refine(
-      (players) =>
-        players
-          .slice(0, 6)
-          .every((player) => player.name && player.nic && player.contactNumber),
+      (players) => {
+        const requiredPlayers = players.slice(0, 6);
+        const optionalPlayers = players.slice(6);
+        return (
+          requiredPlayers.every(
+            (player) => player.name && player.nic && player.contactNumber
+          ) &&
+          optionalPlayers.every(
+            (player) =>
+              !player.name ||
+              (player.name && player.nic && player.contactNumber)
+          )
+        );
+      },
       {
-        message: 'The first 6 players must have all fields filled',
+        message:
+          'The first 6 players must have all fields filled, and optional players must have all fields filled if present',
         path: ['players'],
       }
     ),
