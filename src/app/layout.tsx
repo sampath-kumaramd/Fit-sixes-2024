@@ -26,8 +26,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/logo/logo-light.svg" />
-      <link href="https://unpkg.com/@pqina/flip/dist/flip.min.css" rel="stylesheet"></link>
-        <Script src="https://unpkg.com/@pqina/flip/dist/flip.min.js"></Script>
       </head>
       <body className={oswald.className}>
         <HomePageLayout>

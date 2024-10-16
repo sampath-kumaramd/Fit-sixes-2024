@@ -22,7 +22,7 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
     ref
   ) => {
     const singleLogo = (
-      <Image src="/logo/logo-light.svg" alt="logo" width={logoSize === 'large' ? 150 : logoSize === 'medium' ? 60 : 40} height={logoSize === 'large' ? 150 : logoSize === 'medium' ? 60 : 40} />
+      <Image src="/logo/logo-light.svg" alt="logo image" width={logoSize === 'large' ? 150 : logoSize === 'medium' ? 60 : 40} height={logoSize === 'large' ? 150 : logoSize === 'medium' ? 60 : 40} />
     );
 
     const fullLogo = (

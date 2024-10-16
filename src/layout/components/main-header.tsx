@@ -41,6 +41,13 @@ export function MainHeader({
       label: 'Contact Us',
       active: pathname === `/contact-us`,
     },
+
+ // ROUTES FOR AUTH
+    // {
+    //   href: `/auth/sign-in`,
+    //   label: 'Sign In',
+    //   active: pathname === `/auth/sign-in`,
+    // },
   ];
 
   const router = useRouter();

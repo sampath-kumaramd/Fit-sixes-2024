@@ -8,6 +8,7 @@ export enum SponsorshipLevel {
   BRONZE = 'bronze',
   SILVER = 'silver',
   GOLD = 'gold',
+  NONE = 'none',
 }
 
 export enum IsSponsor {
