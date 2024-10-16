@@ -78,6 +78,7 @@ export default function PaymentDetailsStep({
   const { termsModalOpen, isLoading, setTermsModalOpen, setIsLoading } =
     useOnboardingStore();
 
+
   const handleSubmit = () => {
     console.log('submit');
     form.handleSubmit(onSubmit);
@@ -136,6 +137,7 @@ export default function PaymentDetailsStep({
       setIsLoading(false);
     }
   };
+
 
   return (
     <div>
@@ -220,7 +222,7 @@ export default function PaymentDetailsStep({
         <Button type="button" onClick={onPrevStep}>
           Previous
         </Button>
-        <Button type="submit" onClick={handleSubmit} disabled={isLoading}>
+        <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
