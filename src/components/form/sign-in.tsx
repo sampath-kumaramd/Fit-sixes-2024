@@ -3,12 +3,13 @@
 import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
+import api from '@/utils/api';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { setCookie } from 'cookies-next';
+import axios from 'axios';
 
 import { useToast } from '@/hooks/use-toast';
 import { useOnboardingStore } from './onboarding/store';
@@ -53,9 +54,6 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
       email: '',
       password: '',
     },
-  });
-  const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {

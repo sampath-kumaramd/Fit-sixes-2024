@@ -27,6 +27,7 @@ import { toast } from '@/hooks/use-toast';
 import router from 'next/router';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
+import api from '@/utils/api';
 
 interface PaymentDetailsStepProps {
   form: UseFormReturn<OnboardingSchema>;
@@ -102,9 +103,6 @@ export default function PaymentDetailsStep({
         formData.append('signed_team_card', data.certifiedTeamCard);
       }
 
-      const api = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_API_URL,
-      });
 
       const response = await api.patch(
         `/api/v1/registration/company/${companyId}/`,

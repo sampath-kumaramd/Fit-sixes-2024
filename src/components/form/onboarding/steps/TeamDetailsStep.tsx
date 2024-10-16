@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
-import { Loader2, PlusCircle, X } from 'lucide-react';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { Loader2, PlusCircle, X, Trash2 } from 'lucide-react';
+import { useFieldArray, UseFormReturn  , FieldPath} from 'react-hook-form';
 
 import { OnboardingSchema } from '../schema';
 import { useOnboardingStore } from '../store';
@@ -65,7 +64,14 @@ export default function TeamDetailsStep({
 
   const { toast } = useToast();
 
-  const [optionalPlayers, setOptionalPlayers] = useState(0);
+  const [optionalPlayers, setOptionalPlayers] = useState<number[]>(Array(4).fill(0));
+
+  useEffect(() => {
+    const initialOptionalPlayers = teamFields.map(team => 
+      team.players.filter((_, index) => index >= 6).length
+    );
+    setOptionalPlayers(initialOptionalPlayers);
+  }, [teamFields]);
 
   useEffect(() => {
     const maleTeams = teamFields.filter(
@@ -130,10 +136,26 @@ export default function TeamDetailsStep({
     });
   };
 
-  const addOptionalPlayer = () => {
-    if (optionalPlayers < 2) {
-      setOptionalPlayers(optionalPlayers + 1);
+  const addOptionalPlayer = (teamIndex: number) => {
+    if (optionalPlayers[teamIndex] < 2) {
+      const newOptionalPlayers = [...optionalPlayers];
+      newOptionalPlayers[teamIndex] += 1;
+      setOptionalPlayers(newOptionalPlayers);
     }
+  };
+
+  const removeOptionalPlayer = (teamIndex: number, playerIndex: number) => {
+    const newOptionalPlayers = [...optionalPlayers];
+    newOptionalPlayers[teamIndex] -= 1;
+    setOptionalPlayers(newOptionalPlayers);
+
+    // Remove the player from the form
+    const players = form.getValues(`teams.${teamIndex}.players`);
+    const updatedPlayers = players.filter((_, index) => index !== playerIndex);
+    form.setValue(`teams.${teamIndex}.players`, updatedPlayers);
+
+    // Trigger form validation
+    form.trigger(`teams.${teamIndex}.players`);
   };
 
   return (
@@ -303,17 +325,28 @@ export default function TeamDetailsStep({
                     </div>
                   </div>
                 ))}
-                {[...Array(optionalPlayers)].map((_, index) => (
+                {[...Array(optionalPlayers[teamIndex])].map((_, index) => (
                   <div
                     key={`optional-${index}`}
                     className="space-y-2 rounded-lg border-2 border-gray-200 p-4 md:border-0 md:p-0"
                   >
-                    <h4 className="font-semibold">
-                      Optional Player {index + 1}
-                      <span className="ml-2 text-sm font-normal text-gray-500">
-                        (Optional)
-                      </span>
-                    </h4>
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold">
+                        Optional Player {index + 1}
+                        <span className="ml-2 text-sm font-normal text-gray-500">
+                          (Optional)
+                        </span>
+                      </h4>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeOptionalPlayer(teamIndex, 6 + index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
                     <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
                       <FormField
                         control={form.control}
@@ -354,10 +387,10 @@ export default function TeamDetailsStep({
                     </div>
                   </div>
                 ))}
-                {optionalPlayers < 2 && (
+                {optionalPlayers[teamIndex] < 2 && (
                   <Button
                     type="button"
-                    onClick={addOptionalPlayer}
+                    onClick={() => addOptionalPlayer(teamIndex)}
                     className="mt-4"
                     variant="outline"
                   >

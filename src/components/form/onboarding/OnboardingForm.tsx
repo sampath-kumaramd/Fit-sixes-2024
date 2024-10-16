@@ -17,8 +17,9 @@ import PaymentDetailsStep from './steps/PaymentDetailsStep';
 import TeamCardsPreviewStep from './steps/TeamCardsPreviewStep';
 import TeamDetailsStep from './steps/TeamDetailsStep';
 import { useOnboardingStore } from './store';
-import axios from 'axios';
+import api from '@/utils/api';
 import { CompanyViewStatus } from '@/types/enums/company-view-status';
+import axios from 'axios';
 
 interface OnboardingFormProps {
   currentStep: number;
@@ -40,9 +41,6 @@ export default function OnboardingForm({ currentStep }: OnboardingFormProps) {
     setInvoiceStatus,
   } = useOnboardingStore();
 
-  const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-  });
   const form = useForm<OnboardingSchema>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {

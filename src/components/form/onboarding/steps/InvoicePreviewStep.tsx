@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { useOnboardingStore } from '../store';
 import axios from 'axios';
+import api from '@/utils/api';
 
 interface InvoicePreviewStepProps {
   onPrevStep: () => void;
@@ -18,13 +19,11 @@ export default function InvoicePreviewStep({
 }: InvoicePreviewStepProps) {
   const { invoiceStatus, setInvoiceStatus } = useOnboardingStore();
 
-  const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-  });
+
   useEffect(() => {
     const fetchCompanyData = async () => {
       try {
-        const access = localStorage.getItem('access_token'); // Assuming you store the token in localStorage
+        const access = localStorage.getItem('accessToken'); // Assuming you store the token in localStorage
         const companyResponse = await api.get('/api/v1/registration/me/', {
           headers: { Authorization: `Bearer ${access}` },
         });

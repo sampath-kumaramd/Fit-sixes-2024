@@ -38,6 +38,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
+import api from '@/utils/api';
 
 export default function SignUpForm() {
   const { toast } = useToast();
@@ -64,10 +65,6 @@ export default function SignUpForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
 
   const onSubmit = async (data: SignUpSchema) => {
     if (data.password !== data.confirmPassword) {
