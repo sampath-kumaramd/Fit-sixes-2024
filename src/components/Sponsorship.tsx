@@ -31,9 +31,9 @@ const sponsors = [
   {
     id: 1,
     name: 'creative',
-    logo: '/company-logo/question-mark.png',
-    type: 'platinum',
-    borderColor: '#e80a4c',
+    logo: '/company-logo/pagero.png',
+    type: 'Silver',
+    borderColor: '#183b34',
     description: (
       <div className="space-y-4">
         <p className="text-gray-300">
@@ -53,56 +53,8 @@ const sponsors = [
       </div>
     ),
   },
-  {
-    id: 2,
-    name: 'Digital Ocean',
-    logo: '/company-logo/question-mark.png',
-    type: 'gold',
-    borderColor: '#40a0b8',
-    description: (
-      <div className="space-y-4">
-        <p className="text-gray-300">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type
-          and scrambled it to make a type specimen book.
-        </p>
-        <p className="text-gray-300">
-          It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.
-        </p>
-      </div>
-    ),
-  },
-  {
-    id: 3,
-    name: 'United Nations',
-    logo: '/company-logo/question-mark.png',
-    type: 'silver',
-    borderColor: '#e80a4c',
-    description: (
-      <div className="space-y-4">
-        <p className="text-gray-300">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type
-          and scrambled it to make a type specimen book.
-        </p>
-        <p className="text-gray-300">
-          It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.
-        </p>
-      </div>
-    ),
-  }
+  
+  
 ];
 
 const Sponsorship = () => {
@@ -145,7 +97,7 @@ const Sponsorship = () => {
           />
           <div className="absolute bottom-[8%] xl:bottom-[10%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div
-              className={`bg-[#242829] border rounded-lg rotate-45 transition-all duration-1000 hover:[transform:rotateY(180deg)_rotate(45deg)] perspective-1000`}
+              className={`bg-[#aaaaaa] border rounded-lg rotate-45 transition-all duration-1000 hover:[transform:rotateY(180deg)_rotate(45deg)]`}
               style={{ borderColor: selectedSponsor.borderColor }}
             >
               <div className="w-32 h-32 lg:w-40 lg:h-40 transition-all duration-1000 -rotate-45">
@@ -162,7 +114,7 @@ const Sponsorship = () => {
         </div>
 
         <Card className="bg-transparent text-white border-none">
-          <CardContent className="pt-6">
+          <CardContent className="pt-6 text-center md:text-left">
             <h1 className="text-2xl md:text-3xl font-bold mb-4">
               {selectedSponsor.type.charAt(0).toUpperCase() +
                 selectedSponsor.type.slice(1)}{' '}
@@ -182,10 +134,10 @@ const Sponsorship = () => {
             align: 'center',
             loop: true,
           }}
-          className="w-full max-w-7xl mx-auto"
+          className="w-full  max-w-7xl mx-auto"
           setApi={setApi}
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent className="w-full flex justify-center items-center" >
             {sponsors.map((sponsor) => (
               <CarouselItem
                 key={sponsor.id}
@@ -199,7 +151,7 @@ const Sponsorship = () => {
                       : 'shadow-none hover:shadow-[0_0_16px_rgba(252,181,100,0.5)]'
                   }`}
                 >
-                  <div className="rounded-md bg-[#242829] h-full w-full">
+                  <div className="rounded-md bg-[#aaaaaa] h-full w-full">
                     <div className="relative w-full h-full">
                       <Image
                         src={sponsor.logo}
