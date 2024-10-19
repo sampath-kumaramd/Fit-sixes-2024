@@ -50,6 +50,14 @@ const sponsors = [
           publishing software like Aldus PageMaker including versions of Lorem
           Ipsum.
         </p>
+        <p className="text-gray-300">
+          It has survived not only five centuries, but also the leap into
+          electronic typesetting, remaining essentially unchanged. It was
+          popularised in the 1960s with the release of Letraset sheets
+          containing Lorem Ipsum passages, and more recently with desktop
+          publishing software like Aldus PageMaker including versions of Lorem
+          Ipsum.
+        </p>
       </div>
     ),
   },
@@ -82,12 +90,19 @@ const Sponsorship = () => {
 
   return (
     <div className="min-h-screen bg-[#03080c] py-8 md:py-16">
-      <div className="mx-4 md:mx-8 lg:mx-12 xl:mx-16 grid xl:grid-cols-2 grid-cols-1 gap-8 mb-12 xl:mb-28">
+      <div className="mx-4 md:mx-8 lg:mx-12 xl:mx-16 grid xl:grid-cols-2 grid-cols-1 gap-0 md:gap-8 md:mb-12 xl:mb-28">
+      <h1 className=" text-center text-2xl md:text-4xl font-bold md:hidden block text-white">
+              {selectedSponsor.type.charAt(0).toUpperCase() +
+                selectedSponsor.type.slice(1)}{' '}
+              Sponsor
+            </h1>
         <div className="relative z-10 row-span-1 h-[300px] md:h-[400px] flex items-center justify-center">
+          
           <div
             className="absolute inset-0 bg-center bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(/bg.svg)` }}
           />
+
           <Image
             src="/Ground.svg"
             alt="ground"
@@ -96,18 +111,19 @@ const Sponsorship = () => {
             className="absolute px-3 w-full md:w-3/4 lg:w-2/3 xl:w-2/3 max-w-[600px] bottom-0 left-1/2 top-2/3 transform -translate-x-1/2"
           />
           <div className="absolute bottom-[8%] xl:bottom-[10%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div
-              className={`bg-[#aaaaaa] border rounded-lg rotate-45 transition-all duration-1000 hover:[transform:rotateY(180deg)_rotate(45deg)]`}
-              style={{ borderColor: selectedSponsor.borderColor }}
-            >
-              <div className="w-32 h-32 lg:w-40 lg:h-40 transition-all duration-1000 -rotate-45">
-                <Image
-                  src={selectedSponsor.logo}
-                  alt={selectedSponsor.name}
-                  width={160}
-                  height={160}
-                  className="w-full h-full object-contain"
-                />
+            <div className="cursor-pointer [perspective:1000px] group">
+              <div className="relative   transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                <div className=' -rotate-45 w-32 h-32 lg:w-40 lg:h-40'>
+                <div className="absolute inset-0 bg-[#aaaaaa] border-5 border-white rounded-md shadow-md">
+                  <Image
+                    src={selectedSponsor.logo}
+                    alt={selectedSponsor.name}
+                    fill
+                    className="object-contain rotate-45 rounded-lg p-4 "
+                  />
+                </div>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -115,7 +131,7 @@ const Sponsorship = () => {
 
         <Card className="bg-transparent text-white border-none">
           <CardContent className="pt-6 text-center md:text-left">
-            <h1 className="text-2xl md:text-3xl font-bold mb-4">
+            <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 md:block hidden">
               {selectedSponsor.type.charAt(0).toUpperCase() +
                 selectedSponsor.type.slice(1)}{' '}
               Sponsor
