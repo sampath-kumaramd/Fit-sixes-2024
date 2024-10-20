@@ -9,9 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { dummyTeamsData } from './dummydata';
-import { dummydatacompany } from './dummydatacompany';
+import { dummyData } from './dummydata';
 import { FileText, Pencil, X, Check } from 'lucide-react';
+
+type CompanyData = { 
+  company_name: string; 
+  contact_name: string; 
+  email: string; 
+  phone: string; 
+};
 
 type TeamMember = {
   name: string;
@@ -26,23 +32,34 @@ type Team = {
   team_members: TeamMember[];
 };
 
-async function fetchTeamsData() {
-  return dummyTeamsData;
+////////////////////////
+const data = dummyData;
+
+async function fetchCompanyData() {
+  const companydata = {
+    company_name: data.company_name,
+    contact_name: data.contact_name,
+    email: data.email,
+    phone: data.contact_number,
+  }
+  return companydata;
 }
 
-async function fetchcompanyData() {
-  return dummydatacompany;
+async function fetchTeamsData() {
+  const teamdata = data.teams;
+  return teamdata;
 }
 
 export default function DashboardPage() {
   const [teamsData, setTeamsData] = useState<Team[]>([]);
   const [editingMember, setEditingMember] = useState<string | null>(null);
   const [editedData, setEditedData] = useState<TeamMember | null>(null);
-  const [companyData, setCompanyData] = useState<any>(null);
+  const [companyData, setCompanyData] = useState<CompanyData | null>(null);
+
 
   React.useEffect(() => {
     fetchTeamsData().then(setTeamsData);
-    fetchcompanyData().then(setCompanyData);
+    fetchCompanyData().then(setCompanyData);
   }, []);
 
   const handleEdit = (member: TeamMember) => {
