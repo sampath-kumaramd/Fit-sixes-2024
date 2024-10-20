@@ -1,11 +1,17 @@
-// File: app/dashboard/page.tsx
-
-import React from 'react';
-import Link from 'next/link';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+'use client';
+import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { dummyTeamsData } from './dummydata';
+import { dummydatacompany } from './dummydatacompany';
+import { FileText, Pencil, X, Check } from 'lucide-react';
 
 type TeamMember = {
   name: string;
@@ -20,23 +26,103 @@ type Team = {
   team_members: TeamMember[];
 };
 
-// This function now returns the dummy data
-// Replace this with an actual API call when ready
-async function fetchTeamsData(): Promise<Team[]> {
-  // Simulating API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
+async function fetchTeamsData() {
   return dummyTeamsData;
 }
 
-export default async function DashboardPage() {
-  const teamsData = await fetchTeamsData();
+async function fetchcompanyData() {
+  return dummydatacompany;
+}
+
+export default function DashboardPage() {
+  const [teamsData, setTeamsData] = useState<Team[]>([]);
+  const [editingMember, setEditingMember] = useState<string | null>(null);
+  const [editedData, setEditedData] = useState<TeamMember | null>(null);
+  const [companyData, setCompanyData] = useState<any>(null);
+
+  React.useEffect(() => {
+    fetchTeamsData().then(setTeamsData);
+    fetchcompanyData().then(setCompanyData);
+  }, []);
+
+  const handleEdit = (member: TeamMember) => {
+    setEditingMember(member.nic);
+    setEditedData(member);
+  };
+
+  const handleSave = (teamIndex: number, memberIndex: number) => {
+    if (editedData) {
+      const newTeamsData = [...teamsData];
+      newTeamsData[teamIndex].team_members[memberIndex] = editedData;
+      setTeamsData(newTeamsData);
+      setEditingMember(null);
+      setEditedData(null);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditingMember(null);
+    setEditedData(null);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (editedData) {
+      setEditedData({ ...editedData, [e.target.name]: e.target.value });
+    }
+  };
 
   return (
-    <div className="container mx-auto p-6">      
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <Tabs defaultValue={teamsData[0].team_name}>
-          <div className="flex justify-between items-center mb-4">
+    <div className="container mx-auto p-6">
+      <div className="sm:block lg:flex items-start justify-between">
+        <div className="flex-grow space-y-2">
+          <div className="flex flex-col sm:flex-row">
+            <span className="w-48 text-base text-gray-700">Company Name:</span>
+            <span className="mt-1 text-sm pl-6 sm:pl-0">
+              {companyData?.company_name || 'N/A'}
+            </span>
+          </div>
+          <div className="flex flex-col sm:flex-row">
+            <span className="w-48 text-base text-gray-700">
+              Primary Contact Name:
+            </span>
+            <span className="mt-1 text-sm pl-6 sm:pl-0">
+              {companyData?.contact_name || 'N/A'}
+            </span>
+          </div>
+          <div className="flex flex-col sm:flex-row">
+            <span className="w-48 text-base text-gray-700">
+              Primary Contact Email:
+            </span>
+            <span className="mt-1 text-sm pl-6 sm:pl-0">{companyData?.email || 'N/A'}</span>
+          </div>
+          <div className="flex flex-col sm:flex-row">
+            <span className="w-48 text-base text-gray-700">
+              Primary Contact Phone Number:
+            </span>
+            <span className="mt-1 text-sm pl-6 sm:pl-0">{companyData?.phone || 'N/A'}</span>
+          </div>
+        </div>
+        <div className="ml-6 mt-4 space-y-2 sm:inline-flex md:block">
+          <button
+            type="button"
+            className="flex items-center text-sm text-gray-600 hover:text-gray-800"
+          >
+            <FileText className="mr-2 h-5 w-5" />
+            Certified Team Card
+          </button>
+          <button
+            type="button"
+            className="flex items-center text-sm text-gray-600 hover:text-gray-800"
+          >
+            <FileText className="mr-2 h-5 w-5" />
+            Payment Proof
+          </button>
+        </div>
+      </div>
+
+      <div className="rounded-lg bg-white p-6 shadow-md">
+        <Tabs defaultValue={teamsData[0]?.team_name || ''}>
+          <div className="mb-4 flex items-center justify-between">
             <TabsList>
               {teamsData.map((team) => (
                 <TabsTrigger key={team.team_name} value={team.team_name}>
@@ -44,15 +130,9 @@ export default async function DashboardPage() {
                 </TabsTrigger>
               ))}
             </TabsList>
-            {/* <Button variant="ghost" asChild>
-              <Link href=" ">Edit</Link>
-            </Button> */}
-            <button className="bg-darkBlue">
-              Edit
-            </button>
           </div>
-          
-          {teamsData.map((team) => (
+
+          {teamsData.map((team, teamIndex) => (
             <TabsContent key={team.team_name} value={team.team_name}>
               <Table>
                 <TableHeader>
@@ -62,18 +142,75 @@ export default async function DashboardPage() {
                     <TableHead>Gender</TableHead>
                     <TableHead>NIC</TableHead>
                     <TableHead>Phone Number</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {team.team_members.sort((a, b) => a.sort_order - b.sort_order).map((member) => (
-                    <TableRow key={member.nic}>
-                      <TableCell>{member.sort_order}</TableCell>
-                      <TableCell>{member.name}</TableCell>
-                      <TableCell>{team.gender}</TableCell>
-                      <TableCell>{member.nic}</TableCell>
-                      <TableCell>{member.phone_number}</TableCell>
-                    </TableRow>
-                  ))}
+                  {team.team_members
+                    .sort((a, b) => a.sort_order - b.sort_order)
+                    .map((member, memberIndex) => (
+                      <TableRow key={member.nic}>
+                        <TableCell>{member.sort_order}</TableCell>
+                        <TableCell>
+                          {editingMember === member.nic ? (
+                            <input
+                              name="name"
+                              value={editedData?.name || ''}
+                              onChange={handleInputChange}
+                              className="w-full rounded border px-2 py-1"
+                            />
+                          ) : (
+                            member.name
+                          )}
+                        </TableCell>
+                        <TableCell>{team.gender}</TableCell>
+                        <TableCell>
+                          {editingMember === member.nic ? (
+                            <input
+                              name="nic"
+                              value={editedData?.nic || ''}
+                              onChange={handleInputChange}
+                              className="w-full rounded border px-2 py-1"
+                            />
+                          ) : (
+                            member.nic
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {editingMember === member.nic ? (
+                            <input
+                              name="phone_number"
+                              value={editedData?.phone_number || ''}
+                              onChange={handleInputChange}
+                              className="w-full rounded border px-2 py-1"
+                            />
+                          ) : (
+                            member.phone_number
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {editingMember === member.nic ? (
+                            <>
+                              <button
+                                onClick={() =>
+                                  handleSave(teamIndex, memberIndex)
+                                }
+                                className="mr-2"
+                              >
+                                <Check className="h-5 w-5 text-green-500" />
+                              </button>
+                              <button onClick={handleCancel}>
+                                <X className="h-5 w-5 text-red-500" />
+                              </button>
+                            </>
+                          ) : (
+                            <button onClick={() => handleEdit(member)}>
+                              <Pencil className="h-5 w-5 text-blue-500" />
+                            </button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TabsContent>

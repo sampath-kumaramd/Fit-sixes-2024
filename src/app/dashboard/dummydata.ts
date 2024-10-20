@@ -1,5 +1,3 @@
-// File: app/dashboard/dummyTeamsData.ts
-
 export const dummyTeamsData = [
   {
     "team_name": "Rootcode",

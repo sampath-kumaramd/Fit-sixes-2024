@@ -1,0 +1,20 @@
+export const dummydatacompany =
+{
+    "company_name": "ITELASOFT Pvt Ltd",
+    "password": "pbkdf2_sha256$870000$UFGOcghY8xrJtuXc5JHp1u$nJ1S+HbazamVRbwXE/3lbuFDCIxIc2QX7DmRQl4NzrM=",
+    "view_status": "payment",
+    "is_hut": false,
+    "package": "none",
+    "status": "pending",
+    "contact_name": "Srikarthikeyan Thiyagaraja",
+    "email": "srikarthikeyan.thiyagaraja@itelasoft.com",
+    "phone": "0771742162",
+    "secondary_contact_name": "Chamil Madusanka",
+    "secondary_email": "chamil.madusanka@itelasoft.com",
+    "secondary_phone": "0772078347",
+    "invoice_status": "sent",
+    "team_card": null,
+    "invoice": null,
+    "payment_slip": null,
+    "signed_team_card": null,
+}
