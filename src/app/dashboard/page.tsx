@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Table,
@@ -9,9 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { dummyTeamsData } from './dummydata';
-import { dummydatacompany } from './dummydatacompany';
-import { FileText, Pencil, X, Check } from 'lucide-react';
+import { FileText, Pencil, X, Check, Loader2 } from 'lucide-react';
+import api from '@/utils/api';
 
 type TeamMember = {
   name: string;
@@ -26,12 +25,26 @@ type Team = {
   team_members: TeamMember[];
 };
 
-async function fetchTeamsData() {
-  return dummyTeamsData;
-}
-
 async function fetchcompanyData() {
-  return dummydatacompany;
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      throw new Error('Access token not found');
+    }
+
+    const response = await api.get('/api/v1/registration/me/', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error('Failed to fetch company data');
+    }
+  } catch (error) {
+    console.error('Error fetching company data:', error);
+    throw error;
+  }
 }
 
 export default function DashboardPage() {
@@ -39,10 +52,12 @@ export default function DashboardPage() {
   const [editingMember, setEditingMember] = useState<string | null>(null);
   const [editedData, setEditedData] = useState<TeamMember | null>(null);
   const [companyData, setCompanyData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
-    fetchTeamsData().then(setTeamsData);
-    fetchcompanyData().then(setCompanyData);
+  useEffect(() => {
+    fetchcompanyData()
+      .then(setCompanyData)
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleEdit = (member: TeamMember) => {
@@ -71,13 +86,21 @@ export default function DashboardPage() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-6">
-      <div className="sm:block lg:flex items-start justify-between">
+      <div className="items-start justify-between sm:block lg:flex">
         <div className="flex-grow space-y-2">
           <div className="flex flex-col sm:flex-row">
             <span className="w-48 text-base text-gray-700">Company Name:</span>
-            <span className="mt-1 text-sm pl-6 sm:pl-0">
+            <span className="mt-1 pl-6 text-sm sm:pl-0">
               {companyData?.company_name || 'N/A'}
             </span>
           </div>
@@ -85,7 +108,7 @@ export default function DashboardPage() {
             <span className="w-48 text-base text-gray-700">
               Primary Contact Name:
             </span>
-            <span className="mt-1 text-sm pl-6 sm:pl-0">
+            <span className="mt-1 pl-6 text-sm sm:pl-0">
               {companyData?.contact_name || 'N/A'}
             </span>
           </div>
@@ -93,13 +116,17 @@ export default function DashboardPage() {
             <span className="w-48 text-base text-gray-700">
               Primary Contact Email:
             </span>
-            <span className="mt-1 text-sm pl-6 sm:pl-0">{companyData?.email || 'N/A'}</span>
+            <span className="mt-1 pl-6 text-sm sm:pl-0">
+              {companyData?.email || 'N/A'}
+            </span>
           </div>
           <div className="flex flex-col sm:flex-row">
             <span className="w-48 text-base text-gray-700">
               Primary Contact Phone Number:
             </span>
-            <span className="mt-1 text-sm pl-6 sm:pl-0">{companyData?.phone || 'N/A'}</span>
+            <span className="mt-1 pl-6 text-sm sm:pl-0">
+              {companyData?.phone || 'N/A'}
+            </span>
           </div>
         </div>
         <div className="ml-6 mt-4 space-y-2 sm:inline-flex md:block">
@@ -121,10 +148,10 @@ export default function DashboardPage() {
       </div>
 
       <div className="rounded-lg bg-white p-6 shadow-md">
-        <Tabs defaultValue={teamsData[0]?.team_name || ''}>
+        <Tabs defaultValue={companyData?.teams[0]?.team_name || ''}>
           <div className="mb-4 flex items-center justify-between">
             <TabsList>
-              {teamsData.map((team) => (
+              {companyData?.teams.map((team: Team) => (
                 <TabsTrigger key={team.team_name} value={team.team_name}>
                   {team.team_name}
                 </TabsTrigger>
@@ -132,7 +159,7 @@ export default function DashboardPage() {
             </TabsList>
           </div>
 
-          {teamsData.map((team, teamIndex) => (
+          {companyData?.teams.map((team: Team, teamIndex: number) => (
             <TabsContent key={team.team_name} value={team.team_name}>
               <Table>
                 <TableHeader>

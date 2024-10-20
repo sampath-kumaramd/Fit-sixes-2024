@@ -13,6 +13,7 @@ import Image from 'next/image';
 import LogOutButton from '@/layout/components/log-out-button';
 import { useOnboardingStore } from '@/components/form/onboarding/store';
 import Link from 'next/link';
+import api from '@/utils/api';
 
 export default function Onboarding() {
   const router = useRouter();
