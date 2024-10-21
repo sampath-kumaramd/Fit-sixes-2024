@@ -25,14 +25,21 @@ export default function Onboarding() {
   useEffect(() => {
     const companyData = localStorage.getItem('companyData');
     if (companyData) {
-      const { view_status } = JSON.parse(companyData);
-      setCompanyStatus(view_status as CompanyViewStatus);
+      const { view_status, invoice_status, payment_slip } =
+        JSON.parse(companyData);
+      if (invoice_status === 'sent' && payment_slip === null) {
+        setCompanyStatus(CompanyViewStatus.VERIFICATION);
+      } else if (payment_slip !== null) {
+        router.push('/auth/success');
+      } else {
+        setCompanyStatus(view_status as CompanyViewStatus);
+      }
     }
   }, []);
 
   useEffect(() => {
-    if (companyStatus === CompanyViewStatus.VERIFICATION) {
-      router.push('/dashboard');
+    if (companyStatus === CompanyViewStatus.SUCCESS) {
+      router.push('/auth/dashboard');
     }
   }, [companyStatus, router]);
 

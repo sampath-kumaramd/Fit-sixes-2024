@@ -11,8 +11,12 @@ import {
 } from '@/components/ui/table';
 import { FileText, Pencil, X, Check, Loader2 } from 'lucide-react';
 import api from '@/utils/api';
+import { CompanyViewStatus } from '@/types/enums/company-view-status';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type TeamMember = {
+  id: number;
   name: string;
   nic: string;
   phone_number: string;
@@ -20,12 +24,13 @@ type TeamMember = {
 };
 
 type Team = {
+  id: number;
   team_name: string;
   gender: string;
   team_members: TeamMember[];
 };
 
-async function fetchcompanyData() {
+async function fetchCompanyData() {
   try {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
@@ -49,29 +54,75 @@ async function fetchcompanyData() {
 
 export default function DashboardPage() {
   const [teamsData, setTeamsData] = useState<Team[]>([]);
-  const [editingMember, setEditingMember] = useState<string | null>(null);
+  const [editingMember, setEditingMember] = useState<number | null>(null);
   const [editedData, setEditedData] = useState<TeamMember | null>(null);
   const [companyData, setCompanyData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    fetchcompanyData()
-      .then(setCompanyData)
+    fetchCompanyData()
+      .then((data) => {
+        setCompanyData(data);
+        if (data.view_status !== CompanyViewStatus.SUCCESS) {
+          router.push('/auth/onboarding');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching company data:', error);
+        // Handle error (e.g., redirect to login page or show error message)
+      })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   const handleEdit = (member: TeamMember) => {
-    setEditingMember(member.nic);
+    setEditingMember(member.id);
     setEditedData(member);
   };
 
-  const handleSave = (teamIndex: number, memberIndex: number) => {
+  const handleSave = async (teamIndex: number, memberIndex: number) => {
     if (editedData) {
-      const newTeamsData = [...teamsData];
-      newTeamsData[teamIndex].team_members[memberIndex] = editedData;
-      setTeamsData(newTeamsData);
-      setEditingMember(null);
-      setEditedData(null);
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          throw new Error('Access token not found');
+        }
+
+        const response = await api.put(
+          `/api/v1/registration/team-member/${editedData.id}/`,
+          {
+            name: editedData.name,
+            nic: editedData.nic,
+            phone_number: editedData.phone_number,
+            sort_order: editedData.sort_order,
+          },
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+
+        if (response.status === 200) {
+          // Update local state
+          const newTeamsData = [...companyData.teams];
+          newTeamsData[teamIndex].team_members[memberIndex] = response.data;
+          setCompanyData({ ...companyData, teams: newTeamsData });
+          setEditingMember(null);
+          setEditedData(null);
+        } else {
+          throw new Error('Failed to update team member');
+        }
+      } catch (error) {
+        console.error('Error updating team member:', error);
+        // Handle error (e.g., show error message to user)
+      }
     }
   };
 
@@ -85,14 +136,6 @@ export default function DashboardPage() {
       setEditedData({ ...editedData, [e.target.name]: e.target.value });
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto p-6">
@@ -130,20 +173,24 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="ml-6 mt-4 space-y-2 sm:inline-flex md:block">
-          <button
-            type="button"
+          <Link
+            href={companyData?.signed_team_card || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center text-sm text-gray-600 hover:text-gray-800"
           >
             <FileText className="mr-2 h-5 w-5" />
             Certified Team Card
-          </button>
-          <button
-            type="button"
+          </Link>
+          <Link
+            href={companyData?.payment_slip || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center text-sm text-gray-600 hover:text-gray-800"
           >
             <FileText className="mr-2 h-5 w-5" />
             Payment Proof
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -176,10 +223,10 @@ export default function DashboardPage() {
                   {team.team_members
                     .sort((a, b) => a.sort_order - b.sort_order)
                     .map((member, memberIndex) => (
-                      <TableRow key={member.nic}>
+                      <TableRow key={member.id}>
                         <TableCell>{member.sort_order}</TableCell>
                         <TableCell>
-                          {editingMember === member.nic ? (
+                          {editingMember === member.id ? (
                             <input
                               name="name"
                               value={editedData?.name || ''}
@@ -192,7 +239,7 @@ export default function DashboardPage() {
                         </TableCell>
                         <TableCell>{team.gender}</TableCell>
                         <TableCell>
-                          {editingMember === member.nic ? (
+                          {editingMember === member.id ? (
                             <input
                               name="nic"
                               value={editedData?.nic || ''}
@@ -204,7 +251,7 @@ export default function DashboardPage() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {editingMember === member.nic ? (
+                          {editingMember === member.id ? (
                             <input
                               name="phone_number"
                               value={editedData?.phone_number || ''}
@@ -216,7 +263,7 @@ export default function DashboardPage() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {editingMember === member.nic ? (
+                          {editingMember === member.id ? (
                             <>
                               <button
                                 onClick={() =>
