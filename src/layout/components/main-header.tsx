@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
@@ -17,6 +18,12 @@ export function MainHeader({
 }: MainHeaderProps) {
   const pathname = usePathname();
   const params = useParams();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setIsAuthenticated(pathname === '/auth/dashboard');
+  }, [pathname]);
 
   const routes = [
     {
@@ -37,13 +44,27 @@ export function MainHeader({
 
     //  ROUTES FOR AUTH
     {
-      href: `/auth/sign-in`,
-      label: 'Sign In',
-      active: pathname === `/auth/sign-in`,
+      href: isAuthenticated ? '/' : '/auth/sign-in',
+      label: isAuthenticated ? 'Sign Out' : 'Sign In',
+      active: pathname === '/auth/sign-in',
     },
   ];
 
-  const router = useRouter();
+  const handleSignOut = () => {
+    // Clear local storage
+    localStorage.clear();
+
+    // Clear cookies
+    document.cookie.split(';').forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, '')
+        .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+    });
+
+    // Redirect to home page
+    router.push('/');
+    closeMenu?.();
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -73,8 +94,12 @@ export function MainHeader({
           <motion.div key={route.href} variants={itemVariants}>
             <Button
               onClick={() => {
-                router.push(route.href);
-                closeMenu?.();
+                if (isAuthenticated && route.label === 'Sign Out') {
+                  handleSignOut();
+                } else {
+                  router.push(route.href);
+                  closeMenu?.();
+                }
               }}
               variant={'link'}
               className={`${

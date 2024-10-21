@@ -13,6 +13,7 @@ import Image from 'next/image';
 import LogOutButton from '@/layout/components/log-out-button';
 import { useOnboardingStore } from '@/components/form/onboarding/store';
 import Link from 'next/link';
+import api from '@/utils/api';
 
 export default function Onboarding() {
   const router = useRouter();
@@ -24,14 +25,21 @@ export default function Onboarding() {
   useEffect(() => {
     const companyData = localStorage.getItem('companyData');
     if (companyData) {
-      const { view_status } = JSON.parse(companyData);
-      setCompanyStatus(view_status as CompanyViewStatus);
+      const { view_status, invoice_status, payment_slip } =
+        JSON.parse(companyData);
+      if (invoice_status === 'sent' && payment_slip === null) {
+        setCompanyStatus(CompanyViewStatus.VERIFICATION);
+      } else if (payment_slip !== null) {
+        router.push('/auth/success');
+      } else {
+        setCompanyStatus(view_status as CompanyViewStatus);
+      }
     }
   }, []);
 
   useEffect(() => {
-    if (companyStatus === CompanyViewStatus.VERIFICATION) {
-      router.push('/dashboard');
+    if (companyStatus === CompanyViewStatus.SUCCESS) {
+      router.push('/auth/dashboard');
     }
   }, [companyStatus, router]);
 
@@ -98,7 +106,7 @@ export default function Onboarding() {
           <div className="relative z-10 flex flex-col items-center text-center">
             <Image
               src="/logo/logo-light.svg"
-              alt="Fit Sixes 2k24"
+              alt="Fit Sixes 2K24"
               width={200}
               height={200}
             />
@@ -155,7 +163,7 @@ export default function Onboarding() {
           <div className="flex w-full items-center justify-center py-6">
             <Image
               src="/logo/logo-light.svg"
-              alt="Fit Sixes 2k24"
+              alt="Fit Sixes 2K24"
               width={100}
               height={100}
             />

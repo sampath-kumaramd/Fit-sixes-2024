@@ -8,7 +8,7 @@ import HeroSection from "@/components/Hero-section";
 export default function Home() {
   return (
     <div className="">
-      <div className="  text-white items-center flex flex-col justify-center relative">
+      <div className="  text-white items-center flex flex-col justify-center relative ">
         <HeroSection />
       </div>
       <BallOfFame />
