@@ -156,7 +156,7 @@ const HeroSection: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
 
   return (
-    <section className="relative h-fit w-full bg-darkBlue">
+    <section className="relative h-fit w-full bg-darkBlue min-h-screen">
       <div className="relative mt-0 text-center text-white opacity-90">
         <div className="absolute left-1/2 top-1 z-10 w-full -translate-x-1/2">
           <StylizedText mainText="FIT SIXES" highlightText="2K24" />

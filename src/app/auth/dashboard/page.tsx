@@ -138,7 +138,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 min-h-[80vh]">
       <div className="items-start justify-between sm:block lg:flex">
         <div className="flex-grow space-y-2">
           <div className="flex flex-col sm:flex-row">
@@ -195,11 +195,15 @@ export default function DashboardPage() {
       </div>
 
       <div className="rounded-lg bg-white p-6 shadow-md">
-        <Tabs defaultValue={companyData?.teams[0]?.team_name || ''}>
+        <Tabs defaultValue={companyData?.teams[0]?.id.toString() || ''}>
           <div className="mb-4 flex items-center justify-between">
             <TabsList>
               {companyData?.teams.map((team: Team) => (
-                <TabsTrigger key={team.team_name} value={team.team_name}>
+                <TabsTrigger
+                  key={team.id}
+                  value={team.id.toString()}
+                  
+                >
                   {team.team_name}
                 </TabsTrigger>
               ))}
@@ -207,7 +211,7 @@ export default function DashboardPage() {
           </div>
 
           {companyData?.teams.map((team: Team, teamIndex: number) => (
-            <TabsContent key={team.team_name} value={team.team_name}>
+            <TabsContent key={team.id} value={team.id.toString()  }>
               <Table>
                 <TableHeader>
                   <TableRow>
