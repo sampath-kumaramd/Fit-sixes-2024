@@ -236,6 +236,7 @@ export default function DashboardPage() {
                           key={member.id}
                           className="block md:table-row"
                         >
+                          <TableCell>{member.sort_order}</TableCell>
                           <TableCell className="flex items-center justify-between border-b py-2 md:table-cell md:py-4">
                             <span className="font-bold md:hidden">Name:</span>
                             {editingMember === member.id ? (
