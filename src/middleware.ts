@@ -4,7 +4,11 @@ import type { NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get('accessToken')?.value;
 
-  if (!accessToken && request.nextUrl.pathname.startsWith('/auth/onboarding')) {
+  if (
+    !accessToken &&
+    (request.nextUrl.pathname.startsWith('/auth/onboarding') ||
+      request.nextUrl.pathname.startsWith('/auth/dashboard'))
+  ) {
     return NextResponse.redirect(new URL('/auth/sign-in', request.url));
   }
 
@@ -25,5 +29,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/auth/onboarding/:path*', '/api/:path*'],
+  matcher: ['/auth/onboarding/:path*', '/api/:path*', '/auth/dashboard/:path*'],
 };
