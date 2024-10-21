@@ -106,7 +106,7 @@ export default function Onboarding() {
           <div className="relative z-10 flex flex-col items-center text-center">
             <Image
               src="/logo/logo-light.svg"
-              alt="Fit Sixes 2k24"
+              alt="Fit Sixes 2K24"
               width={200}
               height={200}
             />
@@ -163,7 +163,7 @@ export default function Onboarding() {
           <div className="flex w-full items-center justify-center py-6">
             <Image
               src="/logo/logo-light.svg"
-              alt="Fit Sixes 2k24"
+              alt="Fit Sixes 2K24"
               width={100}
               height={100}
             />
