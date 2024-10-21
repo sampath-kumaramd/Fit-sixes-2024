@@ -237,7 +237,9 @@ export default function DashboardPage() {
                             member.name
                           )}
                         </TableCell>
-                        <TableCell>{team.gender}</TableCell>
+                        <TableCell>
+                          {team.gender === 'male' ? 'Male' : 'Female'}
+                        </TableCell>
                         <TableCell>
                           {editingMember === member.id ? (
                             <input
