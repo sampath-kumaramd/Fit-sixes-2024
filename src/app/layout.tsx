@@ -6,7 +6,6 @@ import Script from 'next/script';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import HomePageLayout from '@/layout/home-page-layout';
-import ErrorBoundary from '@/components/ErrorBoundary';
 
 const oswald = Oswald({
   subsets: ['latin'],
@@ -29,13 +28,11 @@ export default function RootLayout({
         <link rel="icon" href="/logo/logo-light.svg" />
       </head>
       <body className={oswald.className}>
-        <ErrorBoundary>
-          <HomePageLayout>
-            {children}
-            <Analytics />
-          </HomePageLayout>
-          <Toaster />
-        </ErrorBoundary>
+        <HomePageLayout>
+          {children}
+          <Analytics />
+        </HomePageLayout>
+        <Toaster />
       </body>
     </html>
   );

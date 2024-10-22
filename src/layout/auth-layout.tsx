@@ -48,7 +48,7 @@ function AuthLayout({
               height={200}
             />
             <h1 className="mt-6 text-4xl font-bold">{title}</h1>
-            <p className="mt-2 text-sm font-thin">{subTitle}</p>
+            <p className="mt-2 text-lg font-thin">{subTitle}</p>
             {isInSignIn && (
               <div className="mt-6 flex items-center justify-center">
                 {[1, 2, 3, 4].map((step) => (

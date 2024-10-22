@@ -223,7 +223,9 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
               )}
             />
             <div className="flex items-center justify-end text-sm underline">
-              <Link href="/auth/forgot-password">Forgot your password?</Link>
+              <Link href="/auth/forgot-password">
+                Did you forget your password?
+              </Link>
             </div>
             <div className="flex justify-end">
               <Button
