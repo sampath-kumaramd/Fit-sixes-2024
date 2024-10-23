@@ -424,7 +424,7 @@ export default function TeamDetailsStep({
               </FormControl>
               <div className="space-y-1 leading-none">
                 <FormLabel>
-                  Does you need a separate hut (10 x 10)? (Additional LKR 8,000)
+                  Do you need a separate hut (10 x 10)? (Additional LKR 8,000)
                 </FormLabel>
               </div>
             </FormItem>

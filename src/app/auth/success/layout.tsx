@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Sign In to Fit Sixes 2K24',
 };
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   weight: ['400'], // 400 is the weight for Regular
 });
@@ -18,15 +18,15 @@ export default function SignInLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <body className={inter.className}>
-    <AuthLayout
-      title="Welcome Back!"
-      subTitle="Welcome back to Fit Sixes 2K24"
-      isInSignIn={false}
-      currentStep={1}
-    >
-      {children}
-    </AuthLayout>
-    </body>
+    <div className={inter.className}>
+      <AuthLayout
+        title="Welcome Back!"
+        subTitle="Welcome back to Fit Sixes 2K24"
+        isInSignIn={false}
+        currentStep={1}
+      >
+        {children}
+      </AuthLayout>
+    </div>
   );
 }

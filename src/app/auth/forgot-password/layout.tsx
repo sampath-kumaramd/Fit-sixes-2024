@@ -3,8 +3,7 @@ import type { Metadata } from 'next';
 import AuthLayout from '@/layout/auth-layout';
 import { Inter } from 'next/font/google';
 
-
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   weight: ['400'], // 400 is the weight for Regular
 });
@@ -19,8 +18,15 @@ export default function ForgetPasswordLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <body className={inter.className}>
-      <AuthLayout title="We've got you!" subTitle='We will send you a link to reset your password' isInSignIn={false} currentStep={1}>{children}</AuthLayout>
-    </body>
+    <div className={inter.className}>
+      <AuthLayout
+        title="We've got you!"
+        subTitle="We will send you a link to reset your password"
+        isInSignIn={false}
+        currentStep={1}
+      >
+        {children}
+      </AuthLayout>
+    </div>
   );
 }
