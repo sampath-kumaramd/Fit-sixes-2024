@@ -195,8 +195,7 @@ const HeroSection: React.FC = () => {
           className="h-full w-full object-cover opacity-[1%]"
         />
       </div>
-      <div className="fixed bottom-20 right-4 z-[999] h-40 w-40 rounded-full">
-        {/* ROUTES FOR AUTH */}
+      {/* <div className="fixed bottom-20 right-4 z-[999] h-40 w-40 rounded-full">
         <div className="absolute" style={{ top: `${y}px` }}>
           <Button
             className="h-28 w-28 rounded-full bg-yellow text-sm text-white hover:bg-[#e2981b] sm:text-xl"
@@ -212,7 +211,7 @@ const HeroSection: React.FC = () => {
             />
           </Button>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };
