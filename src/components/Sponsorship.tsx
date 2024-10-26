@@ -20,7 +20,8 @@ import 'swiper/css/pagination';
 interface Sponsor {
   id: number;
   name: string;
-  logo: string;
+  logo1: string;
+  logo2: string;
   type: 'platinum' | 'gold' | 'silver';
   borderColor: string;
   description: React.ReactNode;
@@ -30,8 +31,111 @@ interface Sponsor {
 const sponsors = [
   {
     id: 1,
-    name: 'creative',
-    logo: '/company-logo/pagero.png',
+    name: 'cloud-solution',
+    logo1: '/company-logo/cloud-solution-2.svg',
+    logo2: '/company-logo/cloud-solution.png',
+    type: 'Platinum',
+    borderColor: '#C4C4C4',
+    description: (
+      <div className="space-y-4">
+        <p className="text-gray-300">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
+          ever since the 1500s, when an unknown printer took a galley of type
+          and scrambled it to make a type specimen book.
+        </p>
+        <p className="text-gray-300">
+          It has survived not only five centuries, but also the leap into
+          electronic typesetting, remaining essentially unchanged. It was
+          popularised in the 1960s with the release of Letraset sheets
+          containing Lorem Ipsum passages, and more recently with desktop
+          publishing software like Aldus PageMaker including versions of Lorem
+          Ipsum.
+        </p>
+        <p className="text-gray-300">
+          It has survived not only five centuries, but also the leap into
+          electronic typesetting, remaining essentially unchanged. It was
+          popularised in the 1960s with the release of Letraset sheets
+          containing Lorem Ipsum passages, and more recently with desktop
+          publishing software like Aldus PageMaker including versions of Lorem
+          Ipsum.
+        </p>
+      </div>
+    ),
+  },
+  {
+    id: 2,
+    name: 'advania',
+    logo1: '/company-logo/advania2.svg',
+    logo2: '/company-logo/advania.png',
+    type: 'Gold',
+    borderColor: '#C4C4C4',
+    description: (
+      <div className="space-y-4">
+        <p className="text-gray-300">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
+          ever since the 1500s, when an unknown printer took a galley of type
+          and scrambled it to make a type specimen book.
+        </p>
+        <p className="text-gray-300">
+          It has survived not only five centuries, but also the leap into
+          electronic typesetting, remaining essentially unchanged. It was
+          popularised in the 1960s with the release of Letraset sheets
+          containing Lorem Ipsum passages, and more recently with desktop
+          publishing software like Aldus PageMaker including versions of Lorem
+          Ipsum.
+        </p>
+        <p className="text-gray-300">
+          It has survived not only five centuries, but also the leap into
+          electronic typesetting, remaining essentially unchanged. It was
+          popularised in the 1960s with the release of Letraset sheets
+          containing Lorem Ipsum passages, and more recently with desktop
+          publishing software like Aldus PageMaker including versions of Lorem
+          Ipsum.
+        </p>
+      </div>
+    ),
+  },
+  // {
+  //   id: 3,
+  //   name: 'pagero',
+  //   logo1: '/company-logo/pagero2.svg',
+  //   logo2: '/company-logo/pagero.png',
+  //   type: 'Gold',
+  //   borderColor: '#183b34',
+  //   description: (
+  //     <div className="space-y-4">
+  //       <p className="text-gray-300">
+  //         Lorem Ipsum is simply dummy text of the printing and typesetting
+  //         industry. Lorem Ipsum has been the industry&apos;s standard dummy text
+  //         ever since the 1500s, when an unknown printer took a galley of type
+  //         and scrambled it to make a type specimen book.
+  //       </p>
+  //       <p className="text-gray-300">
+  //         It has survived not only five centuries, but also the leap into
+  //         electronic typesetting, remaining essentially unchanged. It was
+  //         popularised in the 1960s with the release of Letraset sheets
+  //         containing Lorem Ipsum passages, and more recently with desktop
+  //         publishing software like Aldus PageMaker including versions of Lorem
+  //         Ipsum.
+  //       </p>
+  //       <p className="text-gray-300">
+  //         It has survived not only five centuries, but also the leap into
+  //         electronic typesetting, remaining essentially unchanged. It was
+  //         popularised in the 1960s with the release of Letraset sheets
+  //         containing Lorem Ipsum passages, and more recently with desktop
+  //         publishing software like Aldus PageMaker including versions of Lorem
+  //         Ipsum.
+  //       </p>
+  //     </div>
+  //   ),
+  // },
+  {
+    id: 4,
+    name: 'pagero',
+    logo1: '/company-logo/pagero2.svg',
+    logo2: '/company-logo/pagero.png',
     type: 'Silver',
     borderColor: '#183b34',
     description: (
@@ -61,8 +165,74 @@ const sponsors = [
       </div>
     ),
   },
-  
-  
+  // {
+  //   id: 5,
+  //   name: 'creative',
+  //   logo1: '/company-logo/88.svg',
+  //   logo2: '/company-logo/pagero.png',
+  //   type: 'Silver',
+  //   borderColor: '#183b34',
+  //   description: (
+  //     <div className="space-y-4">
+  //       <p className="text-gray-300">
+  //         Lorem Ipsum is simply dummy text of the printing and typesetting
+  //         industry. Lorem Ipsum has been the industry&apos;s standard dummy text
+  //         ever since the 1500s, when an unknown printer took a galley of type
+  //         and scrambled it to make a type specimen book.
+  //       </p>
+  //       <p className="text-gray-300">
+  //         It has survived not only five centuries, but also the leap into
+  //         electronic typesetting, remaining essentially unchanged. It was
+  //         popularised in the 1960s with the release of Letraset sheets
+  //         containing Lorem Ipsum passages, and more recently with desktop
+  //         publishing software like Aldus PageMaker including versions of Lorem
+  //         Ipsum.
+  //       </p>
+  //       <p className="text-gray-300">
+  //         It has survived not only five centuries, but also the leap into
+  //         electronic typesetting, remaining essentially unchanged. It was
+  //         popularised in the 1960s with the release of Letraset sheets
+  //         containing Lorem Ipsum passages, and more recently with desktop
+  //         publishing software like Aldus PageMaker including versions of Lorem
+  //         Ipsum.
+  //       </p>
+  //     </div>
+  //   ),
+  // },
+  // {
+  //   id: 6,
+  //   name: 'creative',
+  //   logo1: '/company-logo/88.svg',
+  //   logo2: '/company-logo/pagero.png',
+  //   type: 'Silver',
+  //   borderColor: '#183b34',
+  //   description: (
+  //     <div className="space-y-4">
+  //       <p className="text-gray-300">
+  //         Lorem Ipsum is simply dummy text of the printing and typesetting
+  //         industry. Lorem Ipsum has been the industry&apos;s standard dummy text
+  //         ever since the 1500s, when an unknown printer took a galley of type
+  //         and scrambled it to make a type specimen book.
+  //       </p>
+  //       <p className="text-gray-300">
+  //         It has survived not only five centuries, but also the leap into
+  //         electronic typesetting, remaining essentially unchanged. It was
+  //         popularised in the 1960s with the release of Letraset sheets
+  //         containing Lorem Ipsum passages, and more recently with desktop
+  //         publishing software like Aldus PageMaker including versions of Lorem
+  //         Ipsum.
+  //       </p>
+  //       <p className="text-gray-300">
+  //         It has survived not only five centuries, but also the leap into
+  //         electronic typesetting, remaining essentially unchanged. It was
+  //         popularised in the 1960s with the release of Letraset sheets
+  //         containing Lorem Ipsum passages, and more recently with desktop
+  //         publishing software like Aldus PageMaker including versions of Lorem
+  //         Ipsum.
+  //       </p>
+  //     </div>
+  //   ),
+  // },
 ];
 
 const Sponsorship = () => {
@@ -90,16 +260,15 @@ const Sponsorship = () => {
 
   return (
     <div className="min-h-screen bg-[#03080c] py-8 md:py-16">
-      <div className="mx-4 md:mx-8 lg:mx-12 xl:mx-16 grid xl:grid-cols-2 grid-cols-1 gap-0 md:gap-8 md:mb-12 xl:mb-28">
-      <h1 className=" text-center text-2xl md:text-4xl font-bold md:hidden block text-white">
-              {selectedSponsor.type.charAt(0).toUpperCase() +
-                selectedSponsor.type.slice(1)}{' '}
-              Sponsor
-            </h1>
-        <div className="relative z-10 row-span-1 h-[300px] md:h-[400px] flex items-center justify-center">
-          
+      <div className="mx-4 grid grid-cols-1 gap-0 md:mx-8 md:mb-12 md:gap-8 lg:mx-12 xl:mx-16    xl:grid-cols-2">
+        <h1 className="block text-center text-2xl font-bold text-white md:hidden md:text-4xl">
+          {selectedSponsor.type.charAt(0).toUpperCase() +
+            selectedSponsor.type.slice(1)}{' '}
+          Sponsor
+        </h1>
+        <div className="relative z-10 row-span-1 flex h-[300px] items-center justify-center md:h-[550px]">
           <div
-            className="absolute inset-0 bg-center bg-cover bg-no-repeat"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(/bg.svg)` }}
           />
 
@@ -108,35 +277,45 @@ const Sponsorship = () => {
             alt="ground"
             width={400}
             height={100}
-            className="absolute px-3 w-full md:w-3/4 lg:w-2/3 xl:w-2/3 max-w-[600px] bottom-0 left-1/2 top-2/3 transform -translate-x-1/2"
+            className="absolute bottom-0 left-1/2 top-2/3 w-full max-w-[600px] -translate-x-1/2 transform px-3 md:w-3/4 lg:w-2/3 xl:w-2/3"
           />
-          <div className="absolute bottom-[8%] xl:bottom-[10%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="cursor-pointer [perspective:1000px] group">
-              <div className="relative   transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                <div className=' -rotate-45 w-32 h-32 lg:w-40 lg:h-40'>
-                <div className="absolute inset-0 bg-[#aaaaaa] border-5 border-white rounded-md shadow-md">
+          <div className="flex items-center justify-center p-4">
+            <div className="relative h-48 w-48 xl:h-96 xl:w-96 perspective-1000 bottom-[8%] xl:bottom-[10%] -translate-y-3 xl:-translate-y-12">
+              <div className="absolute h-full w-full cursor-pointer transition-transform duration-800 transform-style-3d hover:rotate-y-180">
+                {/* Front */}
+                <div className="absolute h-full w-full overflow-hidden rounded-lg shadow-lg backface-hidden">
                   <Image
-                    src={selectedSponsor.logo}
-                    alt={selectedSponsor.name}
-                    fill
-                    className="object-contain rotate-45 rounded-lg p-4 "
+                    src={selectedSponsor.logo1}
+                    alt="Flowers"
+                    width={200}
+                    height={200}
+                    className="h-full w-full object-cover"
                   />
                 </div>
+
+                {/* Back */}
+                <div className="absolute h-full w-full rotate-y-180 overflow-hidden rounded-lg shadow-lg backface-hidden">
+                  <Image
+                    src={selectedSponsor.logo1}
+                    alt="Deer"
+                    width={300}
+                    height={400}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
-                
               </div>
             </div>
           </div>
         </div>
 
-        <Card className="bg-transparent text-white border-none">
+        <Card className="border-none bg-transparent text-white">
           <CardContent className="pt-6 text-center md:text-left">
-            <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 md:block hidden">
+            <h1 className="mb-4 hidden text-2xl font-bold md:mb-8 md:block md:text-4xl">
               {selectedSponsor.type.charAt(0).toUpperCase() +
                 selectedSponsor.type.slice(1)}{' '}
               Sponsor
             </h1>
-            <div className="text-sm md:text-base text-gray-300">
+            <div className="text-sm text-gray-300 md:text-base">
               {selectedSponsor.description}
             </div>
           </CardContent>
@@ -144,36 +323,36 @@ const Sponsorship = () => {
       </div>
 
       {/* ADD CAROUSEL */}
-      <div className="w-full md:px-0 px-5">
+      <div className="w-full px-5 ms-4 md:ms-0 md:px-0">
         <Carousel
           opts={{
             align: 'center',
             loop: true,
           }}
-          className="w-full  max-w-7xl mx-auto"
+          className="mx-auto w-full max-w-7xl"
           setApi={setApi}
         >
-          <CarouselContent className="w-full flex justify-center items-center" >
+          <CarouselContent className="flex w-full items-center justify-center">
             {sponsors.map((sponsor) => (
               <CarouselItem
                 key={sponsor.id}
-                className="pl-4 basis-1/3 md:p-6 p-5 md:basis-1/5"
+                className="basis-1/3 p-5 pl-4 md:basis-1/6 md:p-6"
               >
                 <button
                   onClick={() => setSelectedSponsor(sponsor)}
-                  className={`p-0.5 rounded-lg transition-all duration-300 w-full aspect-square bg-gradient-to-t from-[#fff7ec] via-[#ffdcae] to-[#fcb54c] ${
+                  className={`aspect-square w-full rounded-lg bg-gradient-to-t from-[#fff7ec] via-[#ffdcae] to-[#fcb54c] p-0.5 transition-all duration-300 ${
                     selectedSponsor.id === sponsor.id
                       ? 'shadow-[0_0_30px_rgba(252,200,76,0.5)]'
                       : 'shadow-none hover:shadow-[0_0_16px_rgba(252,181,100,0.5)]'
                   }`}
                 >
-                  <div className="rounded-md bg-[#aaaaaa] h-full w-full">
-                    <div className="relative w-full h-full">
+                  <div className="h-full w-full rounded-md bg-[#aaaaaa]">
+                    <div className="relative h-full w-full">
                       <Image
-                        src={sponsor.logo}
+                        src={sponsor.logo2}
                         alt={sponsor.name}
                         fill
-                        className="object-contain rounded-lg p-4"
+                        className="rounded-lg object-contain p-4"
                       />
                     </div>
                   </div>
@@ -182,8 +361,8 @@ const Sponsorship = () => {
             ))}
           </CarouselContent>
           <div className="hidden">
-            <CarouselPrevious className="-left-4 bg-[#242829] border-[#242829] hover:bg-[#242829]/80 hover:border-[#242829]/80" />
-            <CarouselNext className="-right-4 bg-[#242829] border-[#242829] hover:bg-[#242829]/80 hover:border-[#242829]/80" />
+            <CarouselPrevious className="-left-4 border-[#242829] bg-[#242829] hover:border-[#242829]/80 hover:bg-[#242829]/80" />
+            <CarouselNext className="-right-4 border-[#242829] bg-[#242829] hover:border-[#242829]/80 hover:bg-[#242829]/80" />
           </div>
         </Carousel>
       </div>
