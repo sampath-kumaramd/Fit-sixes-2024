@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 import Image from 'next/image';
 
@@ -235,12 +236,26 @@ const sponsors = [
   // },
 ];
 
+// Add these variants outside the component
+const cardVariants = {
+  front: {
+    rotateY: 0,
+    transition: { duration: 0.6, ease: [0.645, 0.045, 0.355, 1] }
+  },
+  back: {
+    rotateY: 180,
+    transition: { duration: 0.6, ease: [0.645, 0.045, 0.355, 1] }
+  }
+};
+
 const Sponsorship = () => {
   const [selectedSponsor, setSelectedSponsor] = useState(sponsors[0]);
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 0
   );
   const [api, setApi] = useState<CarouselApi>();
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -257,6 +272,14 @@ const Sponsorship = () => {
 
     return () => clearInterval(interval);
   }, [api]);
+
+  const handleFlip = () => {
+    if (!isAnimating) {
+      setIsFlipped(!isFlipped);
+      setIsAnimating(true);
+      setTimeout(() => setIsAnimating(false), 600); // Match the animation duration
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#03080c] py-8 md:py-16">
@@ -280,31 +303,52 @@ const Sponsorship = () => {
             className="absolute bottom-0 left-1/2 top-2/3 w-full max-w-[600px] -translate-x-1/2 transform px-3 md:w-3/4 lg:w-2/3 xl:w-2/3"
           />
           <div className="flex items-center justify-center p-4">
-            <div className="relative h-48 w-48 xl:h-96 xl:w-96 perspective-1000 bottom-[8%] xl:bottom-[10%] -translate-y-3 xl:-translate-y-12">
-              <div className="absolute h-full w-full cursor-pointer transition-transform duration-800 transform-style-3d hover:rotate-y-180">
-                {/* Front */}
-                <div className="absolute h-full w-full overflow-hidden rounded-lg shadow-lg backface-hidden">
-                  <Image
-                    src={selectedSponsor.logo1}
-                    alt="Flowers"
-                    width={200}
-                    height={200}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
+            <motion.div
+              className="relative h-48 w-48 xl:h-96 xl:w-96 bottom-[8%] xl:bottom-[10%] -translate-y-3 xl:-translate-y-12 cursor-pointer"
+              animate={isFlipped ? "back" : "front"}
+              variants={cardVariants}
+              onHoverStart={handleFlip}
+              onHoverEnd={handleFlip}
+              style={{ 
+                transformStyle: "preserve-3d",
+                perspective: 1000
+              }}
+            >
+              {/* Front of card */}
+              <motion.div
+                className="absolute inset-0 w-full h-full rounded-lg shadow-lg"
+                style={{ 
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden"
+                }}
+              >
+                <Image
+                  src={selectedSponsor.logo1}
+                  alt="Front"
+                  fill
+                  className="object-cover rounded-lg"
+                  style={{ objectFit: 'contain' }}
+                />
+              </motion.div>
 
-                {/* Back */}
-                <div className="absolute h-full w-full rotate-y-180 overflow-hidden rounded-lg shadow-lg backface-hidden">
-                  <Image
-                    src={selectedSponsor.logo1}
-                    alt="Deer"
-                    width={300}
-                    height={400}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
+              {/* Back of card */}
+              <motion.div
+                className="absolute inset-0 w-full h-full rounded-lg shadow-lg"
+                style={{ 
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)"
+                }}
+              >
+                <Image
+                  src={selectedSponsor.logo1}
+                  alt="Back"
+                  fill
+                  className="object-cover rounded-lg"
+                  style={{ objectFit: 'contain' }}
+                />
+              </motion.div>
+            </motion.div>
           </div>
         </div>
 
