@@ -4,9 +4,9 @@ import { Toaster } from '@/components/ui/toaster';
 import HomePageLayout from '@/layout/home-page-layout';
 import { Inter } from 'next/font/google';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400'], // 400 is the weight for Regular
+  weight: ['400'],
 });
 
 export const metadata: Metadata = {
@@ -14,16 +14,10 @@ export const metadata: Metadata = {
   description: 'Dashboard',
 };
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <div className={inter.className} >
-        <HomePageLayout>
-        {children}
-      </HomePageLayout>
-      </div>
-  );
+  return <div className={inter.className}>{children}</div>;
 }
