@@ -15,6 +15,18 @@ import { CompanyViewStatus } from '@/types/enums/company-view-status';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import PulsatingButton from '@/components/ui/pulsating-button';
+import { useToast } from '@/hooks/use-toast';
+import { DialogClose } from '@/components/ui/dialog';
 
 type TeamMember = {
   id: number;
@@ -29,6 +41,8 @@ type Team = {
   team_name: string;
   gender: string;
   team_members: TeamMember[];
+  food_count_veg: number;
+  food_count_non_veg: number;
 };
 
 async function fetchCompanyData() {
@@ -60,6 +74,11 @@ export default function DashboardPage() {
   const [companyData, setCompanyData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [vegCount, setVegCount] = useState<number>(0);
+  const [nonVegCount, setNonVegCount] = useState<number>(0);
+  const [mealPreferencesError, setMealPreferencesError] = useState<string>('');
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     fetchCompanyData()
@@ -68,10 +87,25 @@ export default function DashboardPage() {
         if (data.view_status !== CompanyViewStatus.SUCCESS) {
           router.push('/auth/onboarding');
         }
+
+        if (data.teams && data.teams.length > 0) {
+          const totalVegCount = data.teams.reduce(
+            (sum: any, team: { food_count_veg: any }) =>
+              sum + (team.food_count_veg || 0),
+            0
+          );
+          const totalNonVegCount = data.teams.reduce(
+            (sum: any, team: { food_count_non_veg: any }) =>
+              sum + (team.food_count_non_veg || 0),
+            0
+          );
+
+          setVegCount(totalVegCount);
+          setNonVegCount(totalNonVegCount);
+        }
       })
       .catch((error) => {
         console.error('Error fetching company data:', error);
-        // Handle error (e.g., redirect to login page or show error message)
       })
       .finally(() => setIsLoading(false));
   }, [router]);
@@ -138,6 +172,85 @@ export default function DashboardPage() {
     }
   };
 
+  const getTotalTeamMembers = () => {
+    return (
+      companyData?.teams.reduce((total: number, team: Team) => {
+        return total + team.team_members.length;
+      }, 0) || 0
+    );
+  };
+
+  const handleSaveMealPreferences = async () => {
+    const totalMembers = getTotalTeamMembers();
+    const totalMeals = vegCount + nonVegCount;
+
+    if (totalMeals !== totalMembers) {
+      setMealPreferencesError(
+        `Total meal count must equal team members (${totalMembers})`
+      );
+      return;
+    }
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) throw new Error('Access token not found');
+
+      let remainingVeg = vegCount;
+      let remainingNonVeg = nonVegCount;
+
+      const updatedTeams = await Promise.all(
+        companyData.teams.map(async (team: Team) => {
+          const teamMemberCount = team.team_members.length;
+          let teamVegCount = 0;
+          let teamNonVegCount = 0;
+
+          if (remainingNonVeg > 0) {
+            teamNonVegCount = Math.min(remainingNonVeg, teamMemberCount);
+            remainingNonVeg -= teamNonVegCount;
+          }
+
+          if (teamNonVegCount < teamMemberCount && remainingVeg > 0) {
+            teamVegCount = Math.min(
+              remainingVeg,
+              teamMemberCount - teamNonVegCount
+            );
+            remainingVeg -= teamVegCount;
+          }
+
+          const response = await api.patch(
+            `/api/v1/registration/team/${team.id}/`,
+            {
+              food_count_veg: teamVegCount,
+              food_count_non_veg: teamNonVegCount,
+            },
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
+          );
+          return response.data;
+        })
+      );
+
+      setCompanyData({ ...companyData, teams: updatedTeams });
+      setMealPreferencesError('');
+      setOpen(false);
+      toast({
+        title: 'Success',
+        description: 'Meal preferences updated successfully',
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Error saving meal preferences:', error);
+      setMealPreferencesError('Failed to save meal preferences');
+      toast({
+        title: 'Error',
+        description: 'Failed to update meal preferences',
+        variant: 'destructive',
+        duration: 3000,
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto min-h-[80vh] p-6">
       <Card className="mb-6">
@@ -179,25 +292,63 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
-          <div className="mt-4 space-y-2">
-            <Link
-              href={companyData?.signed_team_card || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center text-sm text-gray-600 hover:text-gray-800"
-            >
-              <FileText className="mr-2 h-5 w-5" />
-              Certified Team Card
-            </Link>
-            <Link
-              href={companyData?.payment_slip || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center text-sm text-gray-600 hover:text-gray-800"
-            >
-              <FileText className="mr-2 h-5 w-5" />
-              Payment Proof
-            </Link>
+
+          <div className="relative mt-8 inline-block">
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <PulsatingButton
+                  className="bg-yellow text-primary-foreground hover:bg-yellow/80"
+                  pulseColor="hsl(var(--yellow))"
+                >
+                  Update Meal Preferences
+                </PulsatingButton>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Meal Preferences</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Non-Vegetarian Meals
+                    </label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={nonVegCount}
+                      onChange={(e) =>
+                        setNonVegCount(parseInt(e.target.value) || 0)
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Vegetarian Meals
+                    </label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={vegCount}
+                      onChange={(e) =>
+                        setVegCount(parseInt(e.target.value) || 0)
+                      }
+                    />
+                  </div>
+                  {mealPreferencesError && (
+                    <p className="text-sm text-red-500">
+                      {mealPreferencesError}
+                    </p>
+                  )}
+                  <div className="text-sm text-gray-500">
+                    Total team members: {getTotalTeamMembers()}
+                  </div>
+                  <Button onClick={handleSaveMealPreferences}>
+                    Save Preferences
+                  </Button>
+                </div>
+              </DialogContent>
+              <DialogClose />
+            </Dialog>
           </div>
         </CardContent>
       </Card>
