@@ -38,28 +38,13 @@ const sponsors = [
     type: 'Platinum',
     borderColor: '#C4C4C4',
     description: (
-      <div className="space-y-4">
+      <div className=" flex items-center h-full">
         <p className="text-gray-300">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type
-          and scrambled it to make a type specimen book.
-        </p>
-        <p className="text-gray-300">
-          It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.
-        </p>
-        <p className="text-gray-300">
-          It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem
-          Ipsum.
+          Introducing our Platinum Partner
+
+Cloud Solutions International
+
+Welcome Aboard!
         </p>
       </div>
     ),
@@ -98,40 +83,25 @@ const sponsors = [
       </div>
     ),
   },
-  // {
-  //   id: 3,
-  //   name: 'creative',
-  //   logo1: '/company-logo/creative.png',
-  //   logo2: '/company-logo/creative.png',
-  //   type: 'Gold',
-  //   borderColor: '#183b34',
-  //   description: (
-  //     <div className="space-y-4">
-  //       <p className="text-gray-300">
-  //         Lorem Ipsum is simply dummy text of the printing and typesetting
-  //         industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-  //         ever since the 1500s, when an unknown printer took a galley of type
-  //         and scrambled it to make a type specimen book.
-  //       </p>
-  //       <p className="text-gray-300">
-  //         It has survived not only five centuries, but also the leap into
-  //         electronic typesetting, remaining essentially unchanged. It was
-  //         popularised in the 1960s with the release of Letraset sheets
-  //         containing Lorem Ipsum passages, and more recently with desktop
-  //         publishing software like Aldus PageMaker including versions of Lorem
-  //         Ipsum.
-  //       </p>
-  //       <p className="text-gray-300">
-  //         It has survived not only five centuries, but also the leap into
-  //         electronic typesetting, remaining essentially unchanged. It was
-  //         popularised in the 1960s with the release of Letraset sheets
-  //         containing Lorem Ipsum passages, and more recently with desktop
-  //         publishing software like Aldus PageMaker including versions of Lorem
-  //         Ipsum.
-  //       </p>
-  //     </div>
-  //   ),
-  // },
+  {
+    id: 3,
+    name: 'creative',
+    logo1: '/company-logo/creative.svg',
+    logo2: '/company-logo/creative.PNG',
+    type: 'Gold',
+    borderColor: '#183b34',
+    description: (
+      <div className="space-y-4">
+        <p className="text-gray-300">
+         Introducing our Platinum Partner
+
+Cloud Solutions International
+
+Welcome Aboard!
+        </p>
+      </div>
+    ),
+  },
     {
     id: 5,
     name: 'intervest',
@@ -414,11 +384,11 @@ const Sponsorship = () => {
         >
           <Card className="border-none bg-transparent text-white">
             <CardContent className="pt-6 text-center md:text-left">
-              <h1 className="mb-4 hidden text-2xl font-bold md:mb-8 md:block md:text-4xl">
+              {/* <h1 className="mb-4 hidden text-2xl font-bold md:mb-8 md:block md:text-4xl">
                 {selectedSponsor.type.charAt(0).toUpperCase() +
                   selectedSponsor.type.slice(1)}{' '}
                 Sponsor
-              </h1>
+              </h1> */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedSponsor.id}
@@ -427,9 +397,23 @@ const Sponsorship = () => {
                   exit="exit"
                   variants={textVariants}
                   transition={{ duration: 0.4 }}
-                  className="text-sm text-gray-300 md:text-base"
+                  className=" text-gray-300 md:text-xl h-80 items-center justify-center"
                 >
-                  {selectedSponsor.description}
+                  {/* {selectedSponsor.description} */}
+                  <div className='text-4xl font-bold'>
+                  Introducing our
+                  </div>
+                  <div className='flex flex-col gap-4 justify-center items-center h-full'>
+                 <div className='text-6xl font-bold text-center '>
+                  Platinum Partner
+                 </div>
+                 <div className='text-6xl font-bold text-center '>
+                  Cloud Solutions International
+                 </div>
+                 <div className='text-5xl font-bold text-center '>
+                  Welcome Aboard!
+                </div>
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </CardContent>
