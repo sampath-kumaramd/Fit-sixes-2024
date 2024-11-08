@@ -17,7 +17,7 @@ export interface Winner extends Team {
 
 export interface MatchData {
   gender: 'male' | 'female';
-  round: 'preliminary' | 'super16' | 'quarter' | 'semi' | 'final';
+  round: 'round1' | 'round2' | 'super16' | 'quarter' | 'semi' | 'final';
   matchNumber: number;
   status: 'pending' | 'in_progress' | 'completed';
   createdAt: any; // Firebase Timestamp

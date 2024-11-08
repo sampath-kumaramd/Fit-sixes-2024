@@ -14,24 +14,17 @@ const ScoreCard: React.FC<ScoreCardProps> = ({ match }) => {
   return (
     <div className="rounded-lg bg-white/10 p-4">
       <div className="mb-2 text-sm text-gray-300">
+        <span>{match.gender[0].toUpperCase() + match.gender.slice(1)}</span>
+        <span className="mx-2">•</span>
         <span>Match {match.matchNumber}</span>
         <span className="mx-2">•</span>
         <span>
-          Ground{' '}
-          {match.ground === '1'
-            ? 'A'
-            : match.ground === '2'
-              ? 'B'
-              : match.ground === '3'
-                ? 'C'
-                : match.ground === '4'
-                  ? 'D'
-                  : match.ground === '5'
-                    ? 'E'
-                    : match.ground}
+          {match.round === 'round1'
+            ? 'First Round'
+            : match.round === 'round2'
+              ? 'Second Round'
+              : match.round[0].toUpperCase() + match.round.slice(1)}
         </span>
-        <span className="mx-2">•</span>
-        <span>{match.round[0].toUpperCase() + match.round.slice(1)} Round</span>
       </div>
 
       <div className="space-y-2">
