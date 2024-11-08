@@ -3,6 +3,7 @@
 import BallOfFame from "@/components/BallOfFame";
 import HallOfFame from "@/components/HallOfFame";
 import HeroSection from "@/components/Hero-section";
+import Sponsorship from "@/components/Sponsorship";
 
 
 export default function Home() {
@@ -13,7 +14,7 @@ export default function Home() {
       </div>
       <BallOfFame />
       <HallOfFame />
-      {/* <Sponsorship /> */}
+      <Sponsorship />
     </div>
   );
 }
