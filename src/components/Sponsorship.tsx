@@ -33,6 +33,7 @@ const sponsors = [
   {
     id: 1,
     name: 'cloud-solution',
+    displayName: 'Cloud Solutions International',
     logo1: '/company-logo/cloud-solution-2.svg',
     logo2: '/company-logo/cloud-solution.png',
     type: 'Platinum',
@@ -49,6 +50,7 @@ const sponsors = [
   {
     id: 2,
     name: 'advania',
+    displayName: 'Advania',
     logo1: '/company-logo/advania2.svg',
     logo2: '/company-logo/advania.png',
     type: 'Gold',
@@ -83,8 +85,9 @@ const sponsors = [
   {
     id: 3,
     name: 'creative',
+    displayName: 'Creative Software',
     logo1: '/company-logo/creative.svg',
-    logo2: '/company-logo/creative.PNG',
+    logo2: '/company-logo/creative.png',
     type: 'Gold',
     borderColor: '#183b34',
     description: (
@@ -99,6 +102,7 @@ const sponsors = [
   {
     id: 5,
     name: 'intervest',
+    displayName: 'Intervest Software Technologies',
     logo1: '/company-logo/intervest.png',
     logo2: '/company-logo/intervest2.jpg',
     type: 'Silver',
@@ -133,6 +137,7 @@ const sponsors = [
   {
     id: 4,
     name: 'pagero',
+    displayName: 'Pagero',
     logo1: '/company-logo/pagero2.svg',
     logo2: '/company-logo/pagero.png',
     type: 'Silver',
@@ -168,6 +173,7 @@ const sponsors = [
   {
     id: 6,
     name: 'vital-hub',
+    displayName: 'VitalHub Innovations Lab',
     logo1: '/company-logo/vital-hub.png',
     logo2: '/company-logo/vitalhub-logo.png',
     type: 'Silver',
@@ -422,13 +428,7 @@ const Sponsorship = () => {
                       {/* Company name */}
                       <div className="relative">
                         <h2 className="text-4xl font-bold tracking-wide text-white md:text-6xl">
-                          {selectedSponsor.name
-                            .split('-')
-                            .map(
-                              (word) =>
-                                word.charAt(0).toUpperCase() + word.slice(1)
-                            )
-                            .join(' ')}
+                          {selectedSponsor.displayName}
                         </h2>
                         <div className="absolute -inset-2 -z-10 bg-white/5 blur-xl"></div>
                       </div>
