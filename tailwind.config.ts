@@ -27,6 +27,15 @@ const config: Config = {
       '2xl': '1400px',
     },
     extend: {
+      perspective: {
+        '1000': '1000px',
+      },
+      rotate: {
+        'y-180': '180deg',
+      },
+      transitionDuration: {
+        '800': '800ms',
+      },
       backgroundImage: {
         'custom-text-gradient':
           'linear-gradient(89.1deg, #ffae01 6%, #a1700d 16%, #36291a 26%, #020720 70%)',
@@ -222,6 +231,19 @@ const config: Config = {
           'background-clip': 'text',
           '-webkit-background-clip': 'text',
           color: 'transparen  t',
+        },
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+          '-webkit-backface-visibility': 'hidden',
+        },
+        '.perspective-1000': {
+          'perspective': '1000px',
+        },
+        '.transform-style-3d': {
+          'transform-style': 'preserve-3d',
+        },
+        '.rotate-y-180': {
+          'transform': 'rotateY(180deg)',
         },
       });
     }),
