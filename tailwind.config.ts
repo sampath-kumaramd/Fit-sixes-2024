@@ -13,9 +13,9 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: '1rem',
+      padding: '2rem',
       screens: {
-        '2xl': '1600px',
+        '2xl': '1400px',
       },
     },
     screens: {
@@ -50,7 +50,7 @@ const config: Config = {
       },
       fontFamily: {
         schluber: ['var(--font-schluber)'],
-        druktrial: ['var(--font-druktrial-medium)', 'sans-serif'], // Add this line
+        druktrial: ['var(--font-druktrial-medium)', 'sans-serif'],
         exon: ['Exon', 'sans-serif'],
       },
       colors: {
@@ -109,46 +109,102 @@ const config: Config = {
           },
         },
         shimmer: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' },
+          '0%': {
+            transform: 'translateX(-100%)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
+          },
         },
         flip: {
-          '0%': { transform: 'rotateX(0)' },
-          '100%': { transform: 'rotateX(-180deg)' },
+          '0%': {
+            transform: 'rotateX(0)',
+          },
+          '100%': {
+            transform: 'rotateX(-180deg)',
+          },
         },
         fliptop: {
-          '0%': { transform: 'rotateX(0deg)' },
-          '100%': { transform: 'rotateX(-90deg)' },
+          '0%': {
+            transform: 'rotateX(0deg)',
+          },
+          '100%': {
+            transform: 'rotateX(-90deg)',
+          },
         },
         flipbottom: {
-          '0%': { transform: 'rotateX(90deg)' },
-          '100%': { transform: 'rotateX(0deg)' },
+          '0%': {
+            transform: 'rotateX(90deg)',
+          },
+          '100%': {
+            transform: 'rotateX(0deg)',
+          },
         },
         'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
         },
         bounce: {
-          '0%, 100%': { transform: 'translateY(-25%)' },
-          '50%': { transform: 'translateY(0)' },
+          '0%, 100%': {
+            transform: 'translateY(-25%)',
+          },
+          '50%': {
+            transform: 'translateY(0)',
+          },
         },
         'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
         },
         'letter-right-fill': {
-          '0%': { width: '0' },
-          '35%': { width: '40%' },
-          '65%': { width: '40%' },
-          '100%': { width: '100%' },
+          '0%': {
+            width: '0',
+          },
+          '35%': {
+            width: '40%',
+          },
+          '65%': {
+            width: '40%',
+          },
+          '100%': {
+            width: '100%',
+          },
         },
         'flip-down': {
-          '0%': { transform: 'rotateX(0)', opacity: '1' },
-          '100%': { transform: 'rotateX(-180deg)', opacity: '0' },
+          '0%': {
+            transform: 'rotateX(0)',
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'rotateX(-180deg)',
+            opacity: '0',
+          },
         },
         'flip-up': {
-          '0%': { transform: 'rotateX(180deg)', opacity: '0' },
-          '100%': { transform: 'rotateX(0)', opacity: '1' },
+          '0%': {
+            transform: 'rotateX(180deg)',
+            opacity: '0',
+          },
+          '100%': {
+            transform: 'rotateX(0)',
+            opacity: '1',
+          },
+        },
+        pulse: {
+          '0%, 100%': {
+            boxShadow: '0 0 0 0 var(--pulse-color)',
+          },
+          '50%': {
+            boxShadow: '0 0 0 8px var(--pulse-color)',
+          },
         },
       },
       animation: {
@@ -164,6 +220,7 @@ const config: Config = {
         flipbottom: 'flipbottom 0.45s 0.45s both',
         bounce: 'bounce 1s infinite',
         fadeIn: 'fadeIn 1s ease-in-out',
+        pulse: 'pulse var(--duration) ease-out infinite',
       },
     },
   },

@@ -7,14 +7,14 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import HomePageLayout from '@/layout/home-page-layout';
 
-const oswald = Oswald({ 
+const oswald = Oswald({
   subsets: ['latin'],
   weight: ['400'], // 400 is the weight for Regular
 });
 
 export const metadata: Metadata = {
-  title: 'FIT SIXES 2k24',
-  description: 'FIT SIXES 2k24',
+  title: 'FIT SIXES 2K24',
+  description: 'FIT SIXES 2K24',
 };
 
 export default function RootLayout({

@@ -9,7 +9,7 @@ import Sponsorship from "@/components/Sponsorship";
 export default function Home() {
   return (
     <div className="">
-      <div className="  text-white items-center flex flex-col justify-center relative">
+      <div className="  text-white items-center flex flex-col justify-center relative ">
         <HeroSection />
       </div>
       <BallOfFame />

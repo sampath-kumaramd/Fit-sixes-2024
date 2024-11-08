@@ -27,6 +27,7 @@ import {
   Input,
 } from '../ui';
 import { Loader2 } from 'lucide-react';
+import { CompanyViewStatus } from '@/types/enums/company-view-status';
 
 const signInSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -127,8 +128,18 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
 
         onSignInResult({ success: true, emailVerified: true });
 
+        const companyData = localStorage.getItem('companyData');
         // Redirect to onboarding page
-        router.push('/auth/onboarding');
+        if (companyData) {
+          const parsedCompanyData = JSON.parse(companyData);
+          if (parsedCompanyData.view_status === CompanyViewStatus.SUCCESS) {
+            router.push('/auth/dashboard');
+          } else {
+            router.push('/auth/onboarding');
+          }
+        } else {
+          router.push('/auth/onboarding');
+        }
       } else if (response.status === 400) {
         toast({
           title: 'Error',
@@ -211,10 +222,8 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
                 </FormItem>
               )}
             />
-            <div className="  flex items-center justify-end text-sm underline">
-              <Link href="/auth/forgot-password">
-                Did you forget your password?
-              </Link>
+            <div className="flex items-center justify-end text-sm underline">
+              <Link href="/auth/forgot-password">Forgot your password?</Link>
             </div>
             <div className="flex justify-end">
               <Button
@@ -238,7 +247,6 @@ const SignInForm: React.FC<SignInFormProps> = ({ onSignInResult }) => {
                 Register here
               </Link>
             </div>
-            
           </form>
         </Form>
       </CardContent>
